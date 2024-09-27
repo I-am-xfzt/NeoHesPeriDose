@@ -1,0 +1,38 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none !important;
+}
+
+:root {
+    --soil-color-white: #ffffff;
+    --soil-bg-main-color: #f8f8f8;
+    --soil-bg-color: #f5f5ff;
+    --soil-border-color-light: #f1f2f3;
+    --soil-color-primary-lighter: #ecf5ff;
+    --soil-color-success-lighter: #f0f9eb;
+    --soil-color-warning-lighter: #fdf6ec;
+    --soil-color-danger-lighter: #fef0f0;
+    --soil-color-dark-hover: #0000001a;
+    --el-color-primary: #1c61d8;
+    --el-color-primary-dark-2: #1c61d8;
+    --el-color-primary-light-3: #1c80d8;
+}
+
+html,
+body,
+#app {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    background-color: var(--soil-color-white);
+    font-size: 14px;
+    overflow: hidden;
+    position: relative;
+}

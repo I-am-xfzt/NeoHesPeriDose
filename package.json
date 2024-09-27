@@ -1,0 +1,40 @@
+{
+  "name": "datascreen",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "watch": "rollup -w -c ./rollup.config.js",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@jiaminghi/data-view": "^2.10.0",
+    "@vueuse/core": "^11.1.0",
+    "echarts": "^5.5.1",
+    "echarts-liquidfill": "^3.1.0",
+    "element-plus": "^2.8.3",
+    "pinia": "^2.2.2",
+    "postcss-px-to-viewport": "^1.1.1",
+    "three": "^0.168.0",
+    "vue": "^3.4.37",
+    "web-ifc-three": "^0.0.125"
+  },
+  "devDependencies": {
+    "@types/node": "^22.6.1",
+    "@typescript-eslint/eslint-plugin": "^8.7.0",
+    "@vitejs/plugin-vue": "^5.1.2",
+    "patch-package": "^8.0.0",
+    "sass": "^1.79.3",
+    "typescript": "^5.5.3",
+    "unplugin-vue-setup-extend-plus": "^1.0.1",
+    "vite": "^5.4.1",
+    "vite-plugin-compression": "^0.5.1",
+    "vite-plugin-eslint": "^1.8.1",
+    "vite-plugin-pwa": "^0.20.5",
+    "vite-plugin-svg-icons": "^2.0.1",
+    "vite-plugin-vue-devtools": "^7.4.6",
+    "vue-tsc": "^2.0.29"
+  }
+}

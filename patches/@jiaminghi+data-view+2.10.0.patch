@@ -1,0 +1,46 @@
+diff --git a/node_modules/@jiaminghi/data-view/src/components/decoration1/src/main.vue b/node_modules/@jiaminghi/data-view/src/components/decoration1/src/main.vue
+index ae334b3..d8b4541 100644
+--- a/node_modules/@jiaminghi/data-view/src/components/decoration1/src/main.vue
++++ b/node_modules/@jiaminghi/data-view/src/components/decoration1/src/main.vue
+@@ -4,10 +4,10 @@
+ 
+       <template
+         v-for="(point, i) in points"
++        :key="i"
+       >
+         <rect
+           v-if="Math.random() > 0.6"
+-          :key="i"
+           :fill="mergedColor[0]"
+           :x="point[0] - halfPointSideLength"
+           :y="point[1] - halfPointSideLength"
+diff --git a/node_modules/@jiaminghi/data-view/src/components/decoration3/src/main.vue b/node_modules/@jiaminghi/data-view/src/components/decoration3/src/main.vue
+index 51c0278..027db7d 100644
+--- a/node_modules/@jiaminghi/data-view/src/components/decoration3/src/main.vue
++++ b/node_modules/@jiaminghi/data-view/src/components/decoration3/src/main.vue
+@@ -4,9 +4,9 @@
+ 
+       <template
+         v-for="(point, i) in points"
++        :key="i"
+       >
+         <rect
+-          :key="i"
+           :fill="mergedColor[0]"
+           :x="point[0] - halfPointSideLength"
+           :y="point[1] - halfPointSideLength"
+diff --git a/node_modules/@jiaminghi/data-view/src/components/decoration6/src/main.vue b/node_modules/@jiaminghi/data-view/src/components/decoration6/src/main.vue
+index 2649f79..dd516ff 100644
+--- a/node_modules/@jiaminghi/data-view/src/components/decoration6/src/main.vue
++++ b/node_modules/@jiaminghi/data-view/src/components/decoration6/src/main.vue
+@@ -3,9 +3,9 @@
+     <svg :width="`${svgWH[0]}px`" :height="`${svgWH[1]}px`" :style="`transform:scale(${svgScale[0]},${svgScale[1]});`">
+       <template
+         v-for="(point, i) in points"
++        :key="i"
+       >
+         <rect
+-          :key="i"
+           :fill="mergedColor[Math.random() > 0.5 ? 0 : 1]"
+           :x="point[0] - halfRectWidth"
+           :y="point[1] - heights[i] / 2"
