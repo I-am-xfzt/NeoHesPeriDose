@@ -40,7 +40,7 @@
     "src/**/*.d.ts",
     "src/*.d.ts",
     "vite.config.ts",
-    "src/components/model/loadModel.js"
+    "src/components/model/three/loadModel.js"
   ], // **Represents any directory, and * represents any file. Indicates that all files in the src directory will be compiled
   "exclude": [
     "node_modules",
