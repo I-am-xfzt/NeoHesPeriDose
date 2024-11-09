@@ -218,14 +218,14 @@ export class ThreeModel {
   /**
    * 加载模型
   */
-  loadModel(callBack, modelName = '建筑2.glb', setAnimation = true, scale = [
+  loadModel(callBack, modelName = '主体2.glb', setAnimation = true, scale = [
     1,
     1,
     -1
   ], position = [-8.260836601257324,
     1.139329195022583,
   -22.13763427734375]) {
-    this.dracoLoader.setDecoderPath('/uploads/draco/')
+    this.dracoLoader.setDecoderPath('/FLVS/uploads/draco/')
     this.dracoLoader.setDecoderConfig({ type: "js" }); //使用兼容性强的draco_decoder.js解码器
     this.dracoLoader.preload();
     this.loader.setDRACOLoader(this.dracoLoader)
@@ -456,7 +456,7 @@ export class ThreeModel {
       this.animate()
     });
     const that = this
-    window.addEventListener('resize', that.onWindowResize);
+    // window.addEventListener('resize', that.onWindowResize);
     window.onclick = (event) => that.highlight(event, preselectMat, preselectModel);
   }
 }
