@@ -249,7 +249,7 @@ export class BabyLonModel {
             console.log(res);
         }
         for (const fileName of modelArry) {
-            fileName === '紧急疏散点.glb' && SceneLoader.ImportMeshAsync('', '/FLVS/uploads/', fileName, this.scene).then(res => _func(res))
+            fileName === '紧急疏散点.glb' && SceneLoader.ImportMeshAsync('', '/BABYLON/uploads/', fileName, this.scene).then(res => _func(res))
         }
     }
     public clearSceneEvery(): void {
