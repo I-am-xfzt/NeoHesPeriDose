@@ -1,0 +1,1360 @@
+{
+    "name": "newCustom",
+    "selectedNodeID": "",
+    "theme": "techDotGrid",
+    "nodes": [
+        {
+            "scaling": [
+                3,
+                3,
+                -3
+            ],
+            "id": "场景7_23fc4764-f896-49b6-9197-501c9f8a578e",
+            "name": "底座",
+            "url": "/uploads/场景7.glb",
+            "children": [
+                {
+                    "position": [
+                        -0.015347464010119438,
+                        0.3508196771144867,
+                        -0.02647346258163452
+                    ],
+                    "rotation": [
+                        0,
+                        -2.5307274581395487,
+                        0
+                    ],
+                    "id": "地台_520d9c8d-e932-4e95-87f9-a7b4ec7a7917",
+                    "name": "地台",
+                    "children": [
+                        {
+                            "position": [
+                                0,
+                                -0.30740827322006226,
+                                0
+                            ],
+                            "scaling": [
+                                1.5457375049591064,
+                                1.5457375049591064,
+                                1.5457375049591064
+                            ],
+                            "rotation": [
+                                0,
+                                -1.8662637137974745,
+                                0
+                            ],
+                            "id": "Cylinder.007_ab6889f2-e06c-46ae-ae83-3a542ee4295e",
+                            "name": "Cylinder.007",
+                            "children": [],
+                            "paths": [],
+                            "enableReflection": true,
+                            "customAnimations": [],
+                            "$modelType": "calder/CustomMeshModel"
+                        },
+                        {
+                            "position": [
+                                0,
+                                -0.30740827322006226,
+                                0
+                            ],
+                            "rotation": [
+                                0,
+                                -1.8662637137974745,
+                                0
+                            ],
+                            "id": "Cylinder.008_bd9253b4-d0b0-4d66-9b78-c112c9815b6d",
+                            "name": "Cylinder.008",
+                            "children": [],
+                            "paths": [],
+                            "enableReflection": true,
+                            "customAnimations": [],
+                            "$modelType": "calder/CustomMeshModel"
+                        }
+                    ],
+                    "paths": [],
+                    "enableReflection": true,
+                    "customAnimations": [],
+                    "$modelType": "calder/CustomMeshModel"
+                },
+                {
+                    "position": [
+                        -0.015347464010119438,
+                        23.741493225097656,
+                        -0.02647346258163452
+                    ],
+                    "scaling": [
+                        30.022367477416992,
+                        2.9182941913604736,
+                        30.022367477416992
+                    ],
+                    "id": "圆环1_31c96a0e-e146-43b6-b54b-3df07f98df91",
+                    "name": "圆环1",
+                    "children": [],
+                    "paths": [],
+                    "enableReflection": true,
+                    "customAnimations": [],
+                    "$modelType": "calder/CustomMeshModel"
+                },
+                {
+                    "position": [
+                        -0.015347464010119438,
+                        3.884596586227417,
+                        -0.02647346258163452
+                    ],
+                    "scaling": [
+                        13.39766788482666,
+                        1.4959477186203003,
+                        13.39766788482666
+                    ],
+                    "id": "圆环2_edb7d319-e15a-4e3d-9542-e8d662fc7259",
+                    "name": "圆环2",
+                    "children": [],
+                    "paths": [],
+                    "enableReflection": true,
+                    "customAnimations": [],
+                    "$modelType": "calder/CustomMeshModel"
+                },
+                {
+                    "position": [
+                        -0.015347464010119438,
+                        0.3508196771144867,
+                        -0.02647346258163452
+                    ],
+                    "rotation": [
+                        0,
+                        -2.5307274581395487,
+                        0
+                    ],
+                    "id": "发光带_4a196b47-1c29-4d2c-9ea9-0a04cf4544d7",
+                    "name": "发光带",
+                    "children": [],
+                    "paths": [],
+                    "enableReflection": true,
+                    "customAnimations": [],
+                    "$modelType": "calder/CustomMeshModel"
+                }
+            ],
+            "paths": [],
+            "enableReflection": true,
+            "customAnimations": [],
+            "visibleLevel": 2,
+            "$modelType": "calder/CustomMeshModel"
+        },
+        {
+            "scaling": [
+                3,
+                3,
+                -3
+            ],
+            "id": "实景车_a7f97308-0d53-477d-bbe7-81b97d98af9a",
+            "name": "实景车",
+            "url": "/uploads/实景车.glb",
+            "children": [
+                {
+                    "position": [
+                        -0.015347450971603394,
+                        0.35081958770751953,
+                        -0.026473522186279297
+                    ],
+                    "rotation": [
+                        0,
+                        -0.785398183011901,
+                        0
+                    ],
+                    "id": "_车体_grp_eb003070-c232-4f21-a045-7117657cdcb1",
+                    "name": "_车体_grp",
+                    "children": [
+                        {
+                            "position": [
+                                0.1483297049999237,
+                                2.9273486137390137,
+                                -0.06639718264341354
+                            ],
+                            "rotation": [
+                                0,
+                                -3.132363220989095,
+                                0
+                            ],
+                            "id": "内饰_32aa7113-0cff-4052-9a2d-69fa48ddbc2f",
+                            "name": "内饰",
+                            "children": [
+                                {
+                                    "id": "内饰_primitive0_8b7932b4-4083-4a86-ac53-4931c6457aab",
+                                    "name": "内饰_primitive0",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "内饰_primitive1_cc4c7d1a-8618-431d-bdac-63c79a40d579",
+                                    "name": "内饰_primitive1",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "内饰_primitive2_7e41c2fb-5940-45d6-ac98-2203a097c2cb",
+                                    "name": "内饰_primitive2",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "内饰_primitive3_d4dba6f2-c001-456b-b5cb-7ffd3970d24e",
+                                    "name": "内饰_primitive3",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "内饰_primitive4_7c9b6f70-bf00-4e91-9654-bbd8b9f7c394",
+                                    "name": "内饰_primitive4",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "内饰_primitive5_4ed7b797-acf6-44b7-82cd-06373e2ed4f8",
+                                    "name": "内饰_primitive5",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "内饰_primitive6_6c2b1277-aacf-4516-bbe8-b0ce7cefd38b",
+                                    "name": "内饰_primitive6",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "内饰_primitive7_32441a0e-e5fa-4efb-b788-bccfa0592476",
+                                    "name": "内饰_primitive7",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "内饰_primitive8_d1e5e05b-541f-4676-ab47-769b6acc38b4",
+                                    "name": "内饰_primitive8",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "内饰_primitive9_fb67cbfd-95e2-4536-93e2-5c9fcb7d1e66",
+                                    "name": "内饰_primitive9",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "内饰_primitive10_1cb1df38-ac17-45a3-aa4c-7b861ae34036",
+                                    "name": "内饰_primitive10",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "内饰_primitive11_4820858c-c290-469c-b4b2-4f79e1dd0215",
+                                    "name": "内饰_primitive11",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                }
+                            ],
+                            "paths": [],
+                            "enableReflection": true,
+                            "customAnimations": [],
+                            "$modelType": "calder/CustomMeshModel"
+                        },
+                        {
+                            "position": [
+                                -2.86075496673584,
+                                2.7380926609039307,
+                                3.516181468963623
+                            ],
+                            "id": "前右门_e4575ecd-fec3-488d-9db5-1bcbc379b949",
+                            "name": "前右门",
+                            "children": [
+                                {
+                                    "id": "前右门_primitive0_9a617a62-8488-4a55-a1bd-e6d147ae16fa",
+                                    "name": "前右门_primitive0",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "前右门_primitive1_74d81a30-49a7-48d1-bba6-bcb70fd88f00",
+                                    "name": "前右门_primitive1",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "前右门_primitive2_f9e267f5-ba47-4e8a-b860-17009f1912ec",
+                                    "name": "前右门_primitive2",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "前右门_primitive3_913aa0a7-16e7-4e31-96c2-75b513ea16a3",
+                                    "name": "前右门_primitive3",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "前右门_primitive4_49b52498-f44d-4f99-a18d-bd40b84aea75",
+                                    "name": "前右门_primitive4",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "前右门_primitive5_26574938-3989-4e1b-bb4f-3750616485c8",
+                                    "name": "前右门_primitive5",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "前右门_primitive6_00e0266f-9893-4410-819f-df909a345c61",
+                                    "name": "前右门_primitive6",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "前右门_primitive7_45d774a9-83b8-4b8c-bb01-de75ae309331",
+                                    "name": "前右门_primitive7",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "前右门_primitive8_7c9964f6-1e59-4a57-9931-aa1eb5e7221c",
+                                    "name": "前右门_primitive8",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "前右门_primitive9_fe1407d1-f629-4fdd-96f9-4803f93fcf8e",
+                                    "name": "前右门_primitive9",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "前右门_primitive10_f8e55a9c-5109-40ea-a4cc-6e93d217c433",
+                                    "name": "前右门_primitive10",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "前右门_primitive11_89bdc9e0-a250-4437-86fe-a24344d9ab2b",
+                                    "name": "前右门_primitive11",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "前右门_primitive12_ee1460b7-c9e8-4a6e-a28a-99350260f957",
+                                    "name": "前右门_primitive12",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                }
+                            ],
+                            "paths": [],
+                            "enableReflection": true,
+                            "customAnimations": [],
+                            "$modelType": "calder/CustomMeshModel"
+                        },
+                        {
+                            "position": [
+                                3.2235939502716064,
+                                2.7380926609039307,
+                                3.46002197265625
+                            ],
+                            "id": "前左门_e7833ef0-e45b-4e84-a34a-df2eca53ab81",
+                            "name": "前左门",
+                            "children": [
+                                {
+                                    "id": "前左门_primitive0_59f587ae-8be3-438f-b06e-7cba466820b6",
+                                    "name": "前左门_primitive0",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "前左门_primitive1_242cf080-98dc-4e22-a999-13bc6a5c9572",
+                                    "name": "前左门_primitive1",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "前左门_primitive2_c831456b-a2a6-4ced-b2eb-ce4834e326dc",
+                                    "name": "前左门_primitive2",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "前左门_primitive3_bfea196f-31eb-4193-93e5-913300ecd277",
+                                    "name": "前左门_primitive3",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "前左门_primitive4_ec31c9de-2252-4102-ad24-a32e13d08d1c",
+                                    "name": "前左门_primitive4",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "前左门_primitive5_12203702-d14a-432b-8031-04738ce985c3",
+                                    "name": "前左门_primitive5",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "前左门_primitive6_5e39906d-2ad6-4621-8b1b-64131cd28ce5",
+                                    "name": "前左门_primitive6",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "前左门_primitive7_d9fdf9c5-10f8-463c-ba01-0c885cead958",
+                                    "name": "前左门_primitive7",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "前左门_primitive8_05c0fff7-88c0-4d7b-938c-e041e6cfe0aa",
+                                    "name": "前左门_primitive8",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "前左门_primitive9_16f3e43b-d8e8-4154-b435-bc21ebba1146",
+                                    "name": "前左门_primitive9",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "前左门_primitive10_d2037e3c-af17-4f1b-b1a5-012eb32ea691",
+                                    "name": "前左门_primitive10",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "前左门_primitive11_361ede85-4414-40e9-a867-d689969b465a",
+                                    "name": "前左门_primitive11",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "前左门_primitive12_61d1a0cb-ce5c-43b1-805b-75b81206702e",
+                                    "name": "前左门_primitive12",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                }
+                            ],
+                            "paths": [],
+                            "enableReflection": true,
+                            "customAnimations": [],
+                            "$modelType": "calder/CustomMeshModel"
+                        },
+                        {
+                            "position": [
+                                -2.9797887802124023,
+                                2.7380623817443848,
+                                -0.43241921067237854
+                            ],
+                            "id": "后右门_96942e19-b2cf-40ad-89e1-faddd31b1550",
+                            "name": "后右门",
+                            "children": [
+                                {
+                                    "id": "后右门_primitive0_d616d9b4-d2bd-4b4d-aaad-6cef8451a80d",
+                                    "name": "后右门_primitive0",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "后右门_primitive1_5b4cc011-686e-4cd0-beb6-c7f7d48e1844",
+                                    "name": "后右门_primitive1",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "后右门_primitive2_b7487982-5c50-4817-91ca-2aff9aa4fc40",
+                                    "name": "后右门_primitive2",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "后右门_primitive3_45f66ee1-2c7a-409c-b4d8-d4dc8b0876ab",
+                                    "name": "后右门_primitive3",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "后右门_primitive4_2fdaebe5-c8ca-4762-8de5-6bf630f8aa11",
+                                    "name": "后右门_primitive4",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "后右门_primitive5_dd6af03d-4402-4970-94e0-28bb7ee56025",
+                                    "name": "后右门_primitive5",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "后右门_primitive6_667bad3e-5816-4615-bb01-f1f308a85cbb",
+                                    "name": "后右门_primitive6",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "后右门_primitive7_6dc5f465-2326-4440-8bc6-26cc4d168ff0",
+                                    "name": "后右门_primitive7",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "后右门_primitive8_3ee6ccaa-54c2-49f5-8b2b-0dcde24c55fc",
+                                    "name": "后右门_primitive8",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "后右门_primitive9_02b9453b-aaf1-4c90-bc01-6441285b3f18",
+                                    "name": "后右门_primitive9",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "后右门_primitive10_9db0c7a7-c138-4a8e-a6d9-4cf6b823cbe6",
+                                    "name": "后右门_primitive10",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                }
+                            ],
+                            "paths": [],
+                            "enableReflection": true,
+                            "customAnimations": [],
+                            "$modelType": "calder/CustomMeshModel"
+                        },
+                        {
+                            "position": [
+                                3.2697458267211914,
+                                2.7380623817443848,
+                                -0.490103155374527
+                            ],
+                            "id": "后左门_2fb4e4c3-f339-4e2f-9ab4-f5ae664d056a",
+                            "name": "后左门",
+                            "children": [
+                                {
+                                    "id": "后左门_primitive0_590a1e66-cea0-4660-b189-32c033f385a0",
+                                    "name": "后左门_primitive0",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "后左门_primitive1_f5560c27-bc84-4cc8-aaa1-6df8c0945551",
+                                    "name": "后左门_primitive1",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "后左门_primitive2_5313a0a7-d5d7-49df-a180-e8599a686c94",
+                                    "name": "后左门_primitive2",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "后左门_primitive3_03716eef-b51d-4ebf-9b4e-052b586094c2",
+                                    "name": "后左门_primitive3",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "后左门_primitive4_4b869b4b-4c6a-4fea-be7d-72eb52a45e59",
+                                    "name": "后左门_primitive4",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "后左门_primitive5_dfb19c83-5154-4f0b-ae92-b89c47a875d6",
+                                    "name": "后左门_primitive5",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "后左门_primitive6_f3066d7b-343f-46a2-9fdc-cd843f5f3f22",
+                                    "name": "后左门_primitive6",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "后左门_primitive7_b74f363e-fd6b-424e-83e0-71b83e470210",
+                                    "name": "后左门_primitive7",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "后左门_primitive8_eda97173-11e9-4c3c-9a61-6f5d43aeda00",
+                                    "name": "后左门_primitive8",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "后左门_primitive9_b1c5884c-668a-431d-9731-625a2f0a4b19",
+                                    "name": "后左门_primitive9",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "后左门_primitive10_8e36dfd9-c87c-46ee-ab61-357908d41dac",
+                                    "name": "后左门_primitive10",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                }
+                            ],
+                            "paths": [],
+                            "enableReflection": true,
+                            "customAnimations": [],
+                            "$modelType": "calder/CustomMeshModel"
+                        },
+                        {
+                            "position": [
+                                0.09691713005304337,
+                                3.2758395671844482,
+                                0.010325911454856396
+                            ],
+                            "rotation": [
+                                0,
+                                -1.021017703144634,
+                                0
+                            ],
+                            "id": "车身_eb9f8e9a-6f98-4d10-9968-4af314ed6ff3",
+                            "name": "车身",
+                            "children": [
+                                {
+                                    "id": "车身_primitive0_a8a0bca3-1b44-4a83-8649-03bdb2333aea",
+                                    "name": "车身_primitive0",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive1_6a52bfc2-05d9-44f0-9a00-44018919bd6f",
+                                    "name": "车身_primitive1",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive2_dea93b3e-c7d9-4a8a-88e1-1cbffe046414",
+                                    "name": "车身_primitive2",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive3_e120f3be-d607-42da-b1eb-70ced509838c",
+                                    "name": "车身_primitive3",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive4_2af70a90-764b-42b4-8cd8-e1dc3abc1389",
+                                    "name": "车身_primitive4",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive5_14aca57d-859a-4c67-9e48-e35e7e63994c",
+                                    "name": "车身_primitive5",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive6_0f1d8159-48a1-423b-8007-0c1542aac374",
+                                    "name": "车身_primitive6",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive7_74508666-c18c-46f8-bad1-cdba1ffcb489",
+                                    "name": "车身_primitive7",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive8_a6ed8635-0e7f-44dc-bb7b-12a60716abd6",
+                                    "name": "车身_primitive8",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive9_c2386d3c-f780-4b2d-8c40-7c0197470405",
+                                    "name": "车身_primitive9",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive10_172eb3c9-45f3-48e5-89f5-b110d81f99fe",
+                                    "name": "车身_primitive10",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive11_6515c00e-458e-432b-bc39-9990fc075c38",
+                                    "name": "车身_primitive11",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive12_477b0d2c-df46-4411-af21-2d96d617bed2",
+                                    "name": "车身_primitive12",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive13_09f43127-a53f-4227-83d7-f86b37e8ee71",
+                                    "name": "车身_primitive13",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive14_2ab3568f-6ab5-4c08-86af-a857a897dddc",
+                                    "name": "车身_primitive14",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive15_9806a2a1-14df-4da1-a03b-9fdf952b87ab",
+                                    "name": "车身_primitive15",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive16_2eef00ab-ddbe-4784-b223-16ad75e7be5f",
+                                    "name": "车身_primitive16",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive17_45eabe80-4332-423d-8ec1-201668bff05c",
+                                    "name": "车身_primitive17",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive18_7784dfc1-e708-4783-a9cd-8b3f2cdc5428",
+                                    "name": "车身_primitive18",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive19_db3712a2-0755-46b5-9d9b-f790611fbb60",
+                                    "name": "车身_primitive19",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive20_a662546f-972e-40ca-997e-f4462f01f941",
+                                    "name": "车身_primitive20",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive21_ca64fe8e-2de6-480f-8b59-3a967b3cc1ba",
+                                    "name": "车身_primitive21",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive22_61ad78eb-5589-4e7a-bd09-1d6ebae4fbfe",
+                                    "name": "车身_primitive22",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive23_5197eca5-92d4-4527-9426-2317885ac9ca",
+                                    "name": "车身_primitive23",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive24_ea8d19fd-a95d-4d81-8a7d-27ce487bd001",
+                                    "name": "车身_primitive24",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive25_0ed9c469-6c37-4449-ad25-444dd471d2c8",
+                                    "name": "车身_primitive25",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive26_61c1b463-54f6-4a25-b6e6-70ec51348627",
+                                    "name": "车身_primitive26",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive27_4bb98639-d25d-410d-96b1-1d4f7cb3dc99",
+                                    "name": "车身_primitive27",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive28_c565f0a3-44ea-4468-8b36-129b607dc6a2",
+                                    "name": "车身_primitive28",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive29_c967fa15-f7f1-438a-8a59-5dd94334117e",
+                                    "name": "车身_primitive29",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive30_c2242beb-69fa-4114-90ae-7f245be5efd6",
+                                    "name": "车身_primitive30",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive31_21a02e84-08dc-4dfd-b5a2-250e54f576e2",
+                                    "name": "车身_primitive31",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive32_b9b69639-a442-4979-baef-27eaeffe6023",
+                                    "name": "车身_primitive32",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive33_17c7b447-1c8f-438e-aa27-4ae1475efd2d",
+                                    "name": "车身_primitive33",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive34_9fa47045-fb26-43ec-9b54-68dc223edba5",
+                                    "name": "车身_primitive34",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive35_88d3647c-4d30-4e1b-9797-435d7ae9df3d",
+                                    "name": "车身_primitive35",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive36_89a81f1f-6bfe-4bff-bbb3-c244111a9634",
+                                    "name": "车身_primitive36",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive37_7137c510-5b16-471c-8a2e-d4453c2595ea",
+                                    "name": "车身_primitive37",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive38_09d29c2f-2b15-4f61-8473-9f21b4e9a540",
+                                    "name": "车身_primitive38",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive39_152ec26b-8dc8-4189-8a76-fb5bf75a20c2",
+                                    "name": "车身_primitive39",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive40_2508b94c-f61b-4873-933a-4b20a90f68ed",
+                                    "name": "车身_primitive40",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive41_500ac4f0-c92d-418f-a0b7-4396c1bcb098",
+                                    "name": "车身_primitive41",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive42_b7bb25d4-492f-4145-b755-9c29be23281b",
+                                    "name": "车身_primitive42",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive43_f306ad9d-87df-45d4-a7a4-f1a1ac7dce72",
+                                    "name": "车身_primitive43",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                },
+                                {
+                                    "id": "车身_primitive44_bf613d7a-8dd0-40c2-b39e-0147b7cdc03e",
+                                    "name": "车身_primitive44",
+                                    "children": [],
+                                    "paths": [],
+                                    "enableReflection": true,
+                                    "customAnimations": [],
+                                    "$modelType": "calder/CustomMeshModel"
+                                }
+                            ],
+                            "paths": [],
+                            "enableReflection": true,
+                            "customAnimations": [],
+                            "$modelType": "calder/CustomMeshModel"
+                        }
+                    ],
+                    "paths": [],
+                    "enableReflection": true,
+                    "customAnimations": [],
+                    "$modelType": "calder/CustomMeshModel"
+                }
+            ],
+            "paths": [],
+            "enableReflection": true,
+            "customAnimations": [],
+            "visibleLevel": 2,
+            "$modelType": "calder/CustomMeshModel"
+        }
+    ],
+    "skyBoxMicroSurface": 1,
+    "skyBoxColor": "#FFF",
+    "hemisphericLightIntensity": 0.4,
+    "hemisphericLightEnabled": true,
+    "environmentIntensity": 1,
+    "envTexture": "gradient",
+    "groundConfig": {
+        "enabled": true,
+        "type": "legacy",
+        "background": {
+            "type": "legacy",
+            "value": {
+                "type": "dotGrid",
+                "properties": {
+                    "lineColor1": "#000000",
+                    "lineColor2": "#0d0d0d",
+                    "lineWidth1": 0.1,
+                    "lineWidth2": 0.2,
+                    "uvScale": 50,
+                    "groundColor": "#01010C",
+                    "dotColor": "#000000",
+                    "horizon": "#071E3A"
+                }
+            }
+        },
+        "effects": []
+    },
+    "environmentTextureConfig": {
+        "enabled": true,
+        "texture": {
+            "type": "image",
+            "url": "/images/envTexture/plaza.env"
+        },
+        "intensity": 1
+    },
+    "skyBoxConfig": {
+        "enabled": true,
+        "type": "legacy",
+        "environmentTextureUrl": "/images/envTexture/plaza.env",
+        "reflectivityColor": "#010B1A",
+        "microSurface": 0
+    },
+    "fogConfig": {
+        "enabled": false,
+        "color": "#cccccc",
+        "start": 0,
+        "end": 1000
+    },
+    "cameraState": {
+        "position": [
+            0.11143281802462557,
+            3.9882761273818783,
+            0.04004104804143127
+        ],
+        "target": [
+            3.1427378820900844,
+            0,
+            3.103133270236968
+        ]
+    },
+    "shockWaves": [],
+    "snowEffect": false,
+    "meteorEffect": false,
+    "cameraRotateEnabled": false,
+    "cameraRotateSpeed": 20,
+    "animationEnabled": false,
+    "animations": [
+        {
+            "id": "场景7_23fc4764-f896-49b6-9197-501c9f8a578e:Animation",
+            "playType": "immediately",
+            "delay": {
+                "value": 1000,
+                "type": "millisecond"
+            },
+            "loop": true,
+            "reverse": false,
+            "enabled": false
+        },
+        {
+            "id": "框线车身4_cd9486be-3d1b-4396-8570-5f19a338cee2:Animation",
+            "playType": "immediately",
+            "delay": {
+                "value": 1000,
+                "type": "millisecond"
+            },
+            "loop": true,
+            "reverse": false,
+            "enabled": false
+        },
+        {
+            "id": "框线车身4_cd9486be-3d1b-4396-8570-5f19a338cee2:6620bd8b-4361-4750-9a37-e3ea755fa1ac",
+            "playType": "immediately",
+            "delay": {
+                "value": 1000,
+                "type": "millisecond"
+            },
+            "loop": true,
+            "reverse": false,
+            "enabled": false
+        }
+    ],
+    "dataLayers": [],
+    "postProcessing": {
+        "depthOfFieldEnabled": false,
+        "depthOfFieldFocusDistanceType": "dynamic",
+        "depthOfFieldFocusDistance": 2000,
+        "depthOfFieldAperture": 3,
+        "depthOfFieldBlurLevel": "medium",
+        "msaa": true,
+        "fxaa": false,
+        "bloomEnabled": true,
+        "bloomWeight": 0.06,
+        "bloomThreshold": 0.51,
+        "bloomKernel": 32,
+        "saturation": 0,
+        "brightness": 0,
+        "contrast": 0,
+        "$modelId": "2-5DCIVWA5OWcMWmG8bEQuK",
+        "$modelType": "calder/PostProcessingModel"
+    },
+    "lights": [],
+    "shadowQuality": 2,
+    "$modelId": "1-qwMqwMmb5Jev3mRK_3i_y",
+    "$modelType": "calder/CalderCustomModel",
+    "externalObjects": [
+        {
+            "type": "custom",
+            "url": "/uploads/场景7.glb"
+        },
+        {
+            "type": "custom",
+            "url": "/uploads/实景车.glb"
+        }
+    ]
+}

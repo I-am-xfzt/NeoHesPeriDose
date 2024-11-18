@@ -6,7 +6,7 @@ import vue from "@vitejs/plugin-vue";
 import viteCompression from "vite-plugin-compression";
 import vueSetupExtend from "unplugin-vue-setup-extend-plus/vite";
 import NextDevTools from "vite-plugin-vue-devtools";
-
+import createAutoImport from "./auto-import"
 /**
  * 创建 vite 插件
  * @param viteEnv
@@ -26,6 +26,7 @@ export const createVitePlugins = (viteEnv: ViteEnv): (PluginOption | PluginOptio
       iconDirs: [resolve(process.cwd(), "src/assets/icons")],
       symbolId: "icon-[dir]-[name]"
     }),
+    createAutoImport(),
     // vitePWA
     VITE_PWA && createVitePwa(viteEnv)
   ];

@@ -10,7 +10,7 @@ onMounted(() =>
   nextTick(
     () => (
       (modelValue.value = new BabyLonModel(
-        [-1.4149514437369501, 49.99277517400039, 1.0680686465713172],
+        [ 0, 0, 0],
         'babylonContainer'
       )),
       modelValue.value.init()

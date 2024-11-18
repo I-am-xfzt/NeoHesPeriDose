@@ -18,17 +18,19 @@
     "pinia": "^2.2.2",
     "postcss-px-to-viewport": "^1.1.1",
     "three": "^0.168.0",
-    "vue": "^3.4.37"
+    "vue": "^3.4.37",
+    "vue3-scroll-seamless": "^1.0.6"
   },
   "devDependencies": {
     "@babylonjs/core": "^7.29.0",
     "@babylonjs/inspector": "^7.29.0",
-    "@types/node": "^22.6.1",
+    "@types/node": "^22.9.0",
     "@typescript-eslint/eslint-plugin": "^8.7.0",
     "@vitejs/plugin-vue": "^5.1.2",
     "patch-package": "^8.0.0",
     "sass": "^1.79.3",
     "typescript": "^5.5.3",
+    "unplugin-auto-import": "^0.18.4",
     "unplugin-vue-setup-extend-plus": "^1.0.1",
     "vite": "^5.4.1",
     "vite-plugin-compression": "^0.5.1",
