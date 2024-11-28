@@ -30,15 +30,15 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
     },
     optimizeDeps: {
       // 开发时 解决这些commonjs包转成esm包
-      include: [
-        "@jiaminghi/c-render",
-        "@jiaminghi/c-render/lib/plugin/util",
-        "@jiaminghi/charts/lib/util/index",
-        "@jiaminghi/charts/lib/util",
-        "@jiaminghi/charts/lib/extend/index",
-        "@jiaminghi/charts",
-        "@jiaminghi/color",
-      ],
+      // include: [
+      //   "@jiaminghi/c-render",
+      //   "@jiaminghi/c-render/lib/plugin/util",
+      //   "@jiaminghi/charts/lib/util/index",
+      //   "@jiaminghi/charts/lib/util",
+      //   "@jiaminghi/charts/lib/extend/index",
+      //   "@jiaminghi/charts",
+      //   "@jiaminghi/color",
+      // ],
     },
     build: {
       outDir: 'dist',
@@ -72,7 +72,7 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
             viewportUnit: 'vmin',
             landscapeUnit: 'vmax',
             // 字体转换后的单位
-            fontViewportUnit: 'vmax',
+            fontViewportUnit: 'vmin',
             // 能转换的属性，*表示所有属性，!border表示border不转
             propList: ['*'],
             // 最小转换的值，小于等于1不转

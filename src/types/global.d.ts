@@ -10,7 +10,6 @@ declare module '*.ts';
 declare module '*.js';
 declare module '*.mjs';
 declare module 'postcss-px-to-viewport';
-declare module '@jiaminghi/data-view';
 // 声明文件，*.vue 后缀的文件交给 vue 模块来处理
 declare module '*.vue' {
 	import type { DefineComponent } from 'vue';
@@ -21,7 +20,8 @@ declare module '*.vue' {
 // 声明文件，定义全局变量
 /* eslint-disable */
 declare interface Window {
-	nextLoading: boolean;
+	chartScale: number;
+	echartsPortrait: boolean
 }
 
 // 声明路由当前项类型

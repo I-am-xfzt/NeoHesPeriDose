@@ -6,5 +6,10 @@ export default () => autoImport({
         'vue-router',
         'pinia'
     ],
-    dts: false
+    include: [/\.vue$/, /\.vue\?vue/],
+    eslintrc: {
+        enabled: false,
+        filepath: '../.eslintrc-auto-import.json',
+        globalsPropValue: true
+    }
 })

@@ -1,0 +1,4 @@
+{
+    "vetur.format.defaultFormatter.ts": "prettier",
+    "vetur.validation.script": false
+}

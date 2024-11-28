@@ -1,16 +1,14 @@
 <template>
-  <Model />
+  <!-- <Model /> -->
+  <router-view></router-view>
 </template>
 
 <script setup lang="ts" name="App">
 // import Model from '@/components/model/three/index.vue'
-import axios from 'axios'
 import { defineAsyncComponent } from 'vue'
 const Model = defineAsyncComponent(
   () => import('./components/model/babylon/index.vue')
 )
-
-axios.get('/json/modelinfo.json').then((res) => {})
 </script>
 
 <style lang="scss" scoped>

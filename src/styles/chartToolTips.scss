@@ -1,0 +1,45 @@
+.annual-tooltip {
+    box-sizing: border-box;
+    width: 143px;
+    height: 92px;
+    padding: 0 20px;
+    background: url("../assets/BABYLONIMG/preview.png") no-repeat;
+    background-size: 100% 100%;
+    color: rgb(42, 255, 255);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .annual-month {
+        font-size: 10px;
+        line-height: 21px;
+        height: 21px;
+    }
+
+    .annual-list {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        .year-item {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 21px;
+
+            .year-name,
+            .year-value {
+                font-size: 10px;
+            }
+
+            .year-name {
+                margin: 0 2px;
+            }
+
+            .year-value {
+                display: inline-block;
+                width: 25%;
+            }
+        }
+    }
+}
