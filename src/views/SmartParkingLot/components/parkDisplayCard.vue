@@ -29,7 +29,7 @@
             :dataList="dataList"
           >
             <div style="height: 32px">
-              <div class="FlexBox" v-for="(c, v) in dataList">
+              <div class="FlexBox" v-for="c in dataList">
                 <!-- <span class="time">{{c.plate}}</span> -->
                 <div class="flex1" v-for="k in item.labels.length">{{Object.values(c)[k-1]}}</div>
               </div>
@@ -43,7 +43,7 @@
     
 <script setup lang='ts' name="parkDisplayCard">
 import { vue3ScrollSeamless } from 'vue3-scroll-seamless'
-import { getCurrentCarInfo, getCommon } from '../parkMock'
+import { getCurrentCarInfo } from '../parkMock'
 const labels = ['车牌号', '司机性别', '车辆类型']
 const currentCarInAndOutInfo = ref([
   {

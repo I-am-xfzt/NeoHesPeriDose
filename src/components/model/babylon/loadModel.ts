@@ -8,28 +8,27 @@ import {
     ISceneLoaderAsyncResult,
     HemisphericLight,
     SpotLight,
-    Mesh,
     MeshBuilder,
     StandardMaterial,
     AbstractMesh,
-    DynamicTexture,
+    // DynamicTexture,
     Animation,
     Quaternion,
-    ActionManager,
+    // ActionManager,
     SceneLoader,
-    Axis,
+    // Axis,
     Color3,
     Color4,
-    CircleEase,
+    // CircleEase,
     CubicEase,
-    ExecuteCodeAction,
+    // ExecuteCodeAction,
     ParticleSystem,
     EasingFunction,
     BloomEffect,
     DefaultRenderingPipeline,
     Texture,
-    ShaderMaterial,
-    RichTypeColor4
+    // ShaderMaterial,
+    // RichTypeColor4
 } from '@babylonjs/core';
 import "@babylonjs/inspector";
 import "@babylonjs/core/Debug/debugLayer";
@@ -69,7 +68,7 @@ const sceneOptions: SceneOptions = {
     useClonedMeshMap: false,
     virtual: true,
 },
-    handleMeshNames = [],
+    //handleMeshNames = [],
     glbModelFiles = ['充电中车辆.glb', '地下车库.glb', 'UV1.glb', 'UV2.glb']
 export const theVector3 = (...args: MyTuple): Vector3 => {
     return new Vector3(...args)

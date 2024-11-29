@@ -123,7 +123,6 @@ const option: ECOption = {
         padding: 0,
         fontSize: echartsPxScale(),
         margin: echartsPxScale(8),
-        fontSize: echartsPxScale(),
         formatter: function (data) {
           return data
         }

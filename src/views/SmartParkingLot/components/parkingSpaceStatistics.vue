@@ -13,7 +13,7 @@
 import parkStatics from '@/assets/BABYLONIMG/parkStatics.png'
 import ParkPieChart from './commonPie/ParkPieChart.vue'
 import ECharts from '@/components/ECharts/index.vue'
-import { ECOption } from '@/components/ECharts/config'
+import type { ECOption } from '@/components/ECharts/config.ts'
 import { getThousandsRef } from '@/utils/customVueRef.ts'
 import occupy from '@/assets/BABYLONIMG/occupy.png'
 import leisure from '@/assets/BABYLONIMG/leisure.png'
@@ -37,7 +37,7 @@ const data = reactive([
   }
 ])
 const countValue = getThousandsRef('1000')
-const option = <ECOption>{
+const option :ECOption = {
   tooltip: {
     trigger: 'item',
     formatter: '{b} :  {c}个'

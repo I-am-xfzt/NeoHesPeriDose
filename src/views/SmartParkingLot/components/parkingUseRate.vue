@@ -20,17 +20,15 @@
 </template>
     
 <script setup lang='ts' name="parkingUseRate">
-import { ElProgress } from 'element-plus'
 import { getCommon } from '../parkMock'
 import echartsPxScale from '@/utils/echartsPxScale.ts'
-import progressBarImage from '@/assets/BABYLONIMG/progressbar.png'
 const ECharts = defineAsyncComponent(
   () => import('@/components/ECharts/index.vue')
 )
-import { getStr } from '@/components/ECharts/config/customTooltip'
-import { ECOption } from '@/components/ECharts/config'
+import { getStr } from '@/components/ECharts/config/customTooltip.ts'
+import type { ECOption } from '@/components/ECharts/config.ts'
 const dataList = ref(getCommon())
-const option = <ECOption>{
+const option: ECOption = {
   tooltip: {
     trigger: 'axis',
     axisPointer: {

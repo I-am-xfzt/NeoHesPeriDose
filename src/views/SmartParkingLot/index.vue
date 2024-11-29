@@ -74,8 +74,8 @@ const componentsDistribution = reactive({
     },
     {
       title: '停车场各区车位使用率',
-      flex: `0 1 ${39 * window.chartScale ?? 1}%`,
-      height: `${39 * window.chartScale ?? 1}%`,
+      flex: `0 1 ${39 * (window.chartScale ?? 1)}%`,
+      height: `${39 * (window.chartScale ?? 1)}%`,
       is: 'parking-use-rate'
     }
   ],
@@ -92,8 +92,8 @@ const componentsDistribution = reactive({
     },
     {
       title: '告警事件列表',
-      flex: `0 1 ${39 * window.chartScale ?? 1}%`,
-      height: `${39 * window.chartScale ?? 1}%`,
+      flex: `0 1 ${39 * (window.chartScale ?? 1)}%`,
+      height: `${39 * (window.chartScale ?? 1)}%`,
       is: 'alarm-event-list'
     }
   ]

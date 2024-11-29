@@ -28,7 +28,8 @@ const props = defineProps({
 const styles = computed(() => {
   const styleOptions = {
     width: props.width,
-    flex: props.flex
+    flex: props.flex,
+    heigh: props.height
   }
   if (props.height) styleOptions['height'] = props.height
   return styleOptions

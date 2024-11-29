@@ -10,6 +10,7 @@ declare module '*.ts';
 declare module '*.js';
 declare module '*.mjs';
 declare module 'postcss-px-to-viewport';
+declare module 'vue3-scroll-seamless'
 // 声明文件，*.vue 后缀的文件交给 vue 模块来处理
 declare module '*.vue' {
 	import type { DefineComponent } from 'vue';
