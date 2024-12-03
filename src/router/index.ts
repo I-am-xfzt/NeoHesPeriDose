@@ -2,23 +2,25 @@ import { createRouter, createWebHashHistory } from "vue-router";
 const router = createRouter({
 	history: createWebHashHistory(),
 	routes: [
-	// {
-	// 	path: '/unitLogin',
-	// 	name: 'unitLogin',
-	// 	meta: {
-	// 		title: '外部单位登录'
-	// 	},
-	// 	component: () => import('@/views/login/unitLogin/login.vue')
-	// }, 
-	{
-		path: '/',
-		name: 'SmartParkingLot',
-		meta: {
-			title: '智慧停车场'
-		},
+		// {
+		// 	path: '/unitLogin',
+		// 	name: 'unitLogin',
+		// 	meta: {
+		// 		title: '外部单位登录'
+		// 	},
+		// 	component: () => import('@/views/login/unitLogin/login.vue')
+		// }, 
+		{
+			path: '/',
+			name: 'SmartParkingLot',
+			meta: {
+				title: '智慧停车场'
+			},
 			component: () => import('@/views/SmartParkingLot/index.vue'),
-		children: []
-	}]
+			children: []
+		}]
 })
-
+// router.beforeEach((to, from, next) => {
+// 	document.title = `${import.meta.env.VITE_GLOB_APP_TITLE}-${to.meta.title as unknown as string}`
+// })
 export default router

@@ -33,16 +33,16 @@
       <Model />
     </div>
     <div class="container-left s-row-between">
-      <CollBorderBox v-for="com in componentsDistribution.left" v-bind="com">
-        <component :is="com.is" :key="com.is" />
+      <CollBorderBox v-for="com in componentsDistribution.left" v-bind="com" :key="com.is">
+        <component :is="com.is" />
       </CollBorderBox>
     </div>
     <div :style="{backgroundImage: `url(${centerComponentInfo.bgImg})`}" class="container-center">
       <component :is='centerComponentInfo.name'></component>
     </div>
     <div class="container-right s-row-between">
-      <CollBorderBox v-for="com in componentsDistribution.right" v-bind="com">
-        <component :is="com.is" :key="com.is" />
+      <CollBorderBox v-for="com in componentsDistribution.right" v-bind="com" :key="com.is">
+        <component :is="com.is" />
       </CollBorderBox>
     </div>
   </div>

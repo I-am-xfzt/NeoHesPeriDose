@@ -1,5 +1,4 @@
 <template>
-  <!-- <Model /> -->
   <router-view></router-view>
 </template>
 

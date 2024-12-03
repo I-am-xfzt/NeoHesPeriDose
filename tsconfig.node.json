@@ -25,6 +25,10 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
+  "types": [
+    "vite/client",
+    "@babylonjs"
+  ],
   "paths": {
     "@": [
       "src"

@@ -1,4 +1,4 @@
 {
-    "vetur.format.defaultFormatter.ts": "prettier",
+    "vetur.format.defaultFormatter.ts": "prettier-tslint",
     "vetur.validation.script": false
 }

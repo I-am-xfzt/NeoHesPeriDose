@@ -1,14 +1,14 @@
 
 <template>
   <div class="parkDisplayCard wh100 flex">
-    <div class="parkDisplayCard-item FlexBox" v-for="(item,i) in currentCarInAndOutInfo">
+    <div class="parkDisplayCard-item FlexBox" v-for="(item,i) in currentCarInAndOutInfo" :key="item.title">
       <div class="title YouSheBiaoTiHei FlexBox">
         <img src="@/assets/BABYLONIMG/carIcon.png" />
         <span class="filterText">{{item.title}}</span>
       </div>
       <div class="content FlexBox">
         <div class="content-title flex filterText">
-          <span class="flex1" v-for="v in item.labels">{{v}}</span>
+          <span class="flex1" v-for="v in item.labels" :key="v">{{v}}</span>
         </div>
         <div class="content-item">
           <!-- <vue3ScrollSeamless
@@ -29,9 +29,9 @@
             :dataList="dataList"
           >
             <div style="height: 32px">
-              <div class="FlexBox" v-for="c in dataList">
+              <div class="FlexBox" v-for="c in dataList" :key="c.plate">
                 <!-- <span class="time">{{c.plate}}</span> -->
-                <div class="flex1" v-for="k in item.labels.length">{{Object.values(c)[k-1]}}</div>
+                <div class="flex1" v-for="k in item.labels.length" :key="c.plate+k">{{Object.values(c)[k-1]}}</div>
               </div>
             </div>
           </vue3ScrollSeamless>

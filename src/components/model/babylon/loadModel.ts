@@ -319,7 +319,7 @@ export class BabyLonModel {
             // }))
             this.limitModelHandle(model)
             console.log(res);
-        }
+        }        
         for (const fileName of modelArry) {
             SceneLoader.ImportMeshAsync('', '/BABYLON/uploads/', fileName, this.scene).then(res => _func(res))
         }

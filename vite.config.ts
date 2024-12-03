@@ -18,6 +18,7 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
     // esbuild: {// 可去除打印，但打包速度慢
     //   pure: viteEnv.VITE_DROP_CONSOLE ? ["console.log", "debugger"] : []
     // },
+    assetsInclude: ['**/*.glb'],
     root: process.cwd(),
     resolve: { alias },
     base: './',
@@ -26,7 +27,14 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
       port: viteEnv.VITE_PORT as unknown as number,
       open: viteEnv.VITE_OPEN,
       hmr: true,
-      proxy: createProxy(viteEnv.VITE_PROXY)
+      proxy: Object.assign({
+        [env.VITE_API_KEY]: {
+          target: env.VITE_API_URL,
+          ws: false,
+          changeOrigin: true,
+          rewrite: (path: string) => path.replace(/^\/model-api/, ''),
+        }
+      }, createProxy(viteEnv.VITE_PROXY))
     },
     optimizeDeps: {
       // 开发时 解决这些commonjs包转成esm包
