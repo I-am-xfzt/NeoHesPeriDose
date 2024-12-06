@@ -18,7 +18,6 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
     // esbuild: {// 可去除打印，但打包速度慢
     //   pure: viteEnv.VITE_DROP_CONSOLE ? ["console.log", "debugger"] : []
     // },
-    assetsInclude: ['**/*.glb'],
     root: process.cwd(),
     resolve: { alias },
     base: './',

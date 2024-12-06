@@ -145,15 +145,14 @@ export class BabyLonModel {
         });
     }
     public initCamera(): void {
-        // this.camera.setTarget(theVector3([3.1427378820900844, 0, 3.103133270236968]))
-        // this.camera.lowerAlphaLimit = Math.PI / 3; // 最小alpha值
-        // this.camera.upperAlphaLimit = Math.PI; // 最大alpha值
+        this.camera.setTarget(theVector3(3.1427378820900844, 0, 3.103133270236968))
+        this.camera.lowerAlphaLimit = Math.PI / 3; // 最小alpha值
+        this.camera.upperAlphaLimit = Math.PI; // 最大alpha值
         this.camera.lowerBetaLimit = Math.PI / 6; // 最小beta值，限制从下方看上方的角度
         this.camera.upperBetaLimit = Math.PI / 2; // 最大beta值，限制从上方看下方的角度
         this.camera.lowerRadiusLimit = 50
         this.camera.upperRadiusLimit = 500
-        // this.camera.speed = 20
-
+        this.camera.speed = 20
         this.camera.useAutoRotationBehavior = false
         // this.cameraHelper()
         this.camera.spinTo("alpha", Math.PI / 2, 50); // 在1秒内将alpha旋转到90度
