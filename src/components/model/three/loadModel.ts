@@ -4,6 +4,7 @@ import {
   Vector2,
   AmbientLight,
   AxesHelper,
+  CubeTextureLoader,
   DirectionalLight,
   AnimationMixer,
   SpotLight,
@@ -14,20 +15,27 @@ import {
   WebGLRenderer,
   Vector3,
   MeshLambertMaterial,
+  Fog
 } from 'three';
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 // 引入gltf模型加载库GLTFLoader.js
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js"
-const glbModelFiles = ['实景7-ys.glb', '科技场景-uv动画4-ys.glb', '风机-实景-ys.glb', '风机科技3-ys.glb', '风机-展开5-ys.glb'] as const;
+import { ref } from 'vue';
+import { NextLoading } from "@/utils/loading.ts"
+export const progress = ref<number>(0)
+// const CompositionOptions = Object.keys(import.meta.glob('/public/THREE/*.glb')).map(v => (v.split('/')).at(-1)) as readonly string[];
+// console.log(CompositionOptions)
+// export const glbModelFiles = CompositionOptions;
+export const glbModelFiles = ['实景7-ys.glb', '风机-实景-ys.glb', '科技场景-uv动画4-ys.glb', '风机科技3-ys.glb', '风机-展开5-ys.glb'] as const;
 
 /**
  * @description 获取三维向量
- * @param {* MyTuple } args 
- * @returns {* Vector3 } 三维向量
+ * @param {* Vector3Tuple } args 
+ * @returns 三维向量 {x: 0.6, y: 0.6, z: 0.6}
  */
-export const theVector3 = (...args: MyTuple): Vector3 => {
+export const theVector3 = (...args: Vector3Tuple): Vector3 => {
   return new Vector3(...args)
 }
 
@@ -44,29 +52,107 @@ type GLTF = {
   animations: THREE.AnimationClip[];
   asset: any; // 可以根据需要进一步细化这个类型
 };
-
-type GlbModelFilesType = typeof glbModelFiles[number];
+export type loadModelOptionsType = (data: GlbModelFilesType[]) => Array<[GlbModelFilesType, boolean, Vector3Tuple]>;
+export type GlbModelFilesType = ModelFilesNameType<typeof glbModelFiles>;
+export interface LightsOptionsType {
+  position: Vector3Tuple;
+  rotation: Vector3Tuple;
+  color: THREE.Color;
+  intensity: number;
+  spotAngle: number;
+  unSetOther?: boolean;
+}
 const createModelObject = <K extends GlbModelFilesType, V = GLTF>(key: K, value: V): Record<K, V> => ({ [key]: value } as Record<K, V>);
 type ModelObject = ReturnType<typeof createModelObject<GlbModelFilesType, GLTF>>;
+/**
+ * @author fanyonghao 
+ * @class ThreeModel 类用于创建和管理Three.js场景，包括加载模型、初始化相机、渲染器、控制器和灯光等。
+ * @constructor
+ */
 export class ThreeModel {
-  scene: THREE.Scene;  // 创建Three.js场景
-  mesh?: THREE.Mesh; // 网格模型对象Mesh
-  renderer: WebGLRenderer; // 渲染器
-  camera: PerspectiveCamera; // 相机
-  controls?: OrbitControls; // 控制器
-  threeCanvas: HTMLCanvasElement; // 渲染场景的canvas元素
+  /**
+   * Three.js 场景对象。
+   */
+  scene: THREE.Scene;
+  /**
+   * 网格模型对象。
+   */
+  mesh?: THREE.Mesh;
+  /**
+   * WebGL渲染器实例。
+   */
+  renderer: WebGLRenderer;
+  /**
+   * 透视相机实例。
+   */
+  camera: PerspectiveCamera;
+  /**
+   * 轨道控制器实例，可能未定义。
+   */
+  controls?: OrbitControls;
+  /**
+   * 渲染场景的canvas元素。
+   */
+  threeCanvas: HTMLCanvasElement;
+  /**
+   * 缩放三维向量。
+   */
   scaleVector3: Vector3
+  /**
+   * 位置三维向量。
+   */
   positionVector3: Vector3
+  /**
+   * 用于鼠标拾取的光线投射器。
+   */
   raycaster: Raycaster; // 光线投射，用于进行鼠标拾取（在三维空间中计算出鼠标移过了什么物体）
+  /**
+   * DRACOLoader 实例，用于加载优化的模型。
+   */
   dracoLoader: DRACOLoader;
+  /**
+   * GLTFLoader 实例，用于加载GLTF模型。
+   */
   loader: GLTFLoader;
-  mouse: Vector2; // 鼠标的桌面二维坐标
+  /**
+   * 鼠标的二维坐标。
+   */
+  mouse: Vector2;
+  /**
+   * 元素ID，用于获取canvas元素。
+   */
   elemId: string;
+  /**
+   * 模型信息数组。
+   */
   glbInfos?: ModelObject[];
+  /**
+   * 混合器，用于动画控制。
+   */
   mixer: null;
+  /**
+   * 动画模型数组。
+   */
   animationModel: [];
+  GlbName: GlbModelFilesType[];
+  /**
+   * 灯光对象，包含不同类型的灯光。
+   */
   Lights: LightsInterface;
-  constructor(scale: MyTuple, position: MyTuple, elemId: string) {
+  /**
+   * 灯光的一些配置项。
+   */
+  LightsOptions: LightsOptionsType;
+  /**
+   * @constructor 构造函数，初始化ThreeModel实例。
+   * @param GlbName - 模型文件名数组。
+   * @param scale - 模型缩放向量。
+   * @param position - 模型位置向量。
+   * @param elemId - 渲染场景的canvas元素ID。
+   * @param LightsOptions - 灯光配置选项。
+   */
+  constructor(GlbName: GlbModelFilesType[], scale: Vector3Tuple, position: Vector3Tuple, elemId: string, LightsOptions: LightsOptionsType) {
+    this.GlbName = GlbName;
     this.scene = new THREE.Scene();  // 创建Three.js场景
     this.mesh = undefined; // 网格模型对象Mesh
     this.renderer = new WebGLRenderer({ antialias: true, alpha: true });; // 渲染器
@@ -93,9 +179,10 @@ export class ThreeModel {
       DirectionalLight: new DirectionalLight(0xffffff, 2),
       AmbientLight: new AmbientLight(0xffffff, 20)
     };
+    this.LightsOptions = LightsOptions
   }
-  private initCamera() {
-    this.camera.position.set(-10, 100, -10.065529508318049)
+  private initCamera(lookAt: Vector3Tuple = [10, 200, 10.065529508318049]) {
+    this.camera.position.set(...lookAt)
     this.camera.lookAt(this.positionVector3);
   }
   /**
@@ -118,29 +205,34 @@ export class ThreeModel {
 
     // return this.raycaster.intersectObjects([this.mesh]);
   }
-  // ({ loaded, total }) => {
-  //   this.loaded += loaded;
-  //   this.total += total;
-  // }
   /**
-   * 加载模型
+   * @description 加载模型
+   * @param {GlbModelFilesType} modelName 模型名称
+   * @param {Boolean} setAnimation 是否执行模型动画
+   * @param {Vector3Tuple} position 模型加载后的位置
+   * @returns  返回模型对象
   */
-  loadModel(callBack = () => { }, modelName: GlbModelFilesType, setAnimation = true, scale: MyTuple = [1, 1, -1], position: MyTuple = [-8.260836601257324, 1.139329195022583, -22.13763427734375]): Promise<ModelObject> {
+  loadModel(modelName: GlbModelFilesType, setAnimation: boolean = true, position: Vector3Tuple = [-8.260836601257324, 1.139329195022583, -22.13763427734375]): Promise<ModelObject> {
     return new Promise((resolve, reject) => {
       this.loader.load(modelName, (glbFile: GLTF) => {
         console.log(glbFile);
-        glbFile.scene.scale.set(...scale);
+        glbFile.scene.scale.set(...Object.values(this.scaleVector3) as Vector3Tuple);
         glbFile.scene.position.set(...position);
         glbFile.scene.rotation.set(0, Math.PI, 0);
-        if (setAnimation) {
-
+        if (setAnimation && glbFile.animations.length > 0) {
+          this.animate(glbFile.scene, glbFile.animations)
         }
         this.scene.add(glbFile.scene)
         const result = createModelObject(modelName, glbFile)
         resolve(result);
-      }, callBack, (err) => {
-        reject(err)
-      })
+      }, ({ loaded, total, lengthComputable }) => {
+        if (lengthComputable) {
+          progress.value = (loaded / total) * 100;
+          console.log(`${progress.value.toFixed(2)}% loaded`);
+        } else {
+          console.log(`Loaded ${loaded} bytes`);
+        }
+      }, reject)
     })
   }
   /**
@@ -212,47 +304,48 @@ export class ThreeModel {
   render() {
     this.renderer.render(this.scene, this.camera);
   }
-  initModel() {
-    const geometry = new THREE.BoxGeometry();
-    const material = new THREE.MeshPhongMaterial({ color: 0xffffff });
-    this.mesh = new THREE.Mesh(geometry, material);
-    this.scene.add(this.mesh);
-  }
   /**
   * 光线
   */
   initLights() {
     // 告诉平行光需要开启阴影投射
-    this.Lights.DirectionalLight.position.set(0, 50, 0);
-    this.Lights.DirectionalLight.rotation.set(-0.6108653, 1.2217305, -0.5235988)
-    // this.Lights.DirectionalLight.castShadow = true;
-    this.Lights.SpotLight.angle = 0.8
-    const target = this.glbInfos?.find(v => Object.hasOwn(v, 'sm_car.gltf'));
-    this.Lights.SpotLight.target = Object.values(target!)[0].scene;
-    this.Lights.SpotLight.position.set(50, 80, 0)
-    for (const key in this.Lights) {
-      this.scene.add(this.Lights[key]);
+    const { position, rotation, spotAngle, intensity, unSetOther } = this.LightsOptions
+    this.Lights.DirectionalLight.position.set(...position);
+    this.Lights.DirectionalLight.rotation.set(...rotation)
+    this.Lights.DirectionalLight.intensity = intensity;
+    this.scene.add(this.Lights.DirectionalLight)
+    if (!unSetOther) {
+      this.Lights.SpotLight.angle = spotAngle;
+      const target = this.glbInfos?.find(v => Object.hasOwn(v, this.GlbName[0]));
+      this.Lights.SpotLight.target = Object.values(target!)[0].scene;
+      this.Lights.SpotLight.position.set(...position)
+      for (const key in this.Lights) {
+        this.scene.add(this.Lights[key]);
+      }
+      this.scene.add(this.Lights.SpotLight.target)
     }
-    this.scene.add(this.Lights.SpotLight.target)
   }
   /**
    * 获取模型的高度，并设置相机初始视角（也初始化控制器的视角）
    * 
   */
   /**
-   * 辅助工具
+   * 初始化和场景相关： 天空盒、地面、雾等
   */
-  initHelper() {
-    // // grids辅助网格
-    // const grid = new GridHelper(50, 30);
-    // this.scene.add(grid);
-
-    // // Axes辅助轴线
-    // // axes轴（右手坐标系）：红色代表 X 轴. 绿色代表 Y 轴. 蓝色代表 Z 轴.
-    // const axes = new AxesHelper();
-    // axes.material.depthTest = false;
-    // axes.renderOrder = 1;
-    // this.scene.add(axes);
+  initAboutScene() {
+    // 加载天空盒纹理
+    const loader = new CubeTextureLoader();
+    const skyboxTexture = loader.load([
+      'skyBox/skybox_px.jpg', // 正面
+      'skyBox/skybox_nx.jpg', // 背面
+      'skyBox/skybox_py.jpg', // 上面
+      'skyBox/skybox_ny.jpg', // 下面
+      'skyBox/skybox_pz.jpg', // 右面
+      'skyBox/skybox_nz.jpg', // 左面
+    ]);
+    // 设置天空盒
+    this.scene.background = skyboxTexture;
+    this.scene.fog = new Fog(0xcccccc, 52, 300);
   }
   setCameraView() {
 
@@ -260,24 +353,26 @@ export class ThreeModel {
   /**
    * 控制器动画
   */
-  animate() {
-    // let mixer = new AnimationMixer(this.glbInfos?.scene!);
-    // this.glbInfos?.animations.forEach(v => {
-    //   mixer.clipAction(v, this.glbInfos?.scene).setDuration(1).play();
-    // })
-    // const _func = () => {
-    //   // let v = 0
-    //   // v += 0.01
-    //   // this.camera.position.x = 100 * Math.cos(v)
-    //   // this.camera.position.z = 100 * Math.sin(v)
-    //   // this.camera.lookAt(0, 0, 0)
-    //   mixer && mixer.update(new THREE.Clock().getDelta())
-    //   console.log(mixer, 'donghua');
-    //   //更新控制器
-    //   this.render();
-    //   this.controls?.update();
-    // }
-    // requestAnimationFrame(_func);  // 使用requestAnimationFrame可以让浏览器根据自身的渲染节奏调整动画的帧率，从而避免过度渲染，优化three.js渲染性能
+  animate(scene: GLTF['scene'], animations: GLTF['animations']) {
+    let mixer = new AnimationMixer(scene);
+    animations.forEach(v => {
+      const clipAction = mixer.clipAction(v);
+      clipAction.setLoop(THREE.LoopRepeat, 2)
+      clipAction.play();
+    })
+    const _func = () => {
+      // let v = 0
+      // v += 0.01
+      // this.camera.position.x = 100 * Math.cos(v)
+      // this.camera.position.z = 100 * Math.sin(v)
+      // this.camera.lookAt(0, 0, 0)
+      mixer && mixer.update(new THREE.Clock().getDelta())
+      console.log(mixer, 'donghua');
+      //更新控制器
+      this.render();
+      // this.controls!.update();
+    }
+    requestAnimationFrame(_func);  // 使用requestAnimationFrame可以让浏览器根据自身的渲染节奏调整动画的帧率，从而避免过度渲染，优化three.js渲染性能
   }
   /**
    * 视窗的尺寸重新变化
@@ -288,18 +383,84 @@ export class ThreeModel {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.render();
   }
-  async init(callBack = () => { }) {
-    this.scene.background = new THREE.Color().setStyle("#141f3d");
-    this.initCamera();
-    this.initModel();
-    this.initHelper();
-    const res = await Promise.all(glbModelFiles.map((v: GlbModelFilesType) => this.loadModel(callBack, v)))
-    this.glbInfos = res
+  /**
+   * @description 设置地面
+   */
+  async initGround() {
+    const geometry = new THREE.PlaneGeometry(1000, 1000);
+    const textureLoader = new TextureLoader();
+    // 顶点着色器
+    const vertexShader = `
+          varying vec2 vUv;
+          void main() {
+              vUv = uv;
+              gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }`;
+    // 片段着色器
+    const fragmentShader = `
+        uniform sampler2D texture1;
+        uniform sampler2D texture2;
+        varying vec2 vUv;
+        void main() {
+            vec4 texColor1 = texture2D(texture1, vUv);
+            vec4 texColor2 = texture2D(texture2, vUv);
+            gl_FragColor = texColor1 * texColor2;
+        }
+        `;
+    const loadArray = [
+      {
+        path: "textures/resource2.png"
+      },
+      {
+        path: "textures/resource1.jpg"
+      }
+    ]
+    const res = await Promise.all(loadArray.map(v => textureLoader.load(v.path)))
+    const theMaterials = res.map(item => {
+      item.wrapS = THREE.RepeatWrapping; // 水平重复
+      item.wrapT = THREE.RepeatWrapping; // 垂直重复
+      item.repeat.x = 20; // 根据需要调整重复次数       
+      item.repeat.y = 20; // 根据需要调整重复次数
+      return new MeshBasicMaterial({
+        map: item,
+        transparent: true,
+        color: 0x141f3d,
+        side: THREE.DoubleSide
+      })
+    })
+    console.log(res, theMaterials);
+    // 创建材质
+    const material = new THREE.ShaderMaterial({
+      uniforms: {
+          texture1: { value: res[0] },
+          texture2: { value: res[1] }
+      },
+      vertexShader: vertexShader,
+      fragmentShader: fragmentShader
+    });
+    
+    const plane = new THREE.Mesh(geometry, material)
+    plane.rotation.x = -Math.PI / 2
+    this.scene.add(plane)
+  }
+  /**
+   * @description 设置场景颜色
+   * @param color 
+   */
+  setSceneColor(color: string = "#141f3d") {
+    this.scene.background = new THREE.Color().setStyle(color);
+  }
+  async init(getLoadModelOptions: loadModelOptionsType, unLoad?: EmptyObjectType<boolean>, color?: string) {
+    this.setSceneColor(color)
     this.initRender();
+    this.initCamera();
+    !unLoad!?.notSkyBox && this.initAboutScene();
     this.initControls();
+    const res = await Promise.all(getLoadModelOptions(this.GlbName).map((v) => this.loadModel(...v)))
+    this.glbInfos = res
     this.initLights();
     // this.setCameraView()
-    this.animate()
+    NextLoading.done(800);
     const that = this
     window.addEventListener('resize', that.onWindowResize);
     // window.onclick = (event) => that.highlight(event, preselectMat, preselectModel);

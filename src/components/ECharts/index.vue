@@ -1,5 +1,7 @@
 <template>
-  <div id="echarts" ref="chartRef" :style="echartsStyle" />
+  <div class="wh100 posR" v-chartLoading="{ loading, time: 1000 }">
+    <div id="echarts" ref="chartRef" :style="echartsStyle" />
+  </div>
 </template>
 
 <script setup lang="ts" name="ECharts">
@@ -21,7 +23,7 @@ const props = withDefaults(defineProps<Props>(), {
   renderer: "canvas",
   resize: true
 });
-
+const loading = ref(true)
 const echartsStyle = computed(() => {
   return props.width || props.height
     ? { height: props.height + "px", width: props.width + "px" }
@@ -55,6 +57,7 @@ const init = () => {
     );
     chartInstance.value.on("click", handleClick);
     draw();
+    loading.value = false
   }
 };
 

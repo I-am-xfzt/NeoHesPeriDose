@@ -20,7 +20,8 @@ export const getCurrentCarInfo = () => {
             sex: '女',
             carType: '年租车',
             parkTime: '3h'
-        }, {
+        },
+        {
             plate: '豫K88888',
             sex: '女',
             carType: '月租车',
@@ -36,7 +37,8 @@ export const getCurrentCarInfo = () => {
             sex: '女',
             carType: '年租车',
             parkTime: '3h'
-        }, {
+        },
+        {
             plate: '豫A33333',
             sex: '女',
             carType: '月租车',

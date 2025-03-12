@@ -33,6 +33,7 @@ import {
 import "@babylonjs/inspector";
 import "@babylonjs/core/Debug/debugLayer";
 import { SkyMaterial } from '@babylonjs/materials'
+import { NextLoading } from '@/utils/loading.ts';
 interface LightsInterface {
     SpotLight: SpotLight;
     // PointLight: null,
@@ -69,8 +70,9 @@ const sceneOptions: SceneOptions = {
     virtual: true,
 },
     //handleMeshNames = [],
-    glbModelFiles = ['充电中车辆.glb', '地下车库.glb', 'UV1.glb', 'UV2.glb']
-export const theVector3 = (...args: MyTuple): Vector3 => {
+    glbModelFiles = ['UV3.glb', 'UV4.glb', 'chargingvwhicle.glb', 'underground.glb'] as const
+export type GlbModelFilesType = ModelFilesNameType<typeof glbModelFiles>;
+export const theVector3 = (...args: Vector3Tuple): Vector3 => {
     return new Vector3(...args)
 }
 class MyArcRotateCamera extends ArcRotateCamera {
@@ -96,13 +98,14 @@ export class BabyLonModel {
     animationModel = []
     DirectionalLight: LightsInterface['HemisphericLight'];
     ground = MeshBuilder;
-    constructor(position: MyTuple, eleId: string) {
+    constructor(position: Vector3Tuple, eleId: string, cameraTarget: Vector3Tuple) {
+        !window.nextLoading && NextLoading.start();
         this.canvas = document.getElementById(eleId) as HTMLCanvasElement
         this.engine = new Engine(this.canvas, true)
         this.scene = new Scene(this.engine, sceneOptions);  // 创建babylonjs场景
         // this.scene.clearColor = new Color4(0.058, 0.082, 0.121, 1)
         this.scene.clearColor = new Color4(10 / 255, 22 / 255, 32 / 255, 1)
-        this.camera = new MyArcRotateCamera('cameraA', Math.PI / 2, Math.PI / 2, 100, theVector3(3.1427378820900844, 0, 3.103133270236968), this.scene); // 相机
+        this.camera = new MyArcRotateCamera('cameraA', Math.PI / 2, Math.PI / 2, 500, theVector3(...cameraTarget), this.scene); // 相机
         this.camera.position = theVector3(...position)
         this.mouse = new Vector2(); // 鼠标的桌面二维坐标
         this.eleId = eleId
@@ -145,7 +148,6 @@ export class BabyLonModel {
         });
     }
     public initCamera(): void {
-        this.camera.setTarget(theVector3(3.1427378820900844, 0, 3.103133270236968))
         this.camera.lowerAlphaLimit = Math.PI / 3; // 最小alpha值
         this.camera.upperAlphaLimit = Math.PI; // 最大alpha值
         this.camera.lowerBetaLimit = Math.PI / 6; // 最小beta值，限制从下方看上方的角度
@@ -171,7 +173,7 @@ export class BabyLonModel {
             updatable: true
         }, this.scene),
             shaderMaterial = new StandardMaterial('sta', this.scene)
-            ,texture = new Texture("textures/resource.jpg", this.scene)
+            , texture = new Texture("textures/resource.jpg", this.scene)
         shaderMaterial.maxSimultaneousLights = 6
         shaderMaterial.emissiveColor = new Color3(0, 0.003, 0.067)
         texture.uScale = 10;
@@ -297,7 +299,7 @@ export class BabyLonModel {
             pilot.rotationQuaternion = Quaternion.RotationYawPitchRoll(pilot.rotation.y, pilot.rotation.x, pilot.rotation.z);
         });
     }
-    public loadModel(modelArry: string[] = glbModelFiles, rotation: MyTuple = [0, Math.PI, 0], position: MyTuple = [-8.260836601257324, 1.139329195022583, -22.13763427734375], scaling: MyTuple = [1, 1, 1]): void {
+    public loadModel(model: GlbModelFilesType, position: Vector3Tuple = [-8.260836601257324, 1.139329195022583, -22.13763427734375]): Promise<ISceneLoaderAsyncResult> {
         const _func = (res: ISceneLoaderAsyncResult) => {
             res.meshes.forEach((mesh) => {
                 mesh.outlineColor = new Color3(1, 0, 0) // new Color3(0.1137, 0.9686, 1)
@@ -306,7 +308,6 @@ export class BabyLonModel {
             const model = res.meshes[0];
             // model.rotation = theVector3(rotation);
             model.position = theVector3(...position)
-            model.scaling = theVector3(...scaling)
             // const modelManager = new ActionManager(this.scene)
             // modelManager.registerAction(new ExecuteCodeAction({
             //     trigger: ActionManager.OnPickTrigger,
@@ -316,21 +317,21 @@ export class BabyLonModel {
             // }, (evt) => {
             //     console.log(evt, 12);
             // }))
-            this.limitModelHandle(model)
-            console.log(res);
-        }        
-        for (const fileName of modelArry) {
-            SceneLoader.ImportMeshAsync('', '/BABYLON/uploads/', fileName, this.scene).then(res => _func(res))
+            // this.limitModelHandle(model)
+            return res
         }
+        return new Promise((resolve, reject) => {
+            SceneLoader.ImportMeshAsync('', '/BABYLON/uploads/', model, this.scene).then(res => resolve(_func(res))).catch(reject)
+        })
     }
     public clearSceneEvery(): void {
         this.scene.dispose();
     }
-    public init(): void {
+    public async init(): Promise<void> {
         this.setLight();
         this.initGround();
-        // this.initSkyBox()
         this.render();
-        this.loadModel()
+        await Promise.all(glbModelFiles.map(v => this.loadModel(v)));
+        NextLoading.done(500)
     }
 }

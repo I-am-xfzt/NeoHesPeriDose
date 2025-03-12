@@ -3,11 +3,6 @@
     "baseUrl": "." /* Base directory to resolve non-absolute module names. */,
     /* Linting */
     "target": "ESNext",
-    "paths": {
-      "three/*": [
-        "node_modules/@types/three/*"
-      ]
-    },
     "useDefineForClassFields": true,
     "module": "ESNext",
     "lib": [

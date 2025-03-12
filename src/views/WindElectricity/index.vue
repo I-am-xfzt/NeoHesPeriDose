@@ -1,10 +1,18 @@
 <template>
-	<Model />
+	<div class="app-container">
+		<router-view></router-view>
+		<WindPowerTabs class="windpower" />
+	</div>
 </template>
-    
 <script setup lang='ts'>
-	import Model from "@/components/model/three/index.vue";
+import WindPowerTabs from '@/components/Tabs/Tabs.vue';
+
 </script>
-    
+
 <style lang="scss" scoped>
+.windpower {
+	bottom: 3%;
+	left: 50%;
+	transform: translateX(-50%);
+}
 </style>

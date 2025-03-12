@@ -22,7 +22,8 @@ declare module '*.vue' {
 /* eslint-disable */
 declare interface Window {
 	chartScale: number;
-	echartsPortrait: boolean
+	echartsPortrait: boolean;
+	nextLoading: boolean;
 }
 
 // 声明路由当前项类型
@@ -97,6 +98,7 @@ declare interface ViteEnv {
 	VITE_BUILD_COMPRESS_DELETE_ORIGIN_FILE: boolean;
 	VITE_DROP_CONSOLE: boolean;
 	VITE_PWA: boolean;
+	VITE_IMG_BASE_URL: string;
 	VITE_DEVTOOLS: boolean;
 	VITE_PUBLIC_PATH: string;
 	VITE_API_URL: string;
@@ -125,4 +127,4 @@ type Tuple<T, N extends number> =
 	N extends 3 ? [T, T, T] : never;
 
 // 使用示例
-type MyTuple = Tuple<number, 3>; // 这将生成一个包含3个string类型元素的元组类型
+type Vector3Tuple = Tuple<number, 3>; // 这将生成一个包含3个string类型元素的元组类型

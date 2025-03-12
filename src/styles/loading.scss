@@ -1,0 +1,94 @@
+.loading-next {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2024;
+}
+
+// 图表Loding
+$loader-size: 48px;
+$loader-color: #fff;
+$loader-color-before: #d9d9d9;
+$loader-color-after: #0063d6;
+$animation-duration: 1s;
+$animation-delay: 0.4s;
+
+.simple-loading-spin {
+  display: inline-block;
+  width: $loader-size;
+  height: $loader-size;
+  border-radius: 50%;
+  color: $loader-color;
+  perspective: 1000px;
+  transform: rotate(45deg);
+  .loader {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    &:before,
+    &:after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: block;
+      width: inherit;
+      height: inherit;
+      border-radius: 50%;
+      animation: spin $animation-duration linear infinite;
+      transform-origin: center;
+    }
+
+    &:before {
+      color: $loader-color-before;
+      transform: rotateX(70deg);
+    }
+
+    &:after {
+      color: $loader-color-after;
+      animation-delay: $animation-delay;
+      transform: rotateY(70deg);
+    }
+  }
+}
+
+// Keyframes from your provided CSS
+@keyframes spin {
+
+  0%,
+  100% {
+    box-shadow: .2em 0 0 0 currentcolor;
+  }
+
+  12% {
+    box-shadow: .2em .2em 0 0 currentcolor;
+  }
+
+  25% {
+    box-shadow: 0 .2em 0 0 currentcolor;
+  }
+
+  37% {
+    box-shadow: -.2em .2em 0 0 currentcolor;
+  }
+
+  50% {
+    box-shadow: -.2em 0 0 0 currentcolor;
+  }
+
+  62% {
+    box-shadow: -.2em -.2em 0 0 currentcolor;
+  }
+
+  75% {
+    box-shadow: 0 -.2em 0 0 currentcolor;
+  }
+
+  87% {
+    box-shadow: .2em -.2em 0 0 currentcolor;
+  }
+}
+
+// 其他样式可以根据需要添加

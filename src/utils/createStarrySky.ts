@@ -2,7 +2,7 @@
 export const createStarrySky = () => {
     const bodys: Element = document.body
     const div = <HTMLElement>document.createElement("div")
-    div.setAttribute("class", "loading-next")
+    div.setAttribute("class", "sky")
     const htmls = `
               <div class="layer1"></div>
               <div class="layer2"></div>
