@@ -77,10 +77,10 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
             // 转换后的精度
             unitPrecision: 6,
             // 转换后的单位
-            viewportUnit: 'vmin',
+            viewportUnit: 'vmax',
             landscapeUnit: 'vmax',
             // 字体转换后的单位
-            fontViewportUnit: 'vmin',
+            fontViewportUnit: 'vmax',
             // 能转换的属性，*表示所有属性，!border表示border不转
             propList: ['*'],
             // 最小转换的值，小于等于1不转

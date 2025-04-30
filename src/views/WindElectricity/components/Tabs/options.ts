@@ -7,13 +7,13 @@ export default {
             englishTitle: 'Production management'
         },
         {
-            path: "/WindPower/Device",
+            path: "/windPower/device",
             img: '18e45039-9790-4e0e-a084-476eb474b2d7.png',
             title: '设备管理',
             englishTitle: 'Equipment management'
         },
         {
-            path: '/WindPower/OperationAndMaintenance',
+            path: '/windPower/operationAndMaintenance',
             img: '659ca351-493c-453d-9cd2-9a6134c4d8f2.png',
             title: '智能运维',
             englishTitle: 'Intelligence operations'

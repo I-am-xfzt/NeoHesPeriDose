@@ -5,7 +5,7 @@
 	</div>
 </template>
 <script setup lang='ts'>
-import WindPowerTabs from '@/components/Tabs/Tabs.vue';
+import WindPowerTabs from './components/Tabs/Tabs.vue';
 
 </script>
 
