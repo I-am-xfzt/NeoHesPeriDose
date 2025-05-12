@@ -7,14 +7,14 @@ const router = createRouter({
 		{
 			path: '/',
 			name: 'WindPower',
-			redirect: '/windPower/production',
+			redirect: '/wind-power/production',
 			meta: {
 				title: '智能风电'
 			},
 			component: () => import('@/views/WindElectricity/index.vue'),
 			children: [
 				{
-					path: '/windPower/production',
+					path: '/wind-power/production',
 					name: 'WindPower/Production',
 					meta: {
 						title: '风电生产管理'
@@ -22,7 +22,7 @@ const router = createRouter({
 					component: () => import('@/views/WindElectricity/production/index.vue'),
 				},
 				{
-					path: '/windPower/operationAndMaintenance',
+					path: '/wind-power/operation-and-maintenance',
 					name: 'WindPower/operationAndMaintenance',
 					meta: {
 						title: '风电运维管理'
@@ -30,7 +30,7 @@ const router = createRouter({
 					component: () => import('@/views/WindElectricity/OperationAndMaintenance/index.vue'),
 				},
 				{
-					path: '/windPower/device',
+					path: '/wind-power/device',
 					name: 'WindPower/device',
 					meta: {
 						title: '风电设备管理'
@@ -40,7 +40,7 @@ const router = createRouter({
 			]
 		},
 		{
-			path: '/SmartParkingLot',
+			path: '/smart-parking-lot',
 			name: 'SmartParkingLot',
 			meta: {
 				title: '智慧停车场'

@@ -120,11 +120,3 @@ declare const __APP_INFO__: {
 	};
 	lastBuildTime: string;
 };
-type Tuple<T, N extends number> =
-	N extends 0 ? [] :
-	N extends 1 ? [T] :
-	N extends 2 ? [T, T] :
-	N extends 3 ? [T, T, T] : never;
-
-// 使用示例
-type Vector3Tuple = Tuple<number, 3>; // 这将生成一个包含3个string类型元素的元组类型

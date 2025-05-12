@@ -33,7 +33,7 @@
     <div class="right-border borders"></div>
     <div class="bottom-border borders"></div>
     <div class="container-model wh100">
-      <Model />
+      <Model sliceParams="UV3.glb,UV4.glb,chargingvwhicle.glb,underground.glb" />
     </div>
     <div v-for="(item, i) in Object.keys(componentsDistribution)" :key="i" :class="[`container-${item}`, 's-row-between']">
       <CollBorderBox v-for="com in componentsDistribution[item as keys]" v-bind="com" :key="com.is">

@@ -19,21 +19,25 @@ import {
   // Axis,
   Color3,
   Color4,
-  // CircleEase,
+  MultiMaterial,
   CubicEase,
-  // ExecuteCodeAction,
+  Mesh,
   ParticleSystem,
   EasingFunction,
   BloomEffect,
   DefaultRenderingPipeline,
   Texture,
-  // ShaderMaterial,
-  // RichTypeColor4
+  Tools,
+  PostProcess,
+  ShaderMaterial,
+  Effect,
+  GlowLayer,
 } from '@babylonjs/core'
 import '@babylonjs/inspector'
 import '@babylonjs/core/Debug/debugLayer'
 import { SkyMaterial } from '@babylonjs/materials'
 import { NextLoading } from '@/utils/loading.ts'
+import { WorkingCircleWave } from './RippleEffect'
 interface LightsInterface {
   SpotLight: SpotLight
   // PointLight: null,
@@ -63,7 +67,14 @@ export interface SceneOptions {
   /** 定义场景的创建是否应影响引擎（例如 UtilityLayer 的场景） */
   virtual?: boolean
 }
-const sceneOptions: SceneOptions = {
+export interface LightsOptions {
+  direction?: Vector3Tuple
+  position?: Vector3Tuple
+  color: string
+  intensity: number
+  spotAngle: number
+}
+export const sceneOptions: SceneOptions = {
     useGeometryUniqueIdsMap: true,
     useMaterialMeshMap: false,
     useClonedMeshMap: false,
@@ -75,11 +86,13 @@ const sceneOptions: SceneOptions = {
     'UV4.glb',
     'chargingvwhicle.glb',
     'underground.glb',
+    '管道布局12.13改细1_3.glb'
   ] as const
 export type GlbModelFilesType = ModelFilesNameType<typeof glbModelFiles>
 export const theVector3 = (...args: Vector3Tuple): Vector3 => {
   return new Vector3(...args)
 }
+
 class MyArcRotateCamera extends ArcRotateCamera {
   public spinTo(
     whichprop: 'alpha' | 'beta' | 'radius',
@@ -101,15 +114,15 @@ class MyArcRotateCamera extends ArcRotateCamera {
     )
   }
 }
+
 export class BabyLonModel {
   private scene: Scene // 创建babylonjs场景
   engine: Engine
   // mesh: Mesh; // 网格模型对象Mesh
   canvas: HTMLCanvasElement // 渲染器
-  camera: MyArcRotateCamera // 相机
+  camera: ArcRotateCamera // 相机
   controls = null // 控制器
   // raycaster = new Raycaster(); // 光线投射，用于进行鼠标拾取（在三维空间中计算出鼠标移过了什么物体）
-  // raycaster.firstHitOnly = true;
   mouse: Vector2 // 鼠标的桌面二维坐标
   eleId: string
   glbInfos: any
@@ -117,40 +130,27 @@ export class BabyLonModel {
   animationModel = []
   DirectionalLight: LightsInterface['HemisphericLight']
   ground = MeshBuilder
-  constructor(
-    position: Vector3Tuple,
-    eleId: string,
-    cameraTarget: Vector3Tuple
-  ) {
+  constructor(eleId: string, sceneColor: string) {
     !window.nextLoading && NextLoading.start()
     this.canvas = document.getElementById(eleId) as HTMLCanvasElement
     this.engine = new Engine(this.canvas, true)
     this.scene = new Scene(this.engine, sceneOptions) // 创建babylonjs场景
     // this.scene.clearColor = new Color4(0.058, 0.082, 0.121, 1)
-    this.scene.clearColor = new Color4(10 / 255, 22 / 255, 32 / 255, 1)
-    this.camera = new MyArcRotateCamera(
-      'cameraA',
-      Math.PI / 2,
-      Math.PI / 2,
-      500,
-      theVector3(...cameraTarget),
-      this.scene
-    ) // 相机
-    this.camera.position = theVector3(...position)
+    this.scene.clearColor = new Color3().fromHexString(sceneColor)
     this.mouse = new Vector2() // 鼠标的桌面二维坐标
     this.eleId = eleId
     this.glbInfos = null
     this.mixer = null
     this.animationModel = []
+  }
+  public setLight({ direction, intensity, color }): void {
     this.DirectionalLight = new HemisphericLight(
       'DirectionalLight',
-      theVector3(0, 1, 0),
+      theVector3(...direction),
       this.scene
     )
-  }
-  public setLight(): void {
-    this.DirectionalLight.groundColor = new Color3(0, 0, 1)
-    this.DirectionalLight.intensity = 1
+    this.DirectionalLight.groundColor = new Color3().fromHexString(color)
+    this.DirectionalLight.intensity = intensity
   }
   // 场景雾
   public setSceneFog(): void {
@@ -180,7 +180,6 @@ export class BabyLonModel {
   private render(): void {
     let frameCount = 0
     const renderFrequency = 2 // 每 2 帧渲染一次
-    this.initCamera()
     this.engine.runRenderLoop(() => {
       if (frameCount % renderFrequency === 0) this.scene.render(true)
       frameCount++
@@ -189,19 +188,30 @@ export class BabyLonModel {
       this.engine.resize()
     })
   }
-  public initCamera(): void {
-    this.camera.lowerAlphaLimit = Math.PI / 3 // 最小alpha值
-    this.camera.upperAlphaLimit = Math.PI // 最大alpha值
-    this.camera.lowerBetaLimit = Math.PI / 6 // 最小beta值，限制从下方看上方的角度
-    this.camera.upperBetaLimit = Math.PI / 2 // 最大beta值，限制从上方看下方的角度
-    this.camera.lowerRadiusLimit = 50
-    this.camera.upperRadiusLimit = 500
-    this.camera.speed = 20
-    this.camera.useAutoRotationBehavior = false
-    // this.cameraHelper()
-    this.camera.spinTo('alpha', Math.PI / 2, 50) // 在1秒内将alpha旋转到90度
-    this.camera.spinTo('beta', Math.PI / 2, 50) // 在1秒内将beta旋转到105度
-    this.camera.spinTo('radius', 250, 50) // 在1秒内将半径缩放到250
+  public initCamera(
+    { target, position, other },
+    type: BabylonCameraNameType = 'ArcRotateCamera'
+  ): void {
+    const cameraType = {
+      ArcRotateCamera: {
+        init: () =>
+          new ArcRotateCamera(
+            'cameraA',
+            Math.PI / 2,
+            Math.PI / 2,
+            500,
+            theVector3(...target),
+            this.scene
+          ),
+        helper: (params) => this.ArcRotateHelper(params),
+      }, // 相机
+    }
+    this.camera = cameraType[type].init()
+    this.camera.inertia = 0.9
+    this.camera.position = theVector3(...position)
+    console.log(other);
+    
+    cameraType[type]['helper'](other)
     this.camera.attachControl(this.canvas, true) // 控制器
   }
   createTexture() {}
@@ -231,31 +241,6 @@ export class BabyLonModel {
         (ground.material = shaderMaterial)
       )
     )
-    // const texture1 = new Texture("textures/dots.png", this.scene),
-    //     texture2 = new Texture("textures/resource.jpg", this.scene),
-    //     texture3 = new Texture("textures/yuanquan.png", this.scene);
-    // [texture1, texture2 ,texture3].forEach(v => {
-    //     v.uScale = 20;
-    //     v.vScale = 20
-    //     v.uAng = 0; // U轴旋转角度
-    //     v.vAng = 0; // V轴旋转角度
-    //     v.wAng = 0; // W轴旋转角度
-    // })
-
-    // this.scene.beginAnimation(texture3, 0, 100, true);
-    // shaderMaterial.diffuseTexture = texture1;
-    // shaderMaterial.opacityTexture = texture2;
-    // shaderMaterial.emissiveTexture = texture3
-    // ground.material = shaderMaterial
-    // const animTexture3 = new Animation("animTexture3", "uScale", 30, Animation.ANIMATIONTYPE_FLOAT, Animation.ANIMATIONLOOPMODE_CYCLE);
-    // animTexture3.setKeys([{
-    //     frame: 0,
-    //     value: 1
-    // }, {
-    //     frame: 100,
-    //     value: 2
-    // }]);
-    // texture3.animations.push(animTexture3);
   }
   system() {
     const starSystem = new ParticleSystem('stars', 5000, this.scene)
@@ -327,25 +312,49 @@ export class BabyLonModel {
     this.scene.beginAnimation(starSystem, 0, 100, true)
     starSystem.start()
   }
-  private cameraHelper(
-    name: 'alpha' | 'radius' = 'alpha',
-    FPS: number = 30,
-    frameFrom: number = 0,
-    frameTo: number = 60
-  ): void {
-    const rotationAnimation = new Animation(
-        `${name}Animation`,
-        name,
-        FPS,
-        Animation.ANIMATIONTYPE_FLOAT,
-        Animation.ANIMATIONLOOPMODE_CONSTANT
-      ),
-      keys = []
-    keys.push({ frame: frameFrom, value: this.camera[name] })
-    keys.push({ frame: frameTo, value: this.camera[name] + Math.PI / 2 })
-    rotationAnimation.setKeys(keys)
-    this.camera.animations.push(rotationAnimation)
-    this.scene.beginAnimation(this.camera, frameFrom, frameTo, false)
+  private cameraRoam(speed) {
+    const that = this
+    // 控制相机 前后左右移动
+    window.addEventListener('keydown', function (event) {
+      const step = parseInt(speed) / 10,
+        forward = that.camera.getDirection(Axis.Z),
+        right = that.camera.getDirection(Axis.X)
+      switch (event.key) {
+        case 'w':
+        case 'W':
+          // 向前移动
+          that.camera.target.addInPlace(forward.scale(step))
+          break
+        case 's':
+        case 'S':
+          // 向后移动
+          that.camera.target.addInPlace(forward.scale(-step))
+          break
+        case 'a':
+        case 'A':
+          // 向左移动
+          that.camera.target.addInPlace(right.scale(-step))
+          break
+        case 'd':
+        case 'D':
+          // 向右移动
+          that.camera.target.addInPlace(right.scale(step))
+          break
+      }
+    })
+  }
+  private ArcRotateHelper({
+    minPolarAngle,
+    maxPolarAngle,
+    rotateSpeed,
+    roam,
+    roamSpeed,
+  }): void {
+    this.camera.lowerBetaLimit = Math.PI / (180 / minPolarAngle)
+    this.camera.upperBetaLimit = Math.PI / (180 / maxPolarAngle)
+    this.camera.angularSensibilityX = 2000 / rotateSpeed // 水平旋转速度
+    this.camera.angularSensibilityY = 2000 / rotateSpeed // 垂直旋转速度
+    roam && this.cameraRoam(roamSpeed)
   }
   /**
    * @description 限制模型旋转的范围
@@ -383,13 +392,12 @@ export class BabyLonModel {
     })
   }
   public loadModel(
-    model: GlbModelFilesType,
-    position: Vector3Tuple = [
-      -8.260836601257324, 1.139329195022583, -22.13763427734375,
-    ]
+    modelName: GlbModelFilesType,
+    optimize: boolean = true,
+    position: Vector3Tuple
   ): Promise<ISceneLoaderAsyncResult> {
     const _func = (res: ISceneLoaderAsyncResult) => {
-      console.log(res)
+      console.log(res, position)
       res.meshes.forEach((mesh) => {
         mesh.outlineColor = new Color3(1, 0, 0) // new Color3(0.1137, 0.9686, 1)
         mesh.edgesColor = new Color4(0.1137, 0.9686, 1, 1)
@@ -397,32 +405,82 @@ export class BabyLonModel {
       const model = res.meshes[0]
       // model.rotation = theVector3(rotation);
       model.position = theVector3(...position)
-      // const modelManager = new ActionManager(this.scene)
-      // modelManager.registerAction(new ExecuteCodeAction({
-      //     trigger: ActionManager.OnPickTrigger,
-      //     parameter: (evt: any) => {
-      //         console.log(evt);
-      //     }
-      // }, (evt) => {
-      //     console.log(evt, 12);
-      // }))
-      // this.limitModelHandle(model)
+      const updateLOD = () => {
+        const distance = this.camera.radius
+        if (distance < 5) {
+          // 高细节设置
+          model.renderingGroupId = 0
+        } else if (distance < 15) {
+          // 中细节设置
+          model.renderingGroupId = 1
+        } else {
+          // 低细节设置
+          model.renderingGroupId = 2
+        }
+      }
+      if (optimize) {
+        this.camera.onViewMatrixChangedObservable.add(updateLOD)
+        model.isPickable = false // 如果不需要拾取模型，可以设置为 false
+        model.doNotSyncBoundingInfo = true // 减少边界框同步的开销
+        model.frufrustumCulling = true
+      }
       return res
     }
     return new Promise((resolve, reject) => {
-      SceneLoader.ImportMeshAsync('', '/BABYLON/uploads/', model, this.scene)
+      SceneLoader.ImportMeshAsync(
+        '',
+        '/BABYLON/uploads/',
+        modelName,
+        this.scene
+      )
         .then((res) => resolve(_func(res)))
         .catch(reject)
     })
   }
+  /**
+   * 导出场景或者模型为.babylon文件（json格式）
+   * @param {*} filename
+   * @param {*} mOrs
+   */
+  public downLoadScene(filename = '模型场景', mOrs = 'scene') {
+    let objectUrl
+    if (objectUrl) {
+      window.URL.revokeObjectURL(objectUrl)
+    }
+    const serializedMesh = SceneSerializer.SerializeMesh(
+      mOrs === 'scene' ? this[mOrs] : this[mOrs][0]
+    )
+    const strMesh = JSON.stringify(serializedMesh)
+    if (
+      filename.toLowerCase().lastIndexOf('.babylon') !== filename.length - 8 ||
+      filename.length < 9
+    ) {
+      filename += '.babylon'
+    }
+    const blob = new Blob([strMesh], { type: 'octet/stream' })
+    Tools.Download(blob, filename)
+  }
+  // 创建自定义后期处理效果
+  createAuraPostProcess() {
+    // 1. 首先创建带纹理的基础材质
+
+    // 创建波纹效果
+    new WorkingCircleWave(this.scene)
+    // const glowLayer = new GlowLayer('glowLayer', this.scene)
+    // glowLayer.intensity = 0.5
+    // glowLayer.referenceMeshToUseItsOwnMaterial(ground)
+  }
   public clearSceneEvery(): void {
     this.scene.dispose()
+    // 销毁引擎
+    this.engine.dispose()
   }
-  public async init(): Promise<void> {
-    this.setLight()
-    this.initGround()
+  public async init(
+    getLoadModelOptions: loadModelOptionsType<GlbModelFilesType>
+  ): Promise<void> {
+
     this.render()
-    await Promise.all(glbModelFiles.map((v) => this.loadModel(v)))
     NextLoading.done(500)
+    return await Promise.all(getLoadModelOptions.map((v) => this.loadModel(...v)))
   }
 }

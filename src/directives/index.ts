@@ -6,13 +6,15 @@ import debounce from "./modules/debounce";
 import throttle from "./modules/throttle";
 import longpress from "./modules/longpress";
 import chartLoading from "./modules/chartLoading"
-const directivesList: { [key: string]: Directive } = {
+import resizeOb from "./modules/resizeOb";
+const directivesList: { EmptyObjectType<Directive> } = {
   copy,
   waterMarker,
   draggable,
   debounce,
   throttle,
   longpress,
+  resizeOb,
   chartLoading
 };
 

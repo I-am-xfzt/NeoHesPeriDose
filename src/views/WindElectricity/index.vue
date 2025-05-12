@@ -1,5 +1,5 @@
 <template>
-	<div class="app-container">
+	<div class="app-container wh100">
 		<router-view></router-view>
 		<WindPowerTabs class="windpower" />
 	</div>
