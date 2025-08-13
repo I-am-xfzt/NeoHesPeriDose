@@ -75,7 +75,7 @@ const createModelObject = <K extends GlbModelFilesType, V = GLTF>(
 type ModelObject = ReturnType<typeof createModelObject<GlbModelFilesType, GLTF>>
 /**
  * @author fanyonghao
- * @class ThreeModel 类用于创建和管理Three.js场景，包括加载模型、初始化相机、渲染器、控制器和灯光等。
+ * @optionsClass ThreeModel 类用于创建和管理Three.js场景，包括加载模型、初始化相机、渲染器、控制器和灯光等。
  * @constructor
  */
 export class ThreeModel {

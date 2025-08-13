@@ -2,14 +2,14 @@
   <div class="parkingUseRate s-row-center FlexBox">
     <div class="parkingUseRate-content FlexBox">
       <ECharts :option="option" />
-      <!-- <div class="item" v-for="item in dataList">
+      <!-- <div optionsClass="item" v-for="item in dataList">
         <el-progress :percentage="item.useRate" color="#5ecefb" :key="item.area">
           <template #default="{percentage}">
-            <div class="percentage flx-justify-between">
+            <div optionsClass="percentage flx-justify-between">
               <p>{{item.area}}区</p>
-              <div class="YouSheBiaoTiHei">
+              <div optionsClass="YouSheBiaoTiHei">
                 <span>{{percentage}}</span>
-                <span class="span">%</span>
+                <span optionsClass="span">%</span>
               </div>
             </div>
           </template>
