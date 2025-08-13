@@ -7,7 +7,7 @@ import throttle from "./modules/throttle";
 import longpress from "./modules/longpress";
 import chartLoading from "./modules/chartLoading"
 import resizeOb from "./modules/resizeOb";
-const directivesList: { EmptyObjectType<Directive> } = {
+const directivesList: EmptyObjectType<Directive> = {
   copy,
   waterMarker,
   draggable,
