@@ -5,7 +5,7 @@ export default {
   mounted(el, binding: DirectiveBinding) {
     console.log(binding.value, el, 'mounted');
     const loadingIndicator = document.createElement('div');
-    loadingIndicator.setAttribute('class', 'loading-next');
+    loadingIndicator.setAttribute('class', 'loading-next posCenter');
     loadingIndicator.innerHTML = `
       <div class="spin-content">
         <div class="simple-loading-spin">

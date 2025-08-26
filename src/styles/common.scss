@@ -220,3 +220,16 @@
 .flex1{
     flex: 1;
 }
+.posCenter {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.posLCenter {
+    left: 50%;
+    transform: translateX(-50%);
+}
+.posTCenter {
+    top: 50%;
+    transform: translateY(-50%);
+}

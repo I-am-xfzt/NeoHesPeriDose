@@ -24,7 +24,7 @@ const addWaterMarker: Directive = (str: string, parentNode: any, font: any, text
   cans.textAlign = "left";
   cans.textBaseline = "Middle" as CanvasTextBaseline;
   cans.fillText(str, can.width / 10, can.height / 2);
-  parentNode.style.backgroundImage = "url(" + can.toDataURL("image/png") + ")";
+  parentNode.style.backgroundImage = "url(" + can.toDataURL("images/png") + ")";
 };
 
 const waterMarker = {

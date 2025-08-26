@@ -1,6 +1,50 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.node.json" }
+  "compilerOptions": {
+    "baseUrl": "."
+    /* Base directory to resolve non-absolute module names. */,
+    /* Linting */
+    "target": "esnext",
+    "useDefineForClassFields": true,
+    "module": "esnext",
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable",
+      "scripthost"
+    ],
+    "skipLibCheck": true,
+    /* Bundler mode */
+    "moduleResolution": "node",
+    "isolatedModules": true,
+    "jsx": "preserve",
+    /* Linting */
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    }
+  },
+  "types": [
+    "vite/client",
+    "@babylonjs",
+    "@types/three",
+    "@types/three/examples/jsm/Addons",
+    "element-plus/global"
+  ],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.vue",
+    "src/**/*.d.ts",
+    "src/components/model/index.d.ts",
+    "vite.config.ts",
+    "src/autoImports.d.ts"
+  ],
+  // **Represents any directory, and * represents any file. Indicates that all files in the src directory will be compiled
+  "exclude": [
+    "node_modules",
+    "dist"
   ]
 }

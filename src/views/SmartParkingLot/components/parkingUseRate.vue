@@ -108,14 +108,14 @@ const option: ECOption = {
   // graphic: {
   //   elements: [
   //     {
-  //       type: 'image',
+  //       type: 'images',
   //       id: 'background',
   //       shape: {
   //         width: 80, // 根据需要调整宽度
   //         height: 300 // 根据需要调整高度
   //       },
   //       style: {
-  //         image: progressBarImage, // 替换为你的图片地址
+  //         images: progressBarImage, // 替换为你的图片地址
   //         width: 80, // 图片宽度
   //         height: 300 // 图片高度
   //       },

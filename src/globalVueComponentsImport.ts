@@ -1,7 +1,7 @@
 import { App, defineAsyncComponent } from "vue"
 import type { DefineComponent } from "vue"
 type AsyncComponentLoader = () => Promise<DefineComponent>;
-export default {
+export const viewsSmartParkingLot = {
     install(app: App) {
         const CompositionOptions = import.meta.glob('./views/SmartParkingLot/components/*.vue');
         for (const [key, value] of Object.entries(CompositionOptions)) {

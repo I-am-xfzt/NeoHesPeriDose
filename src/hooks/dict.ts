@@ -1,4 +1,4 @@
-import { dict } from '@/store/dict';
+import { dict } from '@/stores/dict';
 // import { getDicts } from '@/api/admin/dict';
 import { ref, toRefs } from 'vue';
 const getDicts = ()=> Promise.resolve({

@@ -14,7 +14,7 @@ import parkStatics from '@/assets/BABYLONIMG/parkStatics.png'
 import ParkPieChart from './commonPie/ParkPieChart.vue'
 import ECharts from '@/components/ECharts/index.vue'
 import type { ECOption } from '@/components/ECharts/config.ts'
-import { getThousandsRef } from '@/utils/customVueRef.ts'
+import { getThousandsRef } from '@/custom-vue-ref/thousandsRef.ts'
 import occupy from '@/assets/BABYLONIMG/occupy.png'
 import leisure from '@/assets/BABYLONIMG/leisure.png'
 import PieChartRightStatistics from "./commonPie/PieChartRightStatistics.vue"

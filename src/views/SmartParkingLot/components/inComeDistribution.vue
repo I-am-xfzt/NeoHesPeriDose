@@ -19,7 +19,7 @@ import inComeDistribution from '@/assets/BABYLONIMG/inComeDistribution.png'
 import ParkPieChart from './commonPie/ParkPieChart.vue'
 import ECharts from '@/components/ECharts/index.vue'
 import { ECOption } from '@/components/ECharts/config'
-import { getThousandsRef } from '@/utils/customVueRef.ts'
+import { getThousandsRef } from '@/custom-vue-ref/thousandsRef.ts'
 import PieChartRightStatistics from './commonPie/PieChartRightStatistics.vue'
 const baseValue = ref(5940)
 const countValue = getThousandsRef(`${baseValue.value}`)

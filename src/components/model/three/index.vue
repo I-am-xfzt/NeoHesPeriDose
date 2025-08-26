@@ -1,15 +1,12 @@
 <template>
   <!-- <dv-border-box-1> -->
   <div id="modelContainer">
-    <div id="progress-text">
-      {{ progress }}
-    </div>
   </div>
   <!-- </dv-border-box-1> -->
 </template>
 <script setup lang="ts" name="ThreeModel">
   import type { GlbModelFilesType, LightsOptionsType } from './loadModel'
-  import { ThreeModel, glbModelFiles, progress } from './loadModel'
+  import { ThreeModel, glbModelFiles } from './loadModel'
   import { Color } from 'three'
   interface thePropsType {
     sliceParams: string
@@ -62,13 +59,5 @@
   #modelContainer {
     width: 100%;
     height: 100%;
-  }
-
-  #progress-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 99;
   }
 </style>

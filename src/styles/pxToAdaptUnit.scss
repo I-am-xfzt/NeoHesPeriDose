@@ -1,0 +1,11 @@
+@use "sass:math";
+
+@function pxToVmax($params, $unit: 'vmax') {
+  $width: 1920;
+  @return math.div($params, $width) * 100 + unquote($unit);
+}
+
+@function pxToVmin($params, $unit: 'vmin') {
+  $height: 1080;
+  @return math.div($params, $height) * 100 + unquote($unit);
+}

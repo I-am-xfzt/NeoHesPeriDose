@@ -1,7 +1,7 @@
-import {allElFormItemsOptions, LoadComOptions} from '@/optionsClass/loadComOptions.ts'
+import {allElFormItemsOptions, loadComOptions} from '@/utils/loadComOptions'
 
 const getElCom = new allElFormItemsOptions(),
-    getElComOption = new LoadComOptions(),
+    getElComOption = new loadComOptions(),
     defaultColum = (): Array<elComAttrAndFunType[]> => [
         [
             getElCom.getDatePicker({
@@ -14,7 +14,7 @@ const getElCom = new allElFormItemsOptions(),
         ]
     ]
 export default {
-    form: getElComOption.getFormOptions(),
+    form: getElComOption.getFormOptions({}),
     rules: {},
     columns: defaultColum()
 } as FyhComOptions

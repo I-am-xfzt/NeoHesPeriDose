@@ -10,7 +10,6 @@ declare module '*.ts';
 declare module '*.js';
 declare module '*.mjs';
 declare module 'postcss-px-to-viewport';
-declare module 'vue3-scroll-seamless'
 // 声明文件，*.vue 后缀的文件交给 vue 模块来处理
 declare module '*.vue' {
 	import type { DefineComponent } from 'vue';
@@ -35,6 +34,7 @@ declare type RouteItem<T = any> = {
 	meta?: {
 		title?: string;
 		roles?: string[];
+		isLink?: string;
 		isHeader?: Boolean
 	};
 	component: T
@@ -84,32 +84,84 @@ declare type SelectOptionType = {
 	label: string | number;
 };
 type StringOrEmpty<T = null> = string | T;
+
+
+/* __APP_INFO__ */
+declare const __APP_INFO__: {
+	pkg: {
+		name: string;
+		version: string;
+		dependencies: Recordable<string>;
+		devDependencies: Recordable<string>;
+	};
+	lastBuildTime: string;
+};
+/* Menu */
+declare namespace Menu {
+	interface MenuOptions {
+		path: string;
+		name: string;
+		component?: string | (() => Promise<unknown>);
+		redirect?: string;
+		meta: MetaProps;
+		children?: MenuOptions[];
+	}
+	interface MetaProps {
+		icon: string;
+		title: string;
+		activeMenu?: string;
+		isLink?: string;
+		isHide: boolean;
+		isFull: boolean;
+		isAffix: boolean;
+		isKeepAlive: boolean;
+	}
+}
+
+/* FileType */
+declare namespace File {
+	type ImageMimeType =
+		| "image/apng"
+		| "image/bmp"
+		| "image/gif"
+		| "image/jpeg"
+		| "image/pjpeg"
+		| "image/png"
+		| "image/svg+xml"
+		| "image/tiff"
+		| "image/webp"
+		| "image/x-icon";
+
+	type ExcelMimeType = "application/vnd.ms-excel" | "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+}
+
 /* Vite */
 declare type Recordable<T = any> = Record<string, T>;
 
 declare interface ViteEnv {
 	VITE_USER_NODE_ENV: "development" | "production" | "test";
-	VITE_GLOB_APP_TITLE: string;
-	VITE_PORT: number;
-	VITE_OPEN: boolean;
-	VITE_REPORT: boolean;
-	VITE_ROUTER_MODE: "hash" | "history";
-	VITE_BUILD_COMPRESS: "gzip" | "brotli" | "gzip,brotli" | "none";
-	VITE_BUILD_COMPRESS_DELETE_ORIGIN_FILE: boolean;
-	VITE_DROP_CONSOLE: boolean;
-	VITE_PWA: boolean;
-	VITE_IMG_BASE_URL: string;
-	VITE_DEVTOOLS: boolean;
-	VITE_PUBLIC_PATH: string;
-	VITE_API_URL: string;
-	VITE_PROXY: [string, string][];
-	VITE_CODEINSPECTOR: boolean;
+	readonly VITE_GLOB_APP_TITLE: string;
+	readonly VITE_PORT: number;
+	readonly VITE_OPEN: boolean;
+	readonly VITE_REPORT: boolean;
+	readonly VITE_ROUTER_MODE: "hash" | "history";
+	readonly VITE_BUILD_COMPRESS: "gzip" | "brotli" | "gzip,brotli" | "none";
+	readonly VITE_BUILD_COMPRESS_DELETE_ORIGIN_FILE: boolean;
+	readonly VITE_DROP_CONSOLE: boolean;
+	readonly VITE_PWA: boolean;
+	readonly VITE_DEVTOOLS: boolean;
+	readonly VITE_PUBLIC_PATH: string;
+	readonly VITE_PROXY: [string, string][];
 }
 
 interface ImportMetaEnv extends ViteEnv {
 	__: unknown;
 }
-
+interface ImportMeta {
+	readonly env: ImportMetaEnv
+	glob: (pattern: string) => Record<string, () => Promise<unknown>>
+	globEager?: (pattern: string) => Record<string, unknown>
+}
 /* __APP_INFO__ */
 declare const __APP_INFO__: {
 	pkg: {
