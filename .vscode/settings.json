@@ -1,5 +1,0 @@
-{
-    "vetur.format.defaultFormatter.ts": "prettier",
-    "vetur.validation.script": true,
-    "vetur.validation.template": false
-}
