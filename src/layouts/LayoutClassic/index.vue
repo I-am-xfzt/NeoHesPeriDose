@@ -4,8 +4,8 @@
     <el-header>
       <div class="header-lf mask-image">
         <div class="logo flx-center">
-          <img class="logo-img" src="@/assets/images/logo.svg" alt="logo" />
-          <span class="logo-text">{{ title }}</span>
+          <img class="logo-img" src="@/assets/images/logo.png" alt="logo" />
+          <span class="logo-text YouSheBiaoTiHei">{{ title }}</span>
         </div>
         <ToolBarLeft />
       </div>
@@ -43,7 +43,7 @@ import Main from "@/layouts/components/Main/index.vue";
 import SubMenu from "@/layouts/components/Menu/SubMenu.vue";
 import ToolBarLeft from "@/layouts/components/Header/ToolBarLeft.vue";
 import ToolBarRight from "@/layouts/components/Header/ToolBarRight.vue";
-
+import { ElHeader, ElAside } from "element-plus";
 const title = import.meta.env.VITE_GLOB_APP_TITLE;
 
 const route = useRoute();

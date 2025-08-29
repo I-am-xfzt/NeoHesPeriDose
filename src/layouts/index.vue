@@ -1,31 +1,21 @@
 <!-- 💥 这里是一次性加载 LayoutComponents -->
 <template>
-  <el-watermark id="watermark" :font="font" :content="watermark ? ['Geeker Admin', 'Happy Working'] : ''">
-    <component :is="LayoutComponents[layout]" />
+    <component :is="LayoutComponents['classic']" />
     <ThemeDrawer />
-  </el-watermark>
 </template>
 
 <script setup lang="ts" name="layout">
 import { useGlobalStore } from "@/stores/modules/global";
 import ThemeDrawer from "./components/ThemeDrawer/index.vue";
-import LayoutVertical from "./LayoutVertical/index.vue";
 import LayoutClassic from "./LayoutClassic/index.vue";
-import LayoutTransverse from "./LayoutTransverse/index.vue";
-import LayoutColumns from "./LayoutColumns/index.vue";
 
-const LayoutComponents: Record<LayoutType, Component> = {
-  vertical: LayoutVertical,
+const LayoutComponents: Record<'classic', Component> = {
   classic: LayoutClassic,
-  transverse: LayoutTransverse,
-  columns: LayoutColumns
 };
 
 const globalStore = useGlobalStore();
 
 const isDark = computed(() => globalStore.isDark);
-const layout = computed(() => globalStore.layout);
-const watermark = computed(() => globalStore.watermark);
 
 const font = reactive({ color: "rgba(0, 0, 0, .15)" });
 watch(isDark, () => (font.color = isDark.value ? "rgba(255, 255, 255, .15)" : "rgba(0, 0, 0, .15)"), {

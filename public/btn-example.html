@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>渐变背景按钮设计</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            padding: 30px;
+            background: rgba(12, 25, 42, 0.6);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #e6e6ff;
+            margin-bottom: 40px;
+            text-shadow: 0 0 15px rgba(120, 100, 220, 0.6);
+            font-weight: 600;
+            font-size: 2.5rem;
+        }
+        
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .button-group {
+            background: rgba(12, 25, 42, 0.5);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .button-group h2 {
+            color: #b0b0ff;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            text-align: center;
+        }
+        
+        /* 基础按钮样式 */
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 14px 20px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            outline: none;
+            color: #e6e6ff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* 主按钮样式 */
+        .btn-primary {
+            background: linear-gradient(135deg, #0c192a 0%, #131f34 100%);
+            border: 1px solid rgba(100, 80, 200, 0.4);
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 40%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(130, 110, 230, 0.3) 0%, transparent 70%);
+            transition: all 0.4s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .btn-primary:hover::before {
+            width: 50%;
+            background: radial-gradient(circle at center, rgba(150, 130, 250, 0.4) 0%, transparent 70%);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(1px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* 次要按钮样式 */
+        .btn-secondary {
+            background: linear-gradient(135deg, #131f34 0%, #18243e 100%);
+            border: 1px solid rgba(80, 60, 180, 0.5);
+        }
+        
+        .btn-secondary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 35%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(110, 90, 210, 0.25) 0%, transparent 70%);
+            transition: all 0.4s ease;
+        }
+        
+        .btn-secondary:hover::before {
+            width: 45%;
+            background: radial-gradient(circle at center, rgba(130, 110, 230, 0.35) 0%, transparent 70%);
+        }
+        
+        /* 轮廓按钮样式 */
+        .btn-outline {
+            background: transparent;
+            border: 2px solid rgba(100, 80, 200, 0.5);
+            box-shadow: 0 0 15px rgba(100, 80, 200, 0.2) inset;
+        }
+        
+        .btn-outline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 30%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(130, 110, 230, 0.2) 0%, transparent 70%);
+            transition: all 0.4s ease;
+        }
+        
+        .btn-outline:hover {
+            background: rgba(100, 80, 200, 0.1);
+            box-shadow: 0 0 20px rgba(100, 80, 200, 0.3) inset;
+        }
+        
+        /* 发光按钮样式 */
+        .btn-glow {
+            background: linear-gradient(135deg, #0c192a 0%, #131f34 100%);
+            border: 1px solid rgba(100, 80, 200, 0.4);
+            box-shadow: 0 0 10px rgba(130, 110, 230, 0.3), 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-glow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 45%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(150, 130, 250, 0.4) 0%, transparent 70%);
+            transition: all 0.4s ease;
+        }
+        
+        .btn-glow:hover {
+            box-shadow: 0 0 20px rgba(150, 130, 250, 0.5), 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* 图标按钮样式 */
+        .btn-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* 禁用状态 */
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .btn:disabled::before {
+            display: none;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .button-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #a0a0c0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>渐变背景按钮设计</h1>
+        
+        <div class="button-grid">
+            <div class="button-group">
+                <h2>主按钮</h2>
+                <button class="btn btn-primary">主要操作</button>
+                <button class="btn btn-primary" disabled>禁用状态</button>
+            </div>
+            
+            <div class="button-group">
+                <h2>次要按钮</h2>
+                <button class="btn btn-secondary">次要操作</button>
+                <button class="btn btn-secondary">取消</button>
+            </div>
+            
+            <div class="button-group">
+                <h2>轮廓按钮</h2>
+                <button class="btn btn-outline">轮廓样式</button>
+                <button class="btn btn-outline">了解更多</button>
+            </div>
+            
+            <div class="button-group">
+                <h2>发光按钮</h2>
+                <button class="btn btn-glow">发光效果</button>
+                <button class="btn btn-glow btn-icon">
+                    <i class="fas fa-rocket"></i> 特效按钮
+                </button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>基于 #0c192a 主色与蓝紫光效果设计的按钮样式</p>
+        </div>
+    </div>
+</body>
+</html>

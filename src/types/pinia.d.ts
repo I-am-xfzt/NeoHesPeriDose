@@ -25,11 +25,26 @@ declare interface GlobalState {
     tabsIcon: boolean;
     footer: boolean;
 }
+// 用户信息
+declare interface UserInfos {
+	name: string;
+	rolesArr: EmptyArrayType[];
+	roles: string[];
+	userName: string;
+	roleName: string;
+	deptId: number | null;
+	deptName?: string;
+	area: string | null;
+	dept: EmptyObjectType;
+	userId?: number;
+	phonenumber: string,
+	signUrl: string
+}
 
 /* UserState */
 declare interface UserState {
     token: string;
-    userInfo: { name: string };
+    userInfo: UserInfos;
 }
 
 /* tabsMenuProps */

@@ -17,6 +17,10 @@
     "moduleResolution": "node",
     "isolatedModules": true,
     "jsx": "preserve",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
     /* Linting */
     "strict": true,
     "noFallthroughCasesInSwitch": true,
@@ -26,6 +30,9 @@
         "src/*"
       ]
     }
+  },
+  "vueCompilerOptions": {
+    "target": 3.5
   },
   "types": [
     "vite/client",
@@ -40,6 +47,9 @@
     "src/**/*.d.ts",
     "src/components/model/index.d.ts",
     "vite.config.ts",
+    "src/layouts/components/**/*.vue",
+    "src/layouts/**/*.vue",
+    "src/layouts/components/**/components/*.vue",
     "src/autoImports.d.ts"
   ],
   // **Represents any directory, and * represents any file. Indicates that all files in the src directory will be compiled

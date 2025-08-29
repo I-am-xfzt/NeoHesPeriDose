@@ -52,7 +52,10 @@ const viteConfig = defineConfig(({mode}: ConfigEnv): UserConfig => {
         css: {
             preprocessorOptions: {
                 scss: {
-                    additionalData: `@use "@/styles/pxToAdaptUnit.scss" as *;`
+                    additionalData: `
+                      @use "@/styles/pxToAdaptUnit.scss" as *;
+                      @use "@/styles/common.scss" as *;
+                    `
                 }
             }
         },

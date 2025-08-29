@@ -1,74 +1,44 @@
-import { RouteRecordRaw } from 'vue-router';
-import { formatTwoStageRoutes, formatFlatteningRoutes, router } from '../index';
-import { baseRouter, staticRouter } from './staticRouters';
-import pinia from '@/stores/index';
-import { Session } from '@/utils/storage';
-// import { useUserInfo } from '/@/stores/userInfo';
-// import { useTagsViewRoutes } from '/@/stores/tagsViewRoutes';
-// import { useRoutesList } from '/@/stores/routesList';
-// import { NextLoading } from '/@/utils/loading';
-
+import router from "../index";
+import { useAuthStore } from "@/stores/modules/auth";
+import pinia from "@/stores/index";
+import { Session } from "@/utils/storage";
+import { useUserStore } from "@/stores/modules/user";
+import { ElNotification } from "element-plus";
+import { NextLoading } from "@/utils/loading";
+import { LOGIN_URL } from "@/config";
+import { RouteRecordRaw } from "vue-router";
 // 前端控制路由
-
+const modules = import.meta.glob("@/views/**/*.vue");
 /**
  * 前端控制路由：初始化方法，防止刷新时路由丢失
  * @method  NextLoading 界面 loading 动画开始执行
- * @method useUserInfo(pinia).setUserInfos() 触发初始化用户信息 pinia
+ * @method useUserStore(pinia).setUserInfos() 触发初始化用户信息 pinia
  * @method setAddRoute 添加动态路由
- * @method setFilterMenuAndCacheTagsViewRoutes 设置递归过滤有权限的路由到 pinia routesList 中（已处理成多级嵌套路由）及缓存多级嵌套数组处理后的一维数组
+ * @method setMenuViewRoutes 设置递归过滤有权限的路由到 pinia routesList 中（已处理成多级嵌套路由）及缓存多级嵌套数组处理后的一维数组
  */
-export async function initFrontEndControlRoutes() {
-	// 界面 loading 动画开始执行
-	if (window.nextLoading === undefined) NextLoading.start();
-	// 无 token 停止执行下一步
-	if (!Session.getToken()) return false;
-	// 触发初始化用户信息 pinia
-	await useUserInfo(pinia).setUserInfos();
-	// 无登录权限时，添加判断
-	if (useUserInfo().userInfos.roles.length <= 0) return Promise.resolve(true);
-	// 添加动态路由
-	await setAddRoute();
-	// 设置递归过滤有权限的路由到 pinia routesList 中（已处理成多级嵌套路由）及缓存多级嵌套数组处理后的一维数组
-	await setFilterMenuAndCacheTagsViewRoutes();
-}
-
-/**
- * 添加动态路由
- * @method router.addRoute
- * @description 此处循环为 baseRoutes（/@/router/route）第一个顶级 children 的路由一维数组，非多级嵌套
- * @link 参考：https://next.router.vuejs.org/zh/api/#addroute
- */
-export async function setAddRoute() {
-	await setFilterRouteEnd().forEach((route: RouteRecordRaw) => {
-		router.addRoute(route);
-	});
-}
-
-/**
- * 删除/重置路由
- * @method router.removeRoute
- * @description 此处循环为 baseRoutes（/@/router/route）第一个顶级 children 的路由一维数组，非多级嵌套
- * @link 参考：https://next.router.vuejs.org/zh/api/#push
- */
-export async function frontEndsResetRoute() {
-	await setFilterRouteEnd().forEach((route: RouteRecordRaw) => {
-		const routeName: any = route.name;
-		router.hasRoute(routeName) && router.removeRoute(routeName);
-	});
-}
-
-/**
- * 获取有当前用户权限标识的路由数组，进行对原路由的替换
- * @description 替换 baseRoutes（/@/router/route）第一个顶级 children 的路由
- * @returns 返回替换后的路由数组
- */
-export function setFilterRouteEnd() {
-	let filterRouteEnd: any = formatTwoStageRoutes(formatFlatteningRoutes(baseRoutes));
-	// notFoundAndNoPower 防止 404、401 不在 layout 布局中，不设置的话，404、401 界面将全屏显示
-	// 关联问题 No match found for location with path 'xxx'
-	filterRouteEnd[0].children = [...setFilterRoute(filterRouteEnd[0].children), ...notFoundAndNoPower];
-	return filterRouteEnd;
-}
+export const initControlRoutes = async () => {
+  // 界面 loading 动画开始执行
+  if (window.nextLoading === undefined) NextLoading.start();
+  // 无 token 停止执行下一步
+  if (!Session.getToken()) return false;
+  // 触发初始化用户信息 pinia
+  await useUserStore(pinia).setUserInfo();
+  // 无登录权限时，添加判断
+  if (useUserStore().userInfo.roles.length <= 0) {
+    ElNotification({
+      title: "无权限访问",
+      message: "当前账号无任何菜单权限，请联系系统管理员！",
+      type: "warning",
+      duration: 3000
+    });
+    useUserStore().clearToken();
+    useUserStore().clearUserInfo();
+    router.replace(LOGIN_URL);
+    return Promise.reject("No permission");
+  }
+  // 设置递归过滤有权限的路由到 pinia routesList 中（已处理成多级嵌套路由）及缓存多级嵌套数组处理后的一维数组
+  await setMenuViewRoutes();
+};
 
 /**
  * 获取当前用户权限标识去比对路由表（未处理成多级嵌套路由）
@@ -78,47 +48,44 @@ export function setFilterRouteEnd() {
  * @returns 返回有当前用户权限标识的路由数组
  */
 export function setFilterRoute(chil: any) {
-	const stores = useUserInfo(pinia);
-	const { userInfos } = storeToRefs(stores);
-	let filterRoute: any = [];
-	chil.forEach((route: any) => {
-		if (route.meta.roles) {
-			route.meta.roles.forEach((metaRoles: any) => {
-				userInfos.value.roles.forEach((roles: any) => {
-					if (metaRoles === roles) filterRoute.push({ ...route });
-				});
-			});
-		}
-	});
-	return filterRoute;
+  const stores = useUserStore(pinia);
+  const { userInfo } = storeToRefs(stores);
+  let filterRoute: any = [];
+  chil.forEach((route: any) => {
+    if (route.meta.roles) {
+      route.meta.roles.forEach((metaRoles: any) => {
+        userInfo.value.roles.forEach((roles: any) => {
+          if (metaRoles === roles) filterRoute.push({ ...route });
+        });
+      });
+    }
+  });
+  return filterRoute;
 }
 
 /**
- * 缓存多级嵌套数组处理后的一维数组
- * @description 用于 tagsView、菜单搜索中：未过滤隐藏的(isHide)
- */
-export function setCacheTagsViewRoutes() {
-	// 获取有权限的路由，否则 tagsView、菜单搜索中无权限的路由也将显示
-	const stores = useUserInfo(pinia);
-	const storesTagsView = useTagsViewRoutes(pinia);
-	const { userInfos } = storeToRefs(stores);
-	let rolesRoutes = setFilterHasRolesMenu(baseRoutes, userInfos.value.roles);
-	// 添加到 pinia setTagsViewRoutes 中
-	storesTagsView.setTagsViewRoutes(formatTwoStageRoutes(formatFlatteningRoutes(rolesRoutes))[0].children);
-}
-
-/**
- * 设置递归过滤有权限的路由到 pinia routesList 中（已处理成多级嵌套路由）及缓存多级嵌套数组处理后的一维数组
  * @description 用于左侧菜单、横向菜单的显示
- * @description 用于 tagsView、菜单搜索中：未过滤隐藏的(isHide)
+ *  添加动态路由
+ * @method router.addRoute
+ * @link 参考：https://next.router.vuejs.org/zh/api/#addroute
  */
-export function setFilterMenuAndCacheTagsViewRoutes() {
-	const stores = useUserInfo(pinia);
-	const storesRoutesList = useRoutesList(pinia);
-	const { userInfos } = storeToRefs(stores);
-	storesRoutesList.setRoutesList(setFilterHasRolesMenu(baseRoutes[0].children, userInfos.value.roles));
-	setCacheTagsViewRoutes();
-}
+export const setMenuViewRoutes = async () => {
+  const authStore = useAuthStore(pinia);
+  await authStore.getAuthMenuList();
+  await authStore.getAuthButtonList();
+  // 3.添加动态路由
+  authStore.flatMenuListGet.forEach(item => {
+    item.children && delete item.children;
+    if (item.component && typeof item.component == "string") {
+      item.component = modules["/src/views" + item.component + ".vue"];
+    }
+    if (item.meta.isFull) {
+      router.addRoute(item as unknown as RouteRecordRaw);
+    } else {
+      router.addRoute("layout", item as unknown as RouteRecordRaw);
+    }
+  });
+};
 
 /**
  * 判断路由 `meta.roles` 中是否包含当前登录用户权限字段
@@ -127,8 +94,8 @@ export function setFilterMenuAndCacheTagsViewRoutes() {
  * @returns 返回对比后有权限的路由项
  */
 export function hasRoles(roles: any, route: any) {
-	if (route.meta && route.meta.roles) return roles.some((role: any) => route.meta.roles.includes(role));
-	else return true;
+  if (route.meta && route.meta.roles) return roles.some((role: any) => route.meta.roles.includes(role));
+  else return true;
 }
 
 /**
@@ -138,13 +105,13 @@ export function hasRoles(roles: any, route: any) {
  * @returns 返回有权限的路由数组 `meta.roles` 中控制
  */
 export function setFilterHasRolesMenu(routes: any, roles: any) {
-	const menu: any = [];
-	routes.forEach((route: any) => {
-		const item = { ...route };
-		if (hasRoles(roles, item)) {
-			if (item.children) item.children = setFilterHasRolesMenu(item.children, roles);
-			menu.push(item);
-		}
-	});
-	return menu;
+  const menu: any = [];
+  routes.forEach((route: any) => {
+    const item = { ...route };
+    if (hasRoles(roles, item)) {
+      if (item.children) item.children = setFilterHasRolesMenu(item.children, roles);
+      menu.push(item);
+    }
+  });
+  return menu;
 }

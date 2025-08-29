@@ -1,23 +1,46 @@
 import { defineStore } from "pinia";
-import { UserState } from "@/stores/interface";
 import piniaPersistConfig from "@/stores/helper/persist";
-
-export const useUserStore = defineStore({
-  id: "geeker-user",
+import { getUserInfoApi } from "@/api/user";
+import { Session } from "@/utils/storage";
+const getUserInfos = (): UserInfos => ({
+  name: "",
+  userName: "",
+  deptId: null,
+  deptName: "",
+  roleName: "",
+  area: null,
+  rolesArr: [],
+  roles: [],
+  dept: {},
+  userId: undefined,
+  phonenumber: "",
+  signUrl: ""
+});
+export const useUserStore = defineStore("neohesperidose-user", {
   state: (): UserState => ({
     token: "",
-    userInfo: { name: "Geeker" }
+    userInfo: getUserInfos()
   }),
   getters: {},
   actions: {
     // Set Token
-    setToken(token: string) {
-      this.token = token;
+    setToken() {
+      this.token = Session.getToken();
     },
     // Set setUserInfo
-    setUserInfo(userInfo: UserState["userInfo"]) {
-      this.userInfo = userInfo;
+    async setUserInfo() {
+      const { code, data } = await getUserInfoApi();
+      if (code === 200) {
+        Object.assign(this.userInfo, data);
+      }
+    },
+    clearToken() {
+      this.token = "";
+      Session.remove("token");
+    },
+    clearUserInfo() {
+      this.userInfo = getUserInfos();
     }
   },
-  persist: piniaPersistConfig("geeker-user")
+  persist: piniaPersistConfig("neohesperidose-user")
 });

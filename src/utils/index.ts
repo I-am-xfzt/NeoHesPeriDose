@@ -1,4 +1,3 @@
-
 /**
  * 加载模块
  * @function loadModule
@@ -11,5 +10,21 @@
  * });
  */
 export const loadModule = async <T = any>(path: string): Promise<T> => {
- return await import(/* @vite-ignore */ `../${path}/formOptions.ts`);
-}
+  return await import(/* @vite-ignore */ `../${path}/formOptions.ts`);
+};
+
+/**
+ * @description 获取浏览器默认语言
+ * @returns {String}
+ */
+export const getBrowserLang = () => {
+  // 使用现代的语言检测方法，优先使用 navigator.language，然后是 navigator.languages[0]
+  let browserLang = navigator.language || (navigator.languages && navigator.languages[0]) || "en";
+  let defaultBrowserLang = "";
+  if (["cn", "zh", "zh-cn"].includes(browserLang.toLowerCase())) {
+    defaultBrowserLang = "zh";
+  } else {
+    defaultBrowserLang = "en";
+  }
+  return defaultBrowserLang;
+};

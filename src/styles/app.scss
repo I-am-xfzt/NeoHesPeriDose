@@ -23,7 +23,9 @@
     width: 100%;
     height: 100%;
 }
-
+#app{
+    background: linear-gradient(135deg, #07121F 0%, #0E2847 50%, #0E2847 50%, #142E51 100%);
+}
 @media (orientation: portrait) {
 
     /* 竖屏时的样式 */

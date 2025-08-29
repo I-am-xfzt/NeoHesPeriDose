@@ -12,7 +12,9 @@ import './styles/element_07ffe5bf.css';
 // svg icons
 import "virtual:svg-icons-register"
 import { viewsSmartParkingLot } from "./globalVueComponentsImport";
+// vue i18n
+import I18n from "@/config/languages/index";
 const app = createApp(App)
 getGridScale()
 importCom(app)
-app.use(router).use(pinia).use(viewsSmartParkingLot).use(directives).mount('#app')
+app.use(router).use(pinia).use(viewsSmartParkingLot).use(directives).use(I18n).mount('#app')

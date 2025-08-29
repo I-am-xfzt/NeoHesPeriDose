@@ -131,12 +131,10 @@
   </el-drawer>
 </template>
 
-<script setup lang="ts">
-import { ref } from "vue";
+<script setup lang="ts" name="theme-setting">
 import { storeToRefs } from "pinia";
 import { useTheme } from "@/hooks/useTheme";
 import { useGlobalStore } from "@/stores/modules/global";
-import { LayoutType } from "@/stores/interface";
 import { DEFAULT_PRIMARY } from "@/config";
 import mittBus from "@/utils/mittBus";
 import SwitchDark from "@/components/SwitchDark/index.vue";

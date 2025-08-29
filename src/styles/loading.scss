@@ -1,6 +1,8 @@
+// @use "./common.scss";
 .loading-next {
   position: absolute;
   z-index: 2025;
+  @extend .posCenter;
 }
 
 // 图表Loding
