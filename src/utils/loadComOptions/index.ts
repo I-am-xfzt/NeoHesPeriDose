@@ -12,7 +12,6 @@
 
 import type {FormItemRule} from "element-plus"
 import {abCreateComOptions} from "./type"
-
 /**
  * 获取el-form组件属性参数配置
  * @param  { FormOptions } options
@@ -25,7 +24,7 @@ export const getFormOptions = (options: FormOptions): FormOptions => {
             labelWidth: '80px',
             inline: true,
             labelPosition: 'right',
-            size: 'small',
+            // size: useGlobalStore().assemblySize,
             disabled: false,
             labelSuffix: '',
             statusIcon: false,
@@ -39,7 +38,7 @@ export const getFormOptions = (options: FormOptions): FormOptions => {
      * @return { FormItemsOptionsType } 返回el-form-item组件的配置项
      * @example const formItemOptions = getFormItemsOptions({labelPosition: '', labelWidth: '', required: false, rules: {},}, 'xxx', 'xxx')
      */
-    getFormItemsOptions = (options: FormItemsOptionsType, ...params: Array<string>): FormItemsOptionsType => {
+    getFormItemsOptions = (options: FormItemsOptionsType | Object, ...params: Array<string>): FormItemsOptionsType => {
         const [a, b] = params,
             defaults: FormItemsOptionsType = {
                 prop: a,
@@ -138,7 +137,7 @@ export class allElFormItemsOptions implements abCreateComOptions.IAllElFormItems
      */
     public getSelect(p: abCreateComOptions.SelectConfig): elComAttrAndFunType {
         const {
-            multiple = true,
+            multiple = false,
             prop = 'estateIds',
             span = 12,
             label = '带访项目',
@@ -151,7 +150,7 @@ export class allElFormItemsOptions implements abCreateComOptions.IAllElFormItems
         return {
             formItem: getFormItemsOptions({}, prop, label),
             attrs: {
-                placeholder: '请选择',
+                placeholder: '请选择'+label,
                 prop,
                 clearable: true,
                 multiple,
@@ -187,7 +186,7 @@ export class allElFormItemsOptions implements abCreateComOptions.IAllElFormItems
             attrs: {
                 prop,
                 label,
-                placeholder: '请输入'
+                placeholder: '请输入'+label
             },
             methods: {
                 event: '',
@@ -216,7 +215,7 @@ export class allElFormItemsOptions implements abCreateComOptions.IAllElFormItems
                 style: {
                     width,
                 },
-                placeholder: '请选择',
+                placeholder: '请选择'+label,
                 type: 'daterange',
                 'range-separator': '至',
                 'start-placeholder': '开始日期',

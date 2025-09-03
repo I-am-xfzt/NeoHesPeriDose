@@ -1,6 +1,6 @@
 <template>
-  <el-dropdown trigger="click" @command="setAssemblySize">
-    <i :class="'iconfont icon-contentright'" class="toolBar-icon"></i>
+  <el-dropdown class="pt5" trigger="click" @command="setAssemblySize">
+    <svg-icon name="contentright" :icon-style="{ width: '18px', height: '18px', fill: '#4a88f5' }" />
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item

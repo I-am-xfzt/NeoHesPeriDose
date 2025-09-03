@@ -1,7 +1,7 @@
 <template>
-  <div class="search-menu">
-    <i :class="'iconfont icon-sousuo'" class="toolBar-icon" @click="handleOpen"></i>
-    <el-dialog class="search-dialog" v-model="isShowSearch" :width="600" :show-close="false" top="10vh">
+  <div class="search-menu pt4">
+    <svg-icon name="Search" :icon-style="{ width: '20px', height: '20px', fill: '#4a88f5' }" @click="handleOpen" />
+    <the-dialog class="search-dialog" :title="`全局搜索`" v-model:visible="isShowSearch" :width="600" :show-close="false" top="10vh">
       <el-input
         v-model="searchMenu"
         ref="menuInputRef"
@@ -28,16 +28,16 @@
         </div>
       </div>
       <el-empty v-else class="mt20 mb20" :image-size="100" description="暂无菜单" />
-    </el-dialog>
+    </the-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import { InputInstance } from "element-plus";
+import { InputInstance, ElEmpty } from "element-plus";
 import { Search } from "@element-plus/icons-vue";
 import { useAuthStore } from "@/stores/modules/auth";
 import { useDebounceFn } from "@vueuse/core";
-
+import theDialog from "@/components/Dialog/index.vue"
 const router = useRouter();
 const authStore = useAuthStore();
 const menuList = computed(() => authStore.flatMenuListGet.filter(item => !item.meta.isHide));
@@ -126,9 +126,6 @@ const handleClickMenu = () => {
 .search-menu {
   :deep(.el-dialog) {
     border-radius: 4px;
-    .el-dialog__header {
-      display: none;
-    }
   }
   .menu-list {
     max-height: 515px;

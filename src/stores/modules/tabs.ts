@@ -60,7 +60,7 @@ export const useTabsStore = defineStore("neohesperidose-tabs",{
       await keepAliveStore.setKeepAliveName(KeepAliveList.map(item => item.path));
     },
     // Set Tabs
-    async setTabs(tabsMenuList: TabsMenuProps[]) {
+    setTabs(tabsMenuList: TabsMenuProps[]) {
       this.tabsMenuList = tabsMenuList;
     },
     // Set Tabs Title

@@ -1,14 +1,14 @@
 import { defineStore } from "pinia";
 import { getAuthMenuListApi, getAuthButtonListApi } from "@/api/login";
-import { getFlatMenuList, getShowMenuList, getAllBreadcrumbList } from "@/utils/other";
-export const useAuthStore = defineStore('neohesperidose-auth',{
+import { getFlatMenuList, getShowMenuList, getAllBreadcrumbList, setActiveMenuForChildren } from "@/utils/other";
+export const useAuthStore = defineStore("neohesperidose-auth", {
   state: (): AuthState => ({
     // 按钮权限列表
     authButtonList: {},
     // 菜单权限列表
     authMenuList: [],
-    // 当前页面的 router name，用来做按钮权限筛选
-    routeName: ""
+    // 当前页面的 router
+    routeName: "/home/index"
   }),
   getters: {
     // 按钮权限列表
@@ -34,7 +34,7 @@ export const useAuthStore = defineStore('neohesperidose-auth',{
       this.authMenuList = data;
     },
     // Set RouteName
-    async setRouteName(name: string) {
+    setRouteName(name: string) {
       this.routeName = name;
     }
   }

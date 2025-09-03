@@ -16,7 +16,7 @@
 	</el-pagination>
 </template>
 
-<script setup lang="ts" name="pagination">
+<script setup lang="ts" name="thePagination">
 import arrowl from "./arrowL.vue"
 import arrowr from "./arrowR.vue"
 const emit = defineEmits(['sizeChange', 'currentChange']);

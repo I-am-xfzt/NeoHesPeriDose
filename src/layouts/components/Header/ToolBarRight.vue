@@ -1,14 +1,14 @@
 <template>
-  <div class="tool-bar-ri">
-    <div class="header-icon">
+  <div class="tool-bar-ri FlexBox">
+    <div class="header-icon FlexBox hand">
       <AssemblySize id="assemblySize" />
       <Language id="language" />
       <SearchMenu id="searchMenu" />
-      <ThemeSetting id="themeSetting" />
+      <!-- <ThemeSetting id="themeSetting" /> -->
       <Message id="message" />
       <Fullscreen id="fullscreen" />
+      <span class="username">{{ username }}</span>
     </div>
-    <span class="username">{{ username }}</span>
     <Avatar />
   </div>
 </template>
@@ -24,27 +24,30 @@ import Fullscreen from "./components/Fullscreen.vue";
 import Avatar from "./components/Avatar.vue";
 
 const userStore = useUserStore();
-const username = computed(() => userStore.userInfo.name);
+const username = computed(() => userStore.userInfo.userName);
 </script>
 
 <style scoped lang="scss">
 .tool-bar-ri {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   padding-right: 25px;
+
   .header-icon {
-    display: flex;
-    align-items: center;
+    gap: 15px;
+
+    & > div {
+      height: 26px;
+    }
+
     & > * {
-      margin-left: 21px;
-      color: var(--el-header-text-color);
+      color: var(--el-color-active-primary);
     }
   }
+
   .username {
-    margin: 0 20px;
+    margin: 0 10px;
     font-size: 15px;
-    color: var(--el-header-text-color);
+    font-weight: bold;
+    color: var(--el-color-active-primary);
   }
 }
 </style>

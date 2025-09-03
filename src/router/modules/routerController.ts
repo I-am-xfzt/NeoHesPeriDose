@@ -8,7 +8,7 @@ import { NextLoading } from "@/utils/loading";
 import { LOGIN_URL } from "@/config";
 import { RouteRecordRaw } from "vue-router";
 // 前端控制路由
-const modules = import.meta.glob("@/views/**/*.vue");
+const modules = import.meta.glob("@/views/**/index.vue");
 /**
  * 前端控制路由：初始化方法，防止刷新时路由丢失
  * @method  NextLoading 界面 loading 动画开始执行
@@ -22,22 +22,22 @@ export const initControlRoutes = async () => {
   // 无 token 停止执行下一步
   if (!Session.getToken()) return false;
   // 触发初始化用户信息 pinia
-  await useUserStore(pinia).setUserInfo();
+  const userStore = useUserStore(pinia);
+  await userStore.setUserInfo();
   // 无登录权限时，添加判断
-  if (useUserStore().userInfo.roles.length <= 0) {
+  if (userStore.userInfo.roles.length <= 0) {
     ElNotification({
       title: "无权限访问",
       message: "当前账号无任何菜单权限，请联系系统管理员！",
       type: "warning",
       duration: 3000
     });
-    useUserStore().clearToken();
-    useUserStore().clearUserInfo();
-    router.replace(LOGIN_URL);
+    userStore.loginOut(() => router.replace(LOGIN_URL));
     return Promise.reject("No permission");
   }
   // 设置递归过滤有权限的路由到 pinia routesList 中（已处理成多级嵌套路由）及缓存多级嵌套数组处理后的一维数组
   await setMenuViewRoutes();
+  return true;
 };
 
 /**
@@ -82,7 +82,7 @@ export const setMenuViewRoutes = async () => {
     if (item.meta.isFull) {
       router.addRoute(item as unknown as RouteRecordRaw);
     } else {
-      router.addRoute("layout", item as unknown as RouteRecordRaw);
+      router.addRoute("Router.layout", item as unknown as RouteRecordRaw);
     }
   });
 };

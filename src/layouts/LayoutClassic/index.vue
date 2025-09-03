@@ -14,16 +14,11 @@
       </div>
     </el-header>
     <el-container class="classic-content">
-      <el-aside>
-        <div class="aside-box" :style="{ width: isCollapse ? '65px' : '210px' }">
+      <el-aside v-if="menuList.length>0">
+        <div class="aside-box" :style="{ width: isCollapse ? '65px' : '160px' }">
           <el-scrollbar>
-            <el-menu
-              :router="false"
-              :default-active="activeMenu"
-              :collapse="isCollapse"
-              :unique-opened="accordion"
-              :collapse-transition="false"
-            >
+            <el-menu :router="false" :default-active="activeMenu" :collapse="isCollapse" :unique-opened="accordion"
+              :collapse-transition="false">
               <SubMenu :menu-list="menuList" />
             </el-menu>
           </el-scrollbar>
@@ -51,8 +46,8 @@ const authStore = useAuthStore();
 const globalStore = useGlobalStore();
 const accordion = computed(() => globalStore.accordion);
 const isCollapse = computed(() => globalStore.isCollapse);
-const menuList = computed(() => authStore.showMenuListGet);
-const activeMenu = computed(() => (route.meta.activeMenu ? route.meta.activeMenu : route.path) as string);
+const menuList = computed(() => authStore.showMenuListGet.find(v=>v.path === authStore.routeName)?.children ?? []);
+const activeMenu = computed(() => (route.meta.activeMenu ?? route.path) as string);
 </script>
 
 <style scoped lang="scss">

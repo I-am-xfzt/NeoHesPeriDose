@@ -1,8 +1,20 @@
 .tabs-box {
-  background-color: var(--el-bg-color);
+  width: 100%;
+  padding-top: 10px;
   .tabs-menu {
-    position: relative;
-    width: 100%;
+    // position: relative;
+    // width: 100%;
+    .tags-active {
+      background: linear-gradient(90deg, #04246a 0%, #1f2d4d 100%) !important;
+      .el-tag__close {
+        color: var(--el-color-active-primary) !important;
+      }
+      color: var(--el-color-active-primary) !important;
+    }
+    :deep(.el-tag) {
+      margin-left: 12px;
+      background: var(--el-color-primary-light-9);
+    }
     .el-dropdown {
       position: absolute;
       top: 0;
@@ -21,47 +33,6 @@
         }
         .iconfont {
           font-size: 12.5px;
-        }
-      }
-    }
-    :deep(.el-tabs) {
-      .el-tabs__header {
-        box-sizing: border-box;
-        height: 40px;
-        padding: 0 10px;
-        margin: 0;
-        .el-tabs__nav-wrap {
-          position: absolute;
-          width: calc(100% - 70px);
-          .el-tabs__nav {
-            display: flex;
-            border: none;
-            .el-tabs__item {
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              color: #afafaf;
-              border: none;
-              .tabs-icon {
-                margin: 1.5px 4px 0 0;
-                font-size: 15px;
-              }
-              .is-icon-close {
-                margin-top: 1px;
-              }
-              &.is-active {
-                color: var(--el-color-primary);
-                &::before {
-                  position: absolute;
-                  bottom: 0;
-                  width: 100%;
-                  height: 0;
-                  content: "";
-                  border-bottom: 2px solid var(--el-color-primary) !important;
-                }
-              }
-            }
-          }
         }
       }
     }

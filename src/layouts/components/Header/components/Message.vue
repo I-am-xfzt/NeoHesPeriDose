@@ -3,7 +3,11 @@
     <el-popover placement="bottom" :width="310" trigger="click">
       <template #reference>
         <el-badge :value="5" class="item">
-          <i :class="'iconfont icon-xiaoxi'" class="toolBar-icon"></i>
+          <svg-icon name="Notice" :icon-style="{
+            width: '20px',
+            height: '26px',
+            fill: `#4a88f5`
+          }" />
         </el-badge>
       </template>
       <el-tabs v-model="activeName">

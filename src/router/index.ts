@@ -26,16 +26,14 @@ router.beforeEach(async (to, from, next) => {
   }
   // 放行白名单页面
   if (ROUTER_WHITE_LIST.includes(to.path)) return next();
+  // 5.判断是否有 Token，没有重定向到 login 页面
+  if (!token) return next({ path: LOGIN_URL, replace: true });
   const authStore = useAuthStore();
   // 刷新页面，或其他原因动态路由清空需重新设置
   if (authStore.authMenuListGet.length === 0) {
-    const isNormal = await initControlRoutes();
-    if (!isNormal) {
-    //   loginOut();
-    } else {
-      NextLoading.done();
-      return next({ ...to, replace: true });
-    }
+    await initControlRoutes();
+    NextLoading.done();
+    return next({ ...to, replace: true });
   }
   next();
 });

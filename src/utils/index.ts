@@ -9,8 +9,8 @@
  *   // 使用加载的模块
  * });
  */
-export const loadModule = async <T = any>(path: string): Promise<T> => {
-  return await import(/* @vite-ignore */ `../${path}/formOptions.ts`);
+export const loadModule = async <T = any>(path: string, name: string = "formOptions.ts"): Promise<T> => {
+  return await import(/* @vite-ignore */ `../${path}/${name}`);
 };
 
 /**

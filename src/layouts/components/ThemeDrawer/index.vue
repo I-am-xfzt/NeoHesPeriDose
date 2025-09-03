@@ -138,7 +138,8 @@ import { useGlobalStore } from "@/stores/modules/global";
 import { DEFAULT_PRIMARY } from "@/config";
 import mittBus from "@/utils/mittBus";
 import SwitchDark from "@/components/SwitchDark/index.vue";
-
+import { ElColorPicker, ElSwitch, ElTooltip, ElDivider, ElDrawer } from "element-plus"
+import { Notification, ColdDrink, Setting, QuestionFilled, CircleCheckFilled } from "@element-plus/icons-vue"
 const { changePrimary, changeGreyOrWeak, setAsideTheme, setHeaderTheme } = useTheme();
 
 const globalStore = useGlobalStore();

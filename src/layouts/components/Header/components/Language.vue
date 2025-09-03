@@ -1,6 +1,6 @@
 <template>
-  <el-dropdown trigger="click" @command="changeLanguage">
-    <i :class="'iconfont icon-zhongyingwen'" class="toolBar-icon"></i>
+  <el-dropdown class="pt3" trigger="click" @command="changeLanguage">
+    <svg-icon :icon-style="{ width: '22px', height: '22px', fill: '#4a88f5' }" name="ZnCh" />
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item

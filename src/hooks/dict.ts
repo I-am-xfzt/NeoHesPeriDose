@@ -1,19 +1,16 @@
-import { dict } from '@/stores/dict';
-// import { getDicts } from '@/api/admin/dict';
+import { useDictStore } from '@/stores/modules/dict';
+import { getDicts } from '@/api/admin/dicts';
 import { ref, toRefs } from 'vue';
-const getDicts = ()=> Promise.resolve({
-	data: []
-})
 /**
  * 获取字典数据
  */
 export function useDict(...args: any): any {
 	const res = ref({});
 	return (() => {
-		args.forEach((dictType: String) => {
+		args.forEach((dictType: string) => {
 			// @ts-ignore
 			res.value[dictType] = [];
-			const dicts = dict().getDict(dictType);
+			const dicts = useDictStore().getDict(dictType);
 			if (dicts) {
 				// @ts-ignore
 				res.value[dictType] = dicts;
@@ -27,7 +24,7 @@ export function useDict(...args: any): any {
 						elTagClass: p.cssClass,
 					}));
 					// @ts-ignore
-					dict().setDict(dictType, res.value[dictType]);
+					useDictStore().setDict(dictType, res.value[dictType]);
 				});
 			}
 		});

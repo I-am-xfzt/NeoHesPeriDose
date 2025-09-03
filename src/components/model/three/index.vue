@@ -1,6 +1,6 @@
 <template>
   <!-- <dv-border-box-1> -->
-  <div id="modelContainer">
+  <div class="wh100" id="modelContainer">
   </div>
   <!-- </dv-border-box-1> -->
 </template>
@@ -45,7 +45,6 @@
       .filter((v) => props.sliceParams!.split(',').some((s) => v.includes(s)))
       .map((v, i) => [v, true, props.modelPosition![i]])
   onMounted(() => {
-    console.log(props.initGround)
 
     model.init(getLoadModelOptions, props.unLoad, props.color)
     props.initGround && model.initGround()
@@ -56,7 +55,7 @@
 </script>
 
 <style>
-  #modelContainer {
+  #modelContainer>canvas {
     width: 100%;
     height: 100%;
   }

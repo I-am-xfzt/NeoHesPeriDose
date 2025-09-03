@@ -209,7 +209,6 @@ export class BabyLonModel {
     this.camera = cameraType[type].init()
     this.camera.inertia = 0.9
     this.camera.position = theVector3(...position)
-    console.log(other);
     
     cameraType[type]['helper'](other)
     this.camera.attachControl(this.canvas, true) // 控制器
@@ -397,7 +396,6 @@ export class BabyLonModel {
     position: Vector3Tuple
   ): Promise<ISceneLoaderAsyncResult> {
     const _func = (res: ISceneLoaderAsyncResult) => {
-      console.log(res, position)
       res.meshes.forEach((mesh) => {
         mesh.outlineColor = new Color3(1, 0, 0) // new Color3(0.1137, 0.9686, 1)
         mesh.edgesColor = new Color4(0.1137, 0.9686, 1, 1)

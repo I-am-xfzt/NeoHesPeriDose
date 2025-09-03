@@ -14,12 +14,12 @@
 
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
+import { RouteLocationNormalizedGeneric } from "vue-router";
 import { useDebounceFn } from "@vueuse/core";
 import { useGlobalStore } from "@/stores/modules/global";
 import { useKeepAliveStore } from "@/stores/modules/keepAlive";
 import Maximize from "./components/Maximize.vue";
 import Tabs from "@/layouts/components/Tabs/index.vue";
-
 const globalStore = useGlobalStore();
 const { maximize, isCollapse, layout, tabs } = storeToRefs(globalStore);
 
@@ -33,7 +33,7 @@ provide("refresh", refreshCurrentPage);
 
 // 解决详情页 keep-alive 问题
 const wrapperMap = new Map();
-function createComponentWrapper(component, route) {
+function createComponentWrapper(component: Component, route: RouteLocationNormalizedGeneric) {
   if (!component) return;
   const wrapperName = route.fullPath;
   let wrapper = wrapperMap.get(wrapperName);

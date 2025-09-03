@@ -40,6 +40,11 @@ export const useUserStore = defineStore("neohesperidose-user", {
     },
     clearUserInfo() {
       this.userInfo = getUserInfos();
+    },
+    loginOut(callback: Function){
+      this.clearToken();
+      this.clearUserInfo();
+      callback()
     }
   },
   persist: piniaPersistConfig("neohesperidose-user")

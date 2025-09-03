@@ -26,7 +26,7 @@ export const useGlobalStore = defineStore('neohesperidose-global', {
         // 头部反转
         headerInverted: false,
         // 折叠菜单
-        isCollapse: true,
+        isCollapse: false,
         // 菜单手风琴
         accordion: true,
         // 页面水印

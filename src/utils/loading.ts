@@ -10,7 +10,7 @@ export const NextLoading = {
     start: (size: number = 100) => {
         const bodys: Element = document.body;
         const div = <HTMLElement>document.createElement('div');
-        div.setAttribute('class', 'loading-next');
+        div.setAttribute('class', 'loading-next posCenter');
         div.innerHTML = `
                 <svg width="${size}px" height="${size}px">
                     <circle cx="${size / 2}" cy="${size / 2}" r="30" fill="transparent" stroke-width="3" stroke-dasharray="31.415, 31.415" stroke="#02bcfe" stroke-linecap="round">

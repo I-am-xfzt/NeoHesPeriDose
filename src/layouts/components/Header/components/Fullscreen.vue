@@ -1,6 +1,6 @@
 <template>
-  <div class="fullscreen">
-    <i :class="['iconfont', isFullscreen ? 'icon-suoxiao' : 'icon-fangda']" class="toolBar-icon" @click="handleFullScreen"></i>
+  <div class="fullscreen pt5">
+    <svg-icon :name="isFullscreen ?  'NoFullScreen' : 'FullScreen'" :icon-style="{ width: '18px', height: '18px', fill: '#4a88f5' }" @click.native="handleFullScreen" />
   </div>
 </template>
 

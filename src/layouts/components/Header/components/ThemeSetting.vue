@@ -1,6 +1,6 @@
 <template>
-  <div class="theme-setting">
-    <i :class="'iconfont icon-zhuti'" class="toolBar-icon" @click="openDrawer"></i>
+  <div class="theme-setting pt4">
+    <svg-icon name="theme" :icon-style="{ width: '20px', height: '20px', fill: '#4a88f5' }" @click="openDrawer" />
   </div>
 </template>
 

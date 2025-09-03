@@ -20,17 +20,17 @@ import {
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 // 引入gltf模型加载库GLTFLoader.js
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
+import type { GLTF as GLTFType } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js'
 import { ref } from 'vue'
-import { NextLoading } from '@/utils/loading.ts'
+import { NextLoading } from '@/utils/loading'
 export const progress = ref<number>(0)
 // const CompositionOptions = Object.keys(import.meta.glob('/public/THREE/*.glb')).map(v => (v.split('/')).at(-1)) as readonly string[];
-// console.log(CompositionOptions)
 // export const glbModelFiles = CompositionOptions;
 export const glbModelFiles = [
   '实景7-ys.glb',
-  '风机-实景-ys.glb',
+  // '风机-实景-ys.glb',
   '科技场景-uv动画4-ys.glb',
   '风机科技3-ys.glb',
   '风机-展开5-ys.glb',
@@ -51,13 +51,8 @@ interface LightsInterface {
   AmbientLight: AmbientLight
   [key: string]: SpotLight | DirectionalLight | AmbientLight // 索引签名
 }
-type GLTF = {
-  scene: THREE.Group | THREE.Object3D
-  scenes: THREE.Group[]
-  cameras: THREE.Camera[]
-  animations: THREE.AnimationClip[]
-  asset: any // 可以根据需要进一步细化这个类型
-}
+// Use the official GLTF type from three.js
+type GLTF = GLTFType
 
 export type GlbModelFilesType = ModelFilesNameType<typeof glbModelFiles>
 export interface LightsOptionsType {
@@ -102,7 +97,7 @@ export class ThreeModel {
   /**
    * 渲染场景的canvas元素。
    */
-  threeCanvas: HTMLCanvasElement
+  threeCanvas: HTMLDivElement
   /**
    * 缩放三维向量。
    */
@@ -122,7 +117,7 @@ export class ThreeModel {
   /**
    * GLTFLoader 实例，用于加载GLTF模型。
    */
-  loader: GLTFLoader
+  loader: InstanceType<typeof GLTFLoader>
   /**
    * 鼠标的二维坐标。
    */
@@ -174,7 +169,7 @@ export class ThreeModel {
       1000
     ) // 相机
     this.controls = undefined // 控制器
-    this.threeCanvas = document.getElementById(elemId) as HTMLCanvasElement
+    this.threeCanvas = document.getElementById(elemId) as HTMLDivElement
     this.scaleVector3 = theVector3(...scale)
     this.positionVector3 = theVector3(...position)
     this.raycaster = new Raycaster() // 光线投射，用于进行鼠标拾取（在三维空间中计算出鼠标移过了什么物体）
@@ -247,7 +242,7 @@ export class ThreeModel {
           const result = createModelObject(modelName, glbFile)
           resolve(result)
         },
-        ({ loaded, total, lengthComputable }) => {
+        ({ loaded, total, lengthComputable }: { loaded: number; total: number; lengthComputable: boolean }) => {
           if (lengthComputable) {
             progress.value = (loaded / total) * 100
             console.log(`${progress.value.toFixed(2)}% loaded`)
@@ -329,7 +324,7 @@ export class ThreeModel {
   /**
    * 光线
    */
-  initLights(name) {
+  initLights(name: string) {
     // 告诉平行光需要开启阴影投射
     const { position, rotation, spotAngle, intensity, unSetOther } =
       this.LightsOptions
@@ -390,7 +385,6 @@ export class ThreeModel {
       // this.camera.position.z = 100 * Math.sin(v)
       // this.camera.lookAt(0, 0, 0)
       mixer && mixer.update(new THREE.Clock().getDelta())
-      console.log(mixer, 'donghua')
       //更新控制器
       this.render()
       // this.controls!.update();
@@ -453,7 +447,6 @@ export class ThreeModel {
         side: THREE.DoubleSide,
       })
     })
-    console.log(res, theMaterials)
     // 创建材质
     const material = new THREE.ShaderMaterial({
       uniforms: {

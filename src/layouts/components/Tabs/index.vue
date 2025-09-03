@@ -1,18 +1,18 @@
 <template>
   <div class="tabs-box">
-    <div class="tabs-menu">
-      <el-tabs v-model="tabsMenuValue" type="card" @tab-click="tabClick" @tab-remove="tabRemove">
-        <el-tab-pane v-for="item in tabsMenuList" :key="item.path" :label="item.title" :name="item.path" :closable="item.close">
-          <template #label>
-            <el-icon v-if="item.icon && tabsIcon" class="tabs-icon">
-              <component :is="item.icon"></component>
-            </el-icon>
+    <!-- <el-scrollbar ref="elMenuHorizontalScrollRef"> -->
+      <div class="tabs-menu">
+        <el-tag v-for="(item, i) in tabsMenuList" :class="{'tags-active': tabsMenuValue === item.path}" :key="item.path"
+          :closable="item.close" @close="tabRemove(item.path)" @click="tabClick(item.path)">
+          <div class="FlexBox hand gap-6">
+            <svg-icon v-if="item.icon && tabsIcon"
+              :icon-style="{width:`12px`, height:`12px`, fill: tabsMenuValue === item.path ? '#4a88f5' : '#7a85a4'}"
+              :name="item.icon"></svg-icon>
             {{ item.title }}
-          </template>
-        </el-tab-pane>
-      </el-tabs>
-      <MoreButton />
-    </div>
+          </div>
+        </el-tag>
+      </div>
+    <!-- </el-scrollbar> -->
   </div>
 </template>
 
@@ -21,15 +21,14 @@ import Sortable from "sortablejs";
 import { useGlobalStore } from "@/stores/modules/global";
 import { useTabsStore } from "@/stores/modules/tabs";
 import { useAuthStore } from "@/stores/modules/auth";
-import { TabsPaneContext, TabPaneName } from "element-plus";
-import MoreButton from "./components/MoreButton.vue";
-
+import { usePageTools } from "@/hooks/useTools"
+import { ElTag } from "element-plus";
 const route = useRoute();
 const router = useRouter();
 const tabStore = useTabsStore();
 const authStore = useAuthStore();
 const globalStore = useGlobalStore();
-
+const { onElMenuHorizontalScroll } = usePageTools();
 const tabsMenuValue = ref(route.fullPath);
 const tabsMenuList = computed(() => tabStore.tabsMenuList);
 const tabsIcon = computed(() => globalStore.tabsIcon);
@@ -43,7 +42,9 @@ onMounted(() => {
 watch(
   () => route.fullPath,
   () => {
-    if (route.meta.isFull) return;
+    console.log(tabsMenuList.value);
+    
+    if (route.meta.isFull && route.meta.isHide) return;
     tabsMenuValue.value = route.fullPath;
     const tabsParams = {
       icon: route.meta.icon as string,
@@ -77,8 +78,8 @@ const initTabs = () => {
 
 // tabs 拖拽排序
 const tabsDrop = () => {
-  Sortable.create(document.querySelector(".el-tabs__nav") as HTMLElement, {
-    draggable: ".el-tabs__item",
+  Sortable.create(document.querySelector(".tabs-menu") as HTMLElement, {
+    draggable: ".el-tag",
     animation: 300,
     onEnd({ newIndex, oldIndex }) {
       const tabsList = [...tabStore.tabsMenuList];
@@ -90,13 +91,13 @@ const tabsDrop = () => {
 };
 
 // Tab Click
-const tabClick = (tabItem: TabsPaneContext) => {
-  const fullPath = tabItem.props.name as string;
+const tabClick = (fullPath: string) => {
+  // authStore.setRouteName((route.meta.activeMenu ?? fullPath) as string);
   router.push(fullPath);
 };
 
 // Remove Tab
-const tabRemove = (fullPath: TabPaneName) => {
+const tabRemove = (fullPath: string) => {
   tabStore.removeTabs(fullPath as string, fullPath == route.fullPath);
 };
 </script>

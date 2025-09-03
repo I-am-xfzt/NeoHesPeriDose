@@ -3,7 +3,7 @@ import type { DefineComponent } from "vue"
 type AsyncComponentLoader = () => Promise<DefineComponent>;
 export const viewsSmartParkingLot = {
     install(app: App) {
-        const CompositionOptions = import.meta.glob('./views/SmartParkingLot/components/*.vue');
+        const CompositionOptions = import.meta.glob('./views/smartParkingLot/components/*.vue');
         for (const [key, value] of Object.entries(CompositionOptions)) {
             // 拼接组件注册的 name
             const componentName = key.match(/([^/]+)\.vue$/)![1]

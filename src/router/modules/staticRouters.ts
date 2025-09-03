@@ -1,47 +1,15 @@
 import { RouteRecordRaw } from "vue-router";
-
+import { HOME_URL, LOGIN_URL } from "@/config"
 /**
  * staticRouter (静态路由)
  */
-export const staticRouter: RouteRecordRaw[] = [
-  {
-    path: "/",
-    redirect: "/home/index",
-    meta: {
-      title: "首页"
-    }
-  },
-  {
-    path: "/system",
-    name: "Router.System",
-    meta: {
-      title: "系统管理"
-    },
-    redirect: "/wind-power"
-  },
-  {
-    path: "/three",
-    name: "Router.Three",
-    meta: {
-      title: "THREE"
-    },
-    redirect: "/wind-power"
-  },
-  {
-    path: "/babylon",
-    name: "Router.BABYLON",
-    meta: {
-      title: "BABYLON"
-    },
-    redirect: ""
-  }
-];
+export const staticRouter: RouteRecordRaw[] = [];
 /**
  * 基础路由配置
  */
 export const baseRouter: RouteRecordRaw[] = [
   {
-    path: "/login",
+    path: LOGIN_URL,
     name: "Router.login",
     component: () => import("@/views/login/index.vue"),
     meta: {
@@ -49,10 +17,10 @@ export const baseRouter: RouteRecordRaw[] = [
     }
   },
   {
-    path: "/layout",
+    path: "/",
     name: "Router.layout",
     component: () => import("@/layouts/index.vue"),
-    // redirect: "/home/index",
+    redirect: HOME_URL,
     children: []
   }
 ];
