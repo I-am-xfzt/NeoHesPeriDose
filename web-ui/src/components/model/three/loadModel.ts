@@ -28,7 +28,7 @@ import { NextLoading } from '@/utils/loading'
 export const progress = ref<number>(0)
 // export const glbModelFiles = CompositionOptions;
 export const glbModelFiles = [
-  'scene7-ys.glb',
+  'scene7.gltf',
   // '风机-实景-ys.glb',
   'science_sceen_uv_ys.glb',
   'fengji_science_ys.glb',
@@ -173,7 +173,7 @@ export class ThreeModel {
     this.positionVector3 = theVector3(...position)
     this.raycaster = new Raycaster() // 光线投射，用于进行鼠标拾取（在三维空间中计算出鼠标移过了什么物体）
     this.dracoLoader = new DRACOLoader()
-    this.loader = new GLTFLoader().setPath('/model-api')
+    this.loader = new GLTFLoader().setPath('/base-api/THREE/')
     this.loader.setMeshoptDecoder(MeshoptDecoder)
     this.dracoLoader.setDecoderPath('THREE/draco/')
     this.dracoLoader.setDecoderConfig({ type: 'js' }) //使用兼容性强的draco_decoder.js解码器

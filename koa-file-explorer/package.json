@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
+    "start": "node handleJson.js",
     "dev": "nodemon server.js"
   },
   "keywords": [],
@@ -14,6 +14,7 @@
   "dependencies": {
     "@koa/cors": "^5.0.0",
     "koa": "^3.0.0",
+    "koa-bodyparser": "^4.4.1",
     "koa-router": "^13.0.1",
     "koa-static": "^5.0.0"
   },

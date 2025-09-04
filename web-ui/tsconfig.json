@@ -12,6 +12,7 @@
       "dom.iterable",
       "scripthost"
     ],
+    "checkJs": false,
     "skipLibCheck": true,
     /* Bundler mode */
     "moduleResolution": "node",
