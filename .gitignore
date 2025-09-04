@@ -5,6 +5,7 @@ bin-release/
 [Bb]in/
 node_modules/
 dist/
+neohesperidose_dist/
 # Other files and folders
 .settings/
 
