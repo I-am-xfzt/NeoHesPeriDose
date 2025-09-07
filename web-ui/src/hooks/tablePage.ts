@@ -4,7 +4,7 @@ import { CSSProperties, onMounted } from "vue";
 /**
  * 表格组件基础配置属性
  */
-export interface BasicTableProps {
+export interface BasicTableProps<T = any> {
   // 是否在创建页面时即调用数据列表接口，默认为true
   createdIsNeed?: boolean;
   // 是否需要分页，默认为true
@@ -12,7 +12,7 @@ export interface BasicTableProps {
   // 查询条件表单对象，类型为any
   queryForm?: any;
   // 数据列表数组
-  dataList?: any[];
+  dataList?: T[];
   // 分页属性对象
   pagination?: Pagination;
   // 数据列表，loading状态标志，默认为false
@@ -31,6 +31,7 @@ export interface BasicTableProps {
   ascs?: string[];
   // props属性对象，类型为any
   props?: any;
+  [k: string]: any; // 添加索引签名，允许添加任意属性
 }
 
 /**
@@ -233,33 +234,37 @@ export function useTable(options?: BasicTableProps) {
    * @returns  css
    */
   const tableStyle = (...args: any[]): TableStyle => ({
-    cellStyle: { textAlign: "center" },
+    cellStyle: {},
     headerCellStyle: {
-      textAlign: "center",
       background: "transparent",
       color: "#fff"
     },
     cellFunStyle({ columnIndex, rowIndex }) {
-      const style: EmptyObjectType = { textAlign: "center" };
+      const style: EmptyObjectType = {};
       if (rowIndex % 2 !== 0) {
         columnIndex === 0 && (style.borderLeft = "1px solid #4485b5");
         columnIndex === args[0] && (style.borderRight = "1px solid #4485b5");
       }
       return style;
     },
-    rowStyle({ row, rowIndex }) {
-      if (rowIndex % 2 === 0) {
-        return {
+    rowStyle({ row, rowIndex }: any) {
+      const style = {
+        dark: {
           background: `rgba(65, 123, 214, 0.19)`,
-          "backdrop-filter": `blur(12px)`,
-          textAlign: "center"
-        };
-      } else {
-        return {
-          background: `transparent`,
-          textAlign: "center"
-        };
-      }
+          "backdrop-filter": `blur(12px)`
+        },
+        light: {
+          background: `transparent`
+        }
+      };
+      let func = () => {
+        if (rowIndex % 2 === 0) {
+          return style.dark;
+        } else {
+          return style.light;
+        }
+      };
+      return func();
     },
     maxHeight: h => `calc(100% - ${h})`
   });

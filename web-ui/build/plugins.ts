@@ -7,7 +7,7 @@ import viteCompression from "vite-plugin-compression";
 import vueSetupExtend from "unplugin-vue-setup-extend-plus/vite";
 import NextDevTools from "vite-plugin-vue-devtools";
 import createAutoImport from "./auto-import"
-
+import { templateCompilerOptions } from "@tresjs/core"
 /**
  * 创建 vite 插件
  * @param viteEnv
@@ -15,7 +15,9 @@ import createAutoImport from "./auto-import"
 export const createVitePlugins = (viteEnv: ViteEnv): (PluginOption | PluginOption[])[] => {
   const { VITE_DEVTOOLS, VITE_PWA } = viteEnv;
   return [
-    vue(),
+    vue({
+      ...templateCompilerOptions
+    }),
     // devTools
     VITE_DEVTOOLS && NextDevTools({ launchEditor: "code" }),
     // name 可以写在 script 标签上

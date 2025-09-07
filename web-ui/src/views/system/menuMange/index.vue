@@ -1,83 +1,65 @@
 <template>
-  <div class="system-menu-container layout-pd">
-    <el-card shadow="hover">
-      <div class="system-menu-search mb15">
-        <el-input size="default" placeholder="请输入菜单名称" style="max-width: 180px"> </el-input>
-        <el-button size="default" type="primary" class="ml10">
-          <el-icon>
-            <ele-Search />
-          </el-icon>
-          查询
-        </el-button>
-        <el-button size="default" type="success" class="ml10" @click="onOpenAddMenu">
-          <el-icon>
-            <ele-FolderAdd />
-          </el-icon>
-          新增菜单
-        </el-button>
-      </div>
-      <el-table
-        :data="state.tableData.data"
-        v-loading="state.tableData.loading"
-        style="width: 100%"
-        row-key="path"
-        :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-      >
-        <el-table-column label="菜单名称" show-overflow-tooltip>
-          <template #default="scope">
-            <SvgIcon :name="scope.row.meta.icon" />
-            <span class="ml10">{{ $t(scope.row.meta.title) }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="path" label="路由路径" show-overflow-tooltip></el-table-column>
-        <el-table-column label="组件路径" show-overflow-tooltip>
-          <template #default="scope">
-            <span>{{ scope.row.component }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="权限标识" show-overflow-tooltip>
-          <template #default="scope">
-            <span>{{ scope.row.meta.roles }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="排序" show-overflow-tooltip width="80">
-          <template #default="scope">
-            {{ scope.$index }}
-          </template>
-        </el-table-column>
-        <el-table-column label="类型" show-overflow-tooltip width="80">
-          <template #default="scope">
-            <el-tag type="success">{{ scope.row.xx }}菜单</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" show-overflow-tooltip width="140">
-          <template #default="scope">
-            <el-button text type="primary" @click="onOpenAddMenu('add')">新增</el-button>
-            <el-button text type="primary" @click="onOpenEditMenu('edit', scope.row)">修改</el-button>
-            <el-button text type="primary" @click="onTabelRowDel(scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-card>
-    <handleDialog ref="menuDialogRef" @refresh="getDataList()" />
+  <div class="page-container">
+    <div class="system-menu-search mb15">
+      <el-input placeholder="请输入菜单名称" v-model="state.searchMenu" @keyup.enter.native="onSearchMenu"  style="max-width: 220px"> </el-input>
+      <el-button :icon="Search" type="primary" class="ml10"> 查询 </el-button>
+      <el-button :icon="FolderAdd" type="add" class="ml10" @click="onOpenAddMenu"> 新增菜单 </el-button>
+    </div>
+    <fyh-table
+      :data="state.dataList"
+      v-chartLoading="{ loading: state.loading, time: 500 }"
+      row-key="path"
+      :tree-props="{ children: 'children', hasChildren: 'children' }"
+      :cell-style="{
+        borderTop: `1px solid #4485b5`
+      }"
+      :header-cell-style="headerCellStyle"
+      :module-path="`views/system/menuMange`"
+    >
+      <template #svgIcon="{ row }">
+        <div class="FlexBox absolute posTCenter left-40 gap-10">
+          <svg-icon
+            :name="row.meta.icon"
+            :icon-style="{
+              width: '16px',
+              height: '16px',
+              fill: '#7a85a4'
+            }"
+          />
+          {{ row.meta.title }}
+        </div>
+      </template>
+      <template #operation="{ row }">
+        <el-button :icon="Plus" text type="primary" @click="onOpenAddMenu('add')">新增</el-button>
+        <el-button :icon="EditPen" text type="primary" @click="onOpenEditMenu('edit', row)">修改</el-button>
+        <el-button :icon="Delete" text type="primary" @click="onTabelRowDel(row)">删除</el-button>
+      </template>
+    </fyh-table>
   </div>
 </template>
 
 <script setup lang="ts" name="systemMenu">
 import { useMessage, useMessageBox } from "@/hooks/message";
-import { getAuthMenuListApi as pageList } from "@/api/login";
-import { useTable, BasicTableProps } from "@/hooks/tablePage"
+import { pageList } from "@/api/admin/menu";
+import { useTable, BasicTableProps } from "@/hooks/tablePage";
+import FyhTable from "@/components/FyhComs/FyhTable.vue";
+import { Delete, FolderAdd, Search, EditPen, Plus } from "@element-plus/icons-vue";
 // 引入组件
 const handleDialog = defineAsyncComponent(() => import("./handleModal.vue"));
 const menuDialogRef = ref<InstanceType<typeof handleDialog>>();
-const state = reactive<BasicTableProps>({
-    pageList
+const state = reactive<BasicTableProps<Menu.MenuOptions>>({
+  pageList,
+  searchMenu: ''
 });
-const { getDataList } = useTable(state);
+const { getDataList, tableStyle } = useTable(state);
+const { headerCellStyle } = tableStyle();
 // 打开新增菜单弹窗
 const onOpenAddMenu = (type: string) => {
   menuDialogRef.value!.openDialog(type);
 };
+const onSearchMenu = ()=> {
+  // state.dataList = state.dataList?.map
+}
 // 打开编辑菜单弹窗
 const onOpenEditMenu = (type: string, row: Menu.MenuOptions) => {
   menuDialogRef.value!.openDialog(type, row);

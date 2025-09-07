@@ -21,16 +21,14 @@ import Sortable from "sortablejs";
 import { useGlobalStore } from "@/stores/modules/global";
 import { useTabsStore } from "@/stores/modules/tabs";
 import { useAuthStore } from "@/stores/modules/auth";
-import { usePageTools } from "@/hooks/useTools"
 import { ElTag } from "element-plus";
 const route = useRoute();
 const router = useRouter();
 const tabStore = useTabsStore();
 const authStore = useAuthStore();
 const globalStore = useGlobalStore();
-const { onElMenuHorizontalScroll } = usePageTools();
 const tabsMenuValue = ref(route.fullPath);
-const tabsMenuList = computed(() => tabStore.tabsMenuList);
+const tabsMenuList = computed(() => tabStore.tabsMenuList.filter(item => !item.path.includes('home/index')));
 const tabsIcon = computed(() => globalStore.tabsIcon);
 
 onMounted(() => {

@@ -42,7 +42,7 @@ router.beforeEach(async (to, from, next) => {
  * */
 router.onError(error => {
   NProgress.done();
-  window.nextLoading && NextLoading.done();
+  window.nextLoading && NextLoading.done(600);
   console.warn("路由错误", error.message);
 });
 

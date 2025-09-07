@@ -73,9 +73,11 @@ declare interface tableColumnOp {
     name: string;
     attrs?: Record<string, any>;
   };
+  handleOp?: (row: EmptyObjectType, op: tableColumnOp) => void;
   /** 选项配置 */
   theOptions?: Array<{
     prop: string;
     label: string;
   }>;
+  [k: string]: any; // 添加索引签名，允许添加任意属性
 }

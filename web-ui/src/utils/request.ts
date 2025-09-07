@@ -1,7 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
 import { ElMessage } from "element-plus";
 import qs from "qs";
-import { generateUUID } from "@/utils/other";
 import { Session } from "@/utils/storage";
 // 基础类型定义
 interface IRequestConfig extends AxiosRequestConfig {
@@ -145,7 +144,8 @@ export class BaseHttpClient {
   public request<T = any>(config: IRequestConfig): Promise<T> {
     return this.instance(config);
   }
-  public static login() {
+  public static async login() {
+    const { generateUUID } = await import("@/utils/other");
     const token = generateUUID();
     Session.set('token', token)
     return Promise.resolve({
@@ -164,54 +164,4 @@ export class BaseHttpClient {
   }
 
   // 其他HTTP方法...
-}
-
-// 业务子模块示例 - 用户模块
-class UserApi extends BaseHttpClient {
-  constructor() {
-    super("/user");
-  }
-
-  public getUserInfo(userId: string) {
-    return this.get<{ user: any }>(`/${userId}`);
-  }
-}
-
-// 业务子模块示例 - 订单模块
-class OrderApi extends BaseHttpClient {
-  constructor(baseURL: string) {
-    super(baseURL);
-  }
-
-  protected async refreshToken(): Promise<string> {
-    const response = await this.post<{ token: string }>("/auth/refresh");
-    localStorage.setItem("auth_token", response.token);
-    return response.token;
-  }
-
-  // 业务方法
-  public createOrder(orderData: any) {
-    return this.post<{ orderId: string }>("/orders", orderData);
-  }
-
-  public getOrderList(params: { page: number; size: number }) {
-    return this.get<{ list: any[] }>("/orders", params);
-  }
-}
-
-// 使用示例
-const API_BASE = "https://api.example.com";
-
-// 初始化各业务模块
-export const userApi = new UserApi();
-export const orderApi = new OrderApi(API_BASE);
-
-// 在组件中使用
-async function fetchData() {
-  try {
-    const user = await userApi.getUserInfo("123");
-    const orders = await orderApi.getOrderList({ page: 1, size: 10 });
-  } catch (error) {
-    console.error("请求失败", error);
-  }
 }

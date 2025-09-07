@@ -1,15 +1,15 @@
 <template>
-	<div class="qrcode-container layout-pd">
-		<el-card shadow="hover" header="qrcodejs2 二维码生成">
+	<div class="qrcode-container page-container">
+		<el-card header="qrcodejs2 二维码生成">
 			<el-alert
 				title="感谢优秀的 `qrcodejs2`，项目地址：https://github.com/davidshimjs/qrcodejs"
-				type="success"
+				type="primary"
 				:closable="false"
 				class="mb15"
 			></el-alert>
 			<div class="qrcode-img-warp">
 				<div class="mb30 mt30 qrcode-img">
-					<div class="qrcode" ref="qrcodeRef"></div>
+					<div class="qrcode l-t-center" ref="qrcodeRef"></div>
 				</div>
 				<el-button type="primary" :icon="Refresh" size="default" @click="onInitQrcode">
 					重新生成
@@ -54,11 +54,11 @@ onMounted(() => {
 		.qrcode-img {
 			display: flex;
 			width: 100%;
-			height: 125px;
+			justify-content: center;
 			.qrcode {
-				margin: auto;
-				width: 125px;
-				height: 125px;
+				width: 132px;
+				height: 132px;
+				border: 1px solid #fff;
 			}
 		}
 	}

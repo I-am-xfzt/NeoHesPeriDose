@@ -167,7 +167,15 @@
   .mr#{$i} {
     margin-right: #{$i}px !important;
   }
-
+  .left-#{$i} {
+    left: #{$i}px !important;
+  }
+  .left-#{$i} {
+    left: #{$i}px !important;
+  }
+  .right{
+    right: #{$i}px !important;
+  }
   .mb#{$i} {
     margin-bottom: #{$i}px !important;
   }
@@ -234,4 +242,15 @@ $pagePadding: 15px;
 .page-container {
   padding: $pagePadding;
   @extend .wh100;
+}
+.relative {
+  position: relative;
+}
+.absolute {
+  position: absolute;
+}
+
+.l-t-center{
+  @extend .FlexBox;
+  @extend .s-row-center;
 }

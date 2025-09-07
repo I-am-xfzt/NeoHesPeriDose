@@ -11,6 +11,7 @@
     <template #footer>
       <el-button :round="isRound" @click="handleDialog('cancel')">{{ cancelText }}</el-button>
       <el-button :round="isRound" type="primary" @click="handleDialog('confirm')">{{ confirmText }}</el-button>
+      <slot name="other_btn"></slot>
     </template>
   </el-dialog>
 </template>

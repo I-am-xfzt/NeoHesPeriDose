@@ -25,7 +25,7 @@ onBeforeMount(initOptions);
   <el-table v-bind="$attrs">
     <el-table-column v-if="showSelection" type="selection" width="55" />
     <template v-for="(row, index) in theOptions" :key="index">
-      <el-table-column v-if="!row['children']" v-bind="row" align="center">
+      <el-table-column v-if="!row['children']" v-bind="row" :align="row.align ?? 'center'">
         <template #default="{ row: info, $index }">
           <slot v-if="row.slots" :name="row.slots" :row="info"></slot>
           <template v-else>
@@ -49,8 +49,8 @@ onBeforeMount(initOptions);
           </template>
         </template>
       </el-table-column>
-      <el-table-column v-else v-bind="row" align="center">
-        <el-table-column v-for="v in row.children" :key="v.prop" v-bind="v" align="center" />
+      <el-table-column v-else v-bind="row" :align="row.align ?? 'center'">
+        <el-table-column v-for="v in row.children" :key="v.prop" v-bind="v" :align="row.align ?? 'center'" />
       </el-table-column>
     </template>
     <slot />

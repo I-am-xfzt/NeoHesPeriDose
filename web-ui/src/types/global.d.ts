@@ -114,6 +114,7 @@ declare namespace Menu {
     isHide: boolean;
     isFull: boolean;
     isAffix: boolean;
+    roles?: string[];
     isKeepAlive: boolean;
   }
 }

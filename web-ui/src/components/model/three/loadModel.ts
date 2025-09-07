@@ -394,7 +394,7 @@ export class ThreeModel {
    * 视窗的尺寸重新变化
    */
   onWindowResize() {
-    this.camera.aspect = window.innerWidth / window.innerHeight
+    // this.camera.aspect = window.innerWidth / window.innerHeight
     this.camera.updateProjectionMatrix()
     this.renderer.setSize(window.innerWidth, window.innerHeight)
     this.render()

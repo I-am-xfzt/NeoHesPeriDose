@@ -34,3 +34,36 @@ Software architecture description
 4.  The most valuable open source project [GVP](https://gitee.com/gvp)
 5.  The manual of Gitee [https://gitee.com/help](https://gitee.com/help)
 6.  The most popular members  [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+
+```
+{
+  "path": "/demos",
+  "name": "demos",
+  "redirect": "/demos/index",
+  "meta": {
+    "icon": "DataScreen",
+    "title": "大屏合集",
+    "isLink": "",
+    "isHide": false,
+    "isFull": false,
+    "isAffix": false,
+    "isKeepAlive": true
+  },
+  "children": [
+    {
+      "path": "/demos/index",
+      "name": "demosIndex",
+      "component": "/demos/index",
+      "meta": {
+        "icon": "DataScreen",
+        "title": "大屏合集",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      }
+    }
+  ]
+}
+```

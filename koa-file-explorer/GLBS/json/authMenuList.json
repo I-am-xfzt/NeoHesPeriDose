@@ -382,7 +382,7 @@
           "component": "/assembly/compressImage/index",
           "meta": {
             "icon": "Compress",
-            "title": "图片裁剪",
+            "title": "图片压缩",
             "isLink": "",
             "isHide": false,
             "isFull": false,
@@ -466,7 +466,7 @@
           "component": "/assembly/workflow/index",
           "meta": {
             "icon": "Workflow",
-            "title": "工作流",
+            "title": "流程图",
             "isLink": "",
             "isHide": false,
             "isFull": false,
@@ -505,12 +505,12 @@
       ]
     },
     {
-      "path": "/demos",
-      "name": "demos",
-      "redirect": "/demos/index",
+      "path": "/amap-example",
+      "name": "amap-example",
+      "redirect": "/amap-example/index",
       "meta": {
-        "icon": "DataScreen",
-        "title": "大屏合集",
+        "icon": "Amap",
+        "title": "高德示例",
         "isLink": "",
         "isHide": false,
         "isFull": false,
@@ -519,12 +519,12 @@
       },
       "children": [
         {
-          "path": "/demos/index",
-          "name": "demosIndex",
-          "component": "/demos/index",
+          "path": "/amap-example/index",
+          "name": "amap-exampleIndex",
+          "component": "/amap-example/index",
           "meta": {
             "icon": "DataScreen",
-            "title": "大屏合集",
+            "title": "高德地图",
             "isLink": "",
             "isHide": false,
             "isFull": false,

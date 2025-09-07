@@ -1,0 +1,40 @@
+<canvas id="curve" width="400" height="200"></canvas>
+
+<script>
+const canvas = document.getElementById('curve');
+const ctx = canvas.getContext('2d');
+
+// 您的数据
+const data = [30, 80, 20, 90, 40, 70, 10, 60];
+
+// 绘制弯弯的曲线
+ctx.beginPath();
+
+// 第一个点
+const firstX = 0;
+const firstY = 200 - data[0] * 2;
+ctx.moveTo(firstX, firstY);
+
+// 用二次贝塞尔曲线连接各点
+for (let i = 0; i < data.length - 1; i++) {
+    const x1 = (i / (data.length - 1)) * 400;
+    const y1 = 200 - data[i] * 2;
+    const x2 = ((i + 1) / (data.length - 1)) * 400;
+    const y2 = 200 - data[i + 1] * 2;
+    
+    // 控制点取两点中间
+    const cx = (x1 + x2) / 2;
+    const cy = (y1 + y2) / 2;
+    
+    ctx.quadraticCurveTo(x1, y1, cx, cy);
+}
+
+// 连接到最后一个点
+const lastX = 400;
+const lastY = 200 - data[data.length - 1] * 2;
+ctx.lineTo(lastX, lastY);
+
+ctx.strokeStyle = 'blue';
+ctx.lineWidth = 2;
+ctx.stroke();
+</script>

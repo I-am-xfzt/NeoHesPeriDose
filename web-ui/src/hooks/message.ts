@@ -85,6 +85,7 @@ export function useMessageBox() {
                 cancelButtonText: '取消',
                 closeOnClickModal: false,
                 closeOnPressEscape: false,
+                center: true,
                 type: 'warning',
                 ...options
             });

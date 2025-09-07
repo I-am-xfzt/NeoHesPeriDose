@@ -147,20 +147,17 @@
 
 <script setup lang="ts" name="systemMenuDialog">
 import { storeToRefs } from 'pinia';
-import { useRoutesList } from '/@/stores/routesList';
-import { i18n } from '/@/i18n/index';
 // import { setBackEndControlRefreshRoutes } from "/@/router/backEnd";
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 
 // 引入组件
-const IconSelector = defineAsyncComponent(() => import('/@/components/iconSelector/index.vue'));
+// const IconSelector = defineAsyncComponent(() => import('/@/components/iconSelector/index.vue'));
 
 // 定义变量内容
 const menuDialogFormRef = ref();
-const stores = useRoutesList();
-const { routesList } = storeToRefs(stores);
+// const { routesList } = storeToRefs(stores);
 const state = reactive({
 	// 参数请参考 `/src/router/route.ts` 中的 `dynamicRoutes` 路由菜单格式
 	ruleForm: {
@@ -198,7 +195,7 @@ const state = reactive({
 const getMenuData = (routes: RouteItems) => {
 	const arr: RouteItems = [];
 	routes.map((val: RouteItem) => {
-		val['title'] = i18n.global.t(val.meta?.title as string);
+		// val['title'] = i18n.global.t(val.meta?.title as string);
 		arr.push({ ...val });
 		if (val.children) getMenuData(val.children);
 	});
