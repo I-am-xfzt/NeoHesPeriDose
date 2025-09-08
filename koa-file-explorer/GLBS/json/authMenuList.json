@@ -335,12 +335,12 @@
           ]
         },
         {
-          "path": "/assembly/StarrySky",
-          "name": "StarrySky",
-          "component": "/assembly/StarrySky/index",
+          "path": "/assembly/scss-particle",
+          "name": "scss-particle",
+          "component": "/assembly/scss-particle/index",
           "meta": {
-            "icon": "StarrySky",
-            "title": "Sass星空",
+            "icon": "scssParticle",
+            "title": "Sass粒子",
             "isLink": "",
             "isHide": false,
             "isFull": false,

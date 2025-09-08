@@ -16,10 +16,10 @@ const viteConfig = defineConfig(({ mode }: ConfigEnv): UserConfig => {
   const viteEnv = wrapperEnv(env);
   return {
     plugins: createVitePlugins(viteEnv),
-    esbuild: {
-      // 可去除打印，但打包速度慢
-      pure: viteEnv.VITE_DROP_CONSOLE ? ["console.log", "debugger"] : []
-    },
+    // esbuild: {
+    //   // 可去除打印，但打包速度慢
+    //   pure: viteEnv.VITE_DROP_CONSOLE ? ["console.log", "debugger"] : []
+    // },
     publicDir: "public",
     root: process.cwd(),
     resolve: { alias },

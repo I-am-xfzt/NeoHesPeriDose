@@ -1,0 +1,132 @@
+// @use 'sass:math';
+// @use 'sass:string';
+
+// @function getShadows($n) {
+//     $result: '#{math.random(100)}vw #{math.random(100)}vh 0 #fff';
+
+//     @for $i from 2 through $n {
+//         $result: '#{$result}, #{math.random(100)}vw #{math.random(100)}vh 0 #fff';
+//     }
+
+//     @return string.unquote($result);
+// }
+
+// $duration: 400s;
+// $num: 1000;
+
+// @for $i from 1 through 5 {
+//     $duration: calc($duration / 2);
+//     // 使用 math.floor 确保 $num 是一个整数
+//     $num: math.floor(math.div($num, 2));
+
+//     .layer#{$i} {
+//         $size: #{$i}px;
+//         position: fixed;
+//         left: 0;
+//         top: 0;
+//         width: $size;
+//         height: $size;
+//         border-radius: 50%;
+//         box-shadow: getShadows($num);
+//         animation: StartMove $duration linear infinite;
+
+//         &::after {
+//             content: "";
+//             position: inherit;
+//             left: 0;
+//             top: 100vh;
+//             width: inherit;
+//             height: inherit;
+//             box-shadow: inherit;
+//             border-radius: inherit;
+//         }
+//     }
+// }
+
+// @keyframes StartMove {
+//     to {
+//         transform: translateY(-100vh) translateZ(0);
+//     }
+// }
+@use 'sass:math';
+@use 'sass:string';
+
+@function getShadows($n, $max: 100) {
+  $result: '';
+  $actual-n: math.min($n, 500); // 限制最大数量，避免性能问题
+  
+  // 使用更简洁的循环和字符串构建
+  @for $i from 1 through $actual-n {
+    $x: math.random($max);
+    $y: math.random($max);
+    $result: if($i == 1, '#{$x}vw #{$y}vh 0 #fff', '#{$result}, #{$x}vw #{$y}vh 0 #fff');
+  }
+  
+  @return string.unquote($result);
+}
+
+$duration: 200s; // 减少总时长
+$num: 600; // 大幅减少阴影数量
+
+@for $i from 1 through 3 { // 减少层数
+  $duration: math.div($duration, 1.5);
+  $num: math.floor(math.div($num, 1.5));
+  $size: math.max(1, $i * 1.2); // 减小粒子大小
+
+  .layer#{$i} {
+    $size: #{$size}px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: $size;
+    height: $size;
+    border-radius: 50%;
+    box-shadow: getShadows($num);
+    animation: moveStars $duration linear infinite;
+    // 启用GPU加速
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    
+    // 优化动画性能
+    will-change: transform, box-shadow;
+
+    &::after {
+      content: "";
+      position: fixed; // 改为fixed定位
+      left: 0;
+      top: 100vh;
+      width: $size;
+      height: $size;
+      box-shadow: inherit;
+      border-radius: 50%;
+    }
+  }
+}
+
+// 优化的关键帧动画
+@keyframes moveStars {
+  0% {
+    transform: translateY(0) translateZ(0);
+  }
+  100% {
+    transform: translateY(-100vh) translateZ(0);
+  }
+}
+
+// 媒体查询，根据设备性能调整
+@media (prefers-reduced-motion: reduce) {
+  .layer1, .layer2, .layer3 {
+    animation-duration: 600s !important;
+    box-shadow: getShadows(50) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  @for $i from 1 through 3 {
+    .layer#{$i} {
+      box-shadow: getShadows(math.floor($num * 0.3)) !important;
+      animation-duration: 300s !important;
+    }
+  }
+}

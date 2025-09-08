@@ -1,3 +1,10 @@
-.el-button {
-  margin-top: 20px;
+.the-driver-popover {
+  background: var(--el-bg-color-overlay) !important;
+  color: #fff;
+  border: none;
+  button {
+    background: #1172b9;
+    color: #fff;
+    text-shadow: none;
+  }
 }
