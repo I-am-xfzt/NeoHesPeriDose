@@ -13,7 +13,7 @@
         "isHide": true,
         "isFull": false,
         "isAffix": true,
-        "isKeepAlive": true
+        "isKeepAlive": false
       }
     },
     {

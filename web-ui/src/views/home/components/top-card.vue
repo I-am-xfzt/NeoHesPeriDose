@@ -3,7 +3,7 @@
     <div class="home-top-card-item FlexBox hand s-row-between" v-for="(item, i) in dataList" :key="i">
       <div class="home-top-card-item-left t-center">
         <div class="home-top-card-item-title">{{ item.title }}</div>
-        <div class="home-top-card-item-value">{{ verifyNumberComma(item.value) }}</div>
+        <div class="home-top-card-item-value" :id="item.id+i">{{ verifyNumberComma(item.value) }}</div>
       </div>
       <div class="home-top-card-item-right">
         <canvas style="width: 150px; height: 60px" :id="item.id"></canvas>
@@ -60,8 +60,8 @@ const dataList = ref([
 // 初始化数字滚动
 const initNumCountUp = () => {
   nextTick(() => {
-    dataList.value.forEach(v => {
-      new CountUp(document.querySelector(".home-top-card-item-value") as HTMLDivElement, Number(v.value)).start();
+    dataList.value.forEach((v, index) => {
+      new CountUp(document.getElementById(`${v.id}${index}`) as HTMLDivElement, Number(v.value)).start();
     });
   });
 };
@@ -100,7 +100,7 @@ onMounted(() => {
     height: 160px;
     &-title {
       font-size: 18px;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
     }
     &-value {
       font-size: 32px;

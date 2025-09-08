@@ -178,7 +178,8 @@ export class allElFormItemsOptions implements abCreateComOptions.IAllElFormItems
         const {
             prop = 'val',
             label = '',
-            span = 4
+            span = 4,
+            disabled = false
         } = p
         return {
             formItem: getFormItemsOptions({}, prop, label),
@@ -186,7 +187,8 @@ export class allElFormItemsOptions implements abCreateComOptions.IAllElFormItems
             attrs: {
                 prop,
                 label,
-                placeholder: '请输入'+label
+                placeholder: '请输入'+label,
+                disabled
             },
             methods: {
                 event: '',
