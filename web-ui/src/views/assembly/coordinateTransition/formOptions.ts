@@ -41,7 +41,7 @@ const getElCom = new allElFormItemsOptions(),
   ];
 export default {
   form: getElComOption.getFormOptions({
-    labelWidth: "65px"
+    labelWidth: "80px"
   }),
   rules: {},
   dicts: getElComOption.countDict(defaultColum()),

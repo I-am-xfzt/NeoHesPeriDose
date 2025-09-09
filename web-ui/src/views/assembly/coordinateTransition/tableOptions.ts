@@ -6,62 +6,32 @@ export default [
     width: 80
   },
   {
-    label: "用户名",
-    prop: "username",
+    label: "源坐标",
+    prop: "source",
     minWidth
   },
   {
-    label: "姓名",
-    prop: "name",
+    label: "源坐标类型",
+    prop: "sourceType",
     minWidth
   },
   {
-    label: "手机号",
-    prop: "phone",
+    label: "目标坐标",
+    prop: "target",
+    minWidth
+  },
+  {
+    label: "目标坐标类型",
+    prop: "targetType",
     minWidth: 130
   },
   {
-    label: "岗位",
-    prop: "postList",
-    minWidth,
-    com: {
-      name: "el-tag",
-      attrs: {
-        type: "primary"
-      }
-    },
-    formatter: (row: any) => (row["postList"] && row["postList"][0]?.postName) || "",
-    methods: {
-      event: "click",
-      name: "handleClick"
-    }
-  },
-  {
-    label: "角色",
-    prop: "roleList",
-    minWidth,
-    com: {
-      name: "el-tag",
-      attrs: {
-        type: "primary"
-      }
-    },
-    formatter: (row: any) => (row["roleList"] && row["roleList"][0]?.roleName) || ""
-  },
-  {
-    label: "创建时间",
+    label: "添加时间",
     prop: "createTime",
     minWidth
   },
   {
-    label: "账号状态",
-    prop: "lockFlag",
-    minWidth,
-    isTag: true,
-    dict: "account_status"
-  },
-  {
-    width: 200,
+    width: 120,
     label: "操作",
     slots: "operation"
   }

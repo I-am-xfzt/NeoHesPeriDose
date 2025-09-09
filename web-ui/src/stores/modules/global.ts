@@ -46,7 +46,7 @@ export const useGlobalStore = defineStore('neohesperidose-global', {
     actions: {
         // Set GlobalState
         setGlobalState(...args: ObjToKeyValArray<GlobalState>) {
-            this.$patch({[args[0]]: args[1]});
+            this.$patch({[args[0]]: args[1]} as any);
         }
     },
     persist: piniaPersistConfig("neohesperidose-global")

@@ -4,7 +4,7 @@
       <template #header>
         <div class="card-header">
           <h2>坐标转换工具</h2>
-          <el-tag type="info">支持 WGS84、GCJ02、BD09 坐标系互转</el-tag>
+          <el-tag type="primary">支持 WGS84、GCJ02、BD09 坐标系互转</el-tag>
         </div>
       </template>
       <el-alert v-if="errorMessage" :title="errorMessage" type="error" show-icon closable @close="errorMessage = ''" />
@@ -19,11 +19,6 @@
         </div>
 
         <el-table :data="result" stripe style="width: 100%">
-          <el-table-column prop="source" label="源坐标" width="200">
-            <template #default="{ row }">
-              {{ formatCoordinate(row.source) }}
-            </template>
-          </el-table-column>
           <el-table-column prop="target" label="目标坐标" width="200">
             <template #default="{ row }">
               {{ formatCoordinate(row.target) }}
@@ -41,11 +36,14 @@
           <div ref="mapContainer" class="map-container"></div>
         </div>
       </div>
-      <el-divider />
-
       <div class="history-section">
-        <h3>历史记录</h3>
-        <fyh-table :data="history" :module-path="modulePath"></fyh-table>
+        <h3 class="pb10">历史记录</h3>
+        <fyh-table :data="historyRecord" :module-path="modulePath">
+          <template #operation="{ row }">
+              <el-button text @click="copySingleCoordinate(row.target)"> 复制 </el-button>
+              <el-button text :icon="Delete" @click="deleteRecord(row.id)"> 删除 </el-button>
+            </template>
+        </fyh-table>
       </div>
     </el-card>
   </div>
@@ -54,9 +52,12 @@
 <script setup>
 import { ElMessage, ElNotification, ElDivider } from "element-plus";
 import { Refresh, Delete, QuestionFilled, DocumentCopy } from "@element-plus/icons-vue";
+import { useCoordinateTransitionStore } from "@/stores/business/coordinateTransition";
 import FyhForm from "@/components/FyhComs/FyhForm.vue";
 import FyhTable from "@/components/FyhComs/FyhTable.vue";
 const modulePath = "views/assembly/coordinateTransition";
+const useCoordStore = useCoordinateTransitionStore();
+const { historyRecord, setHistoryRecord, deleteRecord } = storeToRefs(useCoordStore)
 // 表单数据
 const form = reactive({
   sourceSystem: "wgs84",
@@ -72,95 +73,18 @@ const mapContainer = ref(null);
 
 // 坐标转换函数（简化版，实际使用时需要实现完整的转换算法）
 const coordinateConvert = (lng, lat, from, to) => {
-  // 这里使用模拟转换，实际项目需要实现正确的转换算法
-  const mockOffset = {
-    wgs84_to_gcj02: { lng: 0.01, lat: 0.01 },
-    wgs84_to_bd09: { lng: 0.02, lat: 0.02 },
-    gcj02_to_wgs84: { lng: -0.01, lat: -0.01 },
-    gcj02_to_bd09: { lng: 0.01, lat: 0.01 },
-    bd09_to_wgs84: { lng: -0.02, lat: -0.02 },
-    bd09_to_gcj02: { lng: -0.01, lat: -0.01 }
-  };
-
-  const key = `${from}_to_${to}`;
-  const offset = mockOffset[key] || { lng: 0, lat: 0 };
-
-  return {
-    lng: parseFloat((lng + offset.lng).toFixed(6)),
-    lat: parseFloat((lat + offset.lat).toFixed(6))
-  };
+  
 };
 
 // 解析输入坐标
 const parseCoordinates = input => {
-  const coordinates = [];
 
-  // 尝试解析多种格式
-  try {
-    // JSON数组格式
-    if (input.trim().startsWith("[")) {
-      const jsonData = JSON.parse(input);
-      jsonData.forEach(item => {
-        if (item.lng && item.lat) {
-          coordinates.push({ lng: parseFloat(item.lng), lat: parseFloat(item.lat) });
-        }
-      });
-    } else {
-      // 文本格式：经度,纬度;经度,纬度
-      const points = input.split(";").filter(Boolean);
-      points.forEach(point => {
-        const [lng, lat] = point.split(",").map(coord => parseFloat(coord.trim()));
-        if (!isNaN(lng) && !isNaN(lat)) {
-          coordinates.push({ lng, lat });
-        }
-      });
-    }
-  } catch (error) {
-    throw new Error("坐标格式解析错误，请检查输入格式");
-  }
-
-  if (coordinates.length === 0) {
-    throw new Error("未找到有效的坐标数据");
-  }
-
-  return coordinates;
 };
 
 // 处理转换
 const handleConvert = async () => {
-  if (!form.inputCoordinates.trim()) {
-    ElMessage.warning("请输入坐标数据");
-    return;
-  }
-
-  if (form.sourceSystem === form.targetSystem) {
-    ElMessage.warning("源坐标系和目标坐标系不能相同");
-    return;
-  }
-
-  converting.value = true;
-  errorMessage.value = "";
-
   try {
-    const inputCoords = parseCoordinates(form.inputCoordinates);
-    const convertedResult = inputCoords.map(coord => {
-      const converted = coordinateConvert(coord.lng, coord.lat, form.sourceSystem, form.targetSystem);
-      return {
-        source: coord,
-        target: converted
-      };
-    });
-
-    result.value = convertedResult;
-
-    // 保存到历史记录
-    saveToHistory(inputCoords.length);
-
-    // 初始化地图
-    await nextTick();
-    initMap(convertedResult.map(item => item.target));
-
-    ElMessage.success(`成功转换 ${inputCoords.length} 个坐标点`);
+    
   } catch (error) {
     errorMessage.value = error.message;
     ElMessage.error(error.message);
@@ -171,28 +95,7 @@ const handleConvert = async () => {
 
 // 初始化地图
 const initMap = coordinates => {
-  if (!mapContainer.value) return;
 
-  // 清空地图容器
-  mapContainer.value.innerHTML = "";
-
-  // 这里使用简单的div模拟地图，实际项目可以集成Leaflet或OpenLayers
-  const mapDiv = document.createElement("div");
-  mapDiv.style.height = "300px";
-  mapDiv.style.backgroundColor = "#f0f9ff";
-  mapDiv.style.border = "1px solid #ccc";
-  mapDiv.style.borderRadius = "4px";
-  mapDiv.style.padding = "10px";
-  mapDiv.innerHTML = `
-    <div style="text-align: center; margin-top: 120px; color: #666;">
-      <h3>地图预览</h3>
-      <p>实际项目中可集成 Leaflet 或 OpenLayers</p>
-      <p>转换了 ${coordinates.length} 个坐标点</p>
-      <p>示例坐标: ${coordinates[0].lng.toFixed(6)}, ${coordinates[0].lat.toFixed(6)}</p>
-    </div>
-  `;
-
-  mapContainer.value.appendChild(mapDiv);
 };
 
 // 保存到历史记录
