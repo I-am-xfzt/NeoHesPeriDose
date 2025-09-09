@@ -4,9 +4,9 @@
   border-radius: 15px;
   :deep(.el-card__header){
     border: none !important;
+    padding-bottom: 0 !important;
   }
 }
-
 
 .upload-area {
   border: 2px dashed rgba(255, 255, 255, 0.5);
@@ -189,4 +189,7 @@
   .stats {
     flex-direction: column;
   }
+}
+.hidden{
+  display: none;
 }

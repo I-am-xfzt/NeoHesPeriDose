@@ -1,6 +1,14 @@
 <script setup lang="ts" name="compress-image">
 import { useMessage } from "@/hooks/message";
 import { Download, Refresh } from "@element-plus/icons-vue";
+import { ElRadioGroup, ElRadio } from "element-plus";
+import { ImageCompressor, CompressOptions, CompressResult, CompressProgress } from "@/utils/compressImage";
+const iconStyle = {
+  width: "16px",
+  height: "16px",
+  fill: "#fff"
+};
+let CompressInstance: ImageCompressor | undefined = undefined;
 // 状态管理
 const state = reactive({
   originalFile: null,
@@ -43,17 +51,8 @@ const handleFileUpload = () => {
 
 // 模拟压缩处理
 const compressImage = () => {
-  if (!state.originalImage) return;
-
-  state.isCompressing = true;
-
-  // 模拟压缩过程
-  setTimeout(() => {
-    state.compressedSize = Math.floor(state.originalSize * (state.quality / 100));
-    state.isCompressing = false;
-
-    useMessage().success("图片重新压缩成功！");
-  }, 1000);
+  if (!state.originalImage) return useMessage().error("请先选择图片！");
+  CompressInstance = new ImageCompressor();
 };
 
 // 模拟下载功能
@@ -76,7 +75,6 @@ const handleQualityChange = () => {
     compressImage();
   }
 };
-
 // 选择格式
 const selectFormat = format => {
   state.activeFormat = format;
@@ -99,30 +97,39 @@ const selectFormat = format => {
           <h3>高效压缩图片，减小文件大小，保持图片质量</h3>
         </div>
       </template>
+      <el-alert
+        title="采用HTML5-canvasApi高效压缩图片，减小文件大小，无需上传至服务器，在浏览器中完成压缩"
+        type="primary"
+        :closable="false"
+        class="mb15"
+      ></el-alert>
       <div class="card-body">
-        <div class="upload-area t-center hand" @click="handleFileUpload">
-          <h3>点击上传图片</h3>
-          <p>支持 JPG、PNG、GIF 格式，最大10MB</p>
+        <div class="upload-area t-center hand">
+          <label for="compress">
+            <h3>点击上传图片（支持多选）</h3>
+            <p>支持 JPG、PNG、GIF 格式，最大10MB</p>
+            <input type="file" @change="handleFileUpload" name="compress" :multiple="true" id="compress" accept="image/*" class="hidden" />
+          </label>
         </div>
 
         <div class="controls">
           <div class="control-item">
-            <h4><i class="fas fa-sliders-h"></i> 压缩质量</h4>
-            <el-slider
+            <h4><svg-icon name="Quality" :icon-style="iconStyle" /> 压缩质量</h4>
+            <!-- <el-slider
               v-model="state.quality"
               :min="10"
               :max="100"
               :step="5"
               @change="handleQualityChange"
               show-input
-            ></el-slider>
+            ></el-slider> -->
           </div>
           <div class="control-item">
-            <h4><i class="fas fa-expand-arrows-alt"></i> 调整尺寸</h4>
-            <el-slider v-model="state.width" :min="10" :max="100" :step="5" show-input></el-slider>
+            <h4><svg-icon name="changeSize" :icon-style="iconStyle" /> 调整尺寸</h4>
+            <!-- <el-slider v-model="state.width" :min="10" :max="100" :step="5" show-input></el-slider> -->
           </div>
           <div class="control-item">
-            <h4><i class="fas fa-file-image"></i> 输出格式</h4>
+            <h4><svg-icon name="outputFormat" :icon-style="iconStyle" /> 输出格式</h4>
             <el-radio-group v-model="state.activeFormat">
               <el-radio label="jpeg">JPEG</el-radio>
               <el-radio label="png">PNG</el-radio>
@@ -132,7 +139,7 @@ const selectFormat = format => {
         </div>
       </div>
       <div class="t-center">
-        <el-button type="primary" :icon="Refresh" @click="compressImage" :loading="state.isCompressing"> 重新压缩 </el-button>
+        <el-button type="primary" :icon="Refresh" @click="compressImage" :loading="state.isCompressing"> 开始压缩 </el-button>
         <el-button type="primary" :icon="Download" @click="downloadCompressedImage"> 下载图片 </el-button>
       </div>
     </el-card>

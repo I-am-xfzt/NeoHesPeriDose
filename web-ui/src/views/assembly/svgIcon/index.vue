@@ -1,6 +1,12 @@
 <template>
   <div class="awesome-container layout-pd">
     <el-card shadow="hover" :header="`svg 图标`">
+      <el-alert
+        title="使用 vite-plugin-svg-icons插件 文档 ：https://github.com/vbenjs/vite-plugin-svg-icons; 组件使用：<svg-icon name='xxx' :icon-style='{width: 100px, height: 100px}' />"
+        type="primary"
+        :closable="false"
+        class="mb15"
+      ></el-alert>
       <el-row class="iconfont-row">
         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="2" v-for="(v, k) in state.sheetsIconList" :key="k">
           <div class="iconfont-warp FlexBox s-row-center">

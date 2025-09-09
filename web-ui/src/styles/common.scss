@@ -161,6 +161,9 @@
   .mt#{$i} {
     margin-top: #{$i}px !important;
   }
+  .rounded-#{$i} {
+    border-radius: #{$i}px !important;
+  }
   .gap-#{$i} {
     gap: #{$i}px !important;
   }
@@ -173,7 +176,7 @@
   .left-#{$i} {
     left: #{$i}px !important;
   }
-  .right{
+  .right {
     right: #{$i}px !important;
   }
   .mb#{$i} {
@@ -226,13 +229,20 @@ $pagePadding: 15px;
 .flex1 {
   flex: 1;
 }
-.posZero{
+.posZero {
   left: 0;
   top: 0;
 }
-.posCenter {
+.pos50 {
   left: 50%;
   top: 50%;
+}
+.posZeroB {
+  bottom: 0;
+  left: 0;
+}
+.posCenter {
+  @extend .pos50;
   transform: translate(-50%, -50%);
 }
 .posLCenter {
@@ -254,7 +264,7 @@ $pagePadding: 15px;
   position: absolute;
 }
 
-.l-t-center{
+.l-t-center {
   @extend .FlexBox;
   @extend .s-row-center;
 }

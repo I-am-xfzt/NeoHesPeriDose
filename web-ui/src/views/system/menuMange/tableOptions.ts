@@ -15,7 +15,7 @@ export default [
     label: "路由路径",
     prop: "component",
     minWidth,
-    formatter: (row) => ((row?.component ?? row?.redirect)) || "",
+    formatter: (row) => 'views'+ ((row?.component ?? row?.redirect)) || "",
   },
   {
     label: "排序",
