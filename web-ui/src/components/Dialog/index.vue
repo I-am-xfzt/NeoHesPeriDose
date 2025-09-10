@@ -2,15 +2,17 @@
   <el-dialog
     v-model="showDialog"
     v-bind="$attrs"
-    :show-close="false"
+    :show-close="showClose"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     center
   >
     <slot></slot>
     <template #footer>
-      <el-button :round="isRound" @click="handleDialog('cancel')">{{ cancelText }}</el-button>
-      <el-button :round="isRound" type="primary" @click="handleDialog('confirm')">{{ confirmText }}</el-button>
+      <template v-if="showBtns">
+        <el-button :round="isRound" @click="handleDialog('cancel')">{{ cancelText }}</el-button>
+        <el-button :round="isRound" type="primary" @click="handleDialog('confirm')">{{ confirmText }}</el-button>
+      </template>
       <slot name="other_btn"></slot>
     </template>
   </el-dialog>
@@ -31,6 +33,14 @@ const props = defineProps({
   cancelText: {
     type: String,
     default: "取消"
+  },
+  showClose: {
+    type: Boolean,
+    default: false
+  },
+  showBtns: {
+    type: Boolean,
+    default: true
   }
 });
 

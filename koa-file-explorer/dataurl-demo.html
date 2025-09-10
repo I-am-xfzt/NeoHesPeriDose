@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataURL图片分析演示 - GLM-4.5V</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+
+        .content {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .upload-section, .result-section {
+            background: #f8f9ff;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .upload-area {
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: #f0f2ff;
+        }
+
+        .upload-area.dragover {
+            border-color: #764ba2;
+            background: #e8ebff;
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .quick-questions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .quick-question {
+            background: #e8ebff;
+            border: 1px solid #667eea;
+            color: #667eea;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quick-question:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .result-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 15px;
+        }
+
+        .result-meta {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #ffe6e6;
+            border-left-color: #ff4444;
+            color: #cc0000;
+        }
+
+        .success {
+            background: #e6ffe6;
+            border-left-color: #44ff44;
+            color: #006600;
+        }
+
+        .dataurl-info {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🖼️ DataURL图片分析 - GLM-4.5V</h1>
+            <p>直接通过dataUrl上传图片并使用智谱GLM-4.5V进行智能分析</p>
+        </div>
+
+        <div class="content">
+            <div class="upload-section">
+                <h2 class="section-title">📤 图片上传</h2>
+                
+                <div class="dataurl-info">
+                    <strong>💡 说明：</strong>支持直接上传图片文件，系统将自动转换为dataUrl格式发送到后端
+                </div>
+
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📁</div>
+                    <h3>拖拽图片到此处或点击上传</h3>
+                    <p>支持 JPG、PNG、GIF、WebP、BMP 格式，最大10MB</p>
+                    <input type="file" id="fileInput" class="file-input" accept="image/*">
+                </div>
+
+                <div id="previewArea" style="display: none;">
+                    <img id="previewImage" class="preview-image" alt="预览图片">
+                </div>
+
+                <div class="form-group">
+                    <label>选择模型：</label>
+                    <select id="modelSelect">
+                        <option value="glm-4.5v" selected>GLM-4.5V (推荐)</option>
+                        <option value="glm-4v">GLM-4V</option>
+                        <option value="glm-4">GLM-4</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>分析问题：</label>
+                    <div class="quick-questions">
+                        <span class="quick-question" onclick="setQuestion('这是什么？')">这是什么？</span>
+                        <span class="quick-question" onclick="setQuestion('请详细描述这张图片')">详细描述</span>
+                        <span class="quick-question" onclick="setQuestion('图片中有哪些值得注意的细节？')">注意细节</span>
+                        <span class="quick-question" onclick="setQuestion('请识别图片中的文字')">识别文字</span>
+                        <span class="quick-question" onclick="setQuestion('这张图片的情感氛围如何？')">情感氛围</span>
+                    </div>
+                    <textarea id="questionInput" placeholder="请输入你的问题...">请详细分析这张图片</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>创造性 (0.0-1.0)：</label>
+                    <input type="range" id="temperatureRange" min="0" max="1" step="0.1" value="0.7">
+                    <span id="temperatureValue">0.7</span>
+                </div>
+
+                <button id="analyzeBtn" class="btn" onclick="analyzeImage()" disabled>
+                    开始分析
+                </button>
+            </div>
+
+            <div class="result-section">
+                <h2 class="section-title">📊 分析结果</h2>
+                <div id="resultArea">
+                    <div style="text-align: center; color: #666; padding: 40px;">
+                        📸 上传图片后查看分析结果
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedFile = null;
+        let dataUrl = null;
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            setupDragDrop();
+            setupFileInput();
+            setupTemperatureSlider();
+            checkService();
+        });
+
+        function setupDragDrop() {
+            const uploadArea = document.getElementById('uploadArea');
+
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleFile(files[0]);
+                }
+            });
+        }
+
+        function setupFileInput() {
+            const fileInput = document.getElementById('fileInput');
+            const uploadArea = document.getElementById('uploadArea');
+
+            uploadArea.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleFile(e.target.files[0]);
+                }
+            });
+        }
+
+        function setupTemperatureSlider() {
+            const range = document.getElementById('temperatureRange');
+            const value = document.getElementById('temperatureValue');
+            
+            range.addEventListener('input', (e) => {
+                value.textContent = e.target.value;
+            });
+        }
+
+        async function checkService() {
+            try {
+                const response = await fetch('http://localhost:3000/api/ai/providers');
+                const data = await response.json();
+                console.log('服务状态:', data.data);
+            } catch (error) {
+                showError('无法连接到AI服务，请确保服务已启动 (node handleAI.js)');
+            }
+        }
+
+        function handleFile(file) {
+            if (!file.type.startsWith('image/')) {
+                showError('请选择图片文件');
+                return;
+            }
+
+            if (file.size > 10 * 1024 * 1024) {
+                showError('图片文件不能超过10MB');
+                return;
+            }
+
+            selectedFile = file;
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                dataUrl = e.target.result;
+                
+                const previewArea = document.getElementById('previewArea');
+                const previewImage = document.getElementById('previewImage');
+                previewImage.src = dataUrl;
+                previewArea.style.display = 'block';
+                
+                document.getElementById('analyzeBtn').disabled = false;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function setQuestion(question) {
+            document.getElementById('questionInput').value = question;
+        }
+
+        async function analyzeImage() {
+            if (!dataUrl) {
+                showError('请先选择图片');
+                return;
+            }
+
+            const prompt = document.getElementById('questionInput').value.trim();
+            if (!prompt) {
+                showError('请输入问题');
+                return;
+            }
+
+            const model = document.getElementById('modelSelect').value;
+            const temperature = parseFloat(document.getElementById('temperatureRange').value);
+
+            showLoading();
+
+            try {
+                const response = await fetch('http://localhost:3000/api/ai/analyze-image-dataurl', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        dataUrl: dataUrl,
+                        prompt: prompt,
+                        model: model,
+                        temperature: temperature,
+                        maxTokens: 2000
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    showResult(result.data);
+                } else {
+                    showError(result.error || '分析失败');
+                }
+            } catch (error) {
+                showError('请求失败: ' + error.message);
+            }
+        }
+
+        function showLoading() {
+            const resultArea = document.getElementById('resultArea');
+            resultArea.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <div>正在使用GLM-4.5V分析图片...</div>
+                    <div style="font-size: 14px; color: #666; margin-top: 10px;">
+                        这可能需要几秒钟时间
+                    </div>
+                </div>
+            `;
+        }
+
+        function showResult(data) {
+            const resultArea = document.getElementById('resultArea');
+            resultArea.innerHTML = `
+                <div class="result-content success">
+                    <div class="result-meta">
+                        <strong>模型：</strong>${data.model} | 
+                        <strong>耗时：</strong>${data.duration}ms | 
+                        <strong>图片大小：</strong>${Math.round(data.imageSize / 1024)}KB
+                    </div>
+                    <div style="line-height: 1.6; white-space: pre-wrap;">${data.analysis}</div>
+                </div>
+            `;
+        }
+
+        function showError(message) {
+            const resultArea = document.getElementById('resultArea');
+            resultArea.innerHTML = `
+                <div class="result-content error">
+                    <h3>❌ 错误</h3>
+                    <div style="line-height: 1.6;">${message}</div>
+                </div>
+            `;
+        }
+
+        // 示例图片测试
+        function loadSampleImage() {
+            // 创建简单的测试图片（1x1像素红色图片）
+            const canvas = document.createElement('canvas');
+            canvas.width = 100;
+            canvas.height = 100;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#ff0000';
+            ctx.fillRect(0, 0, 100, 100);
+            
+            dataUrl = canvas.toDataURL('image/png');
+            
+            const previewArea = document.getElementById('previewArea');
+            const previewImage = document.getElementById('previewImage');
+            previewImage.src = dataUrl;
+            previewArea.style.display = 'block';
+            
+            document.getElementById('questionInput').value = '这是什么颜色的方块？';
+            document.getElementById('analyzeBtn').disabled = false;
+        }
+    </script>
+</body>
+</html>

@@ -5,20 +5,24 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node handleJson.js",
+    "start": "concurrently \"nodemon handleJson.js\" \"nodemon handleAI.js\"",
     "dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@cloudbase/node-sdk": "^3.10.1",
     "@koa/cors": "^5.0.0",
+    "axios": "^1.6.0",
+    "dotenv": "^16.6.1",
     "koa": "^3.0.0",
     "koa-bodyparser": "^4.4.1",
     "koa-router": "^13.0.1",
     "koa-static": "^5.0.0"
   },
   "devDependencies": {
+    "concurrently": "^9.2.1",
     "nodemon": "^3.1.10"
   }
 }

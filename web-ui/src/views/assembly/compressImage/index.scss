@@ -88,6 +88,17 @@
   &.format-control {
     flex: 2;
   }
+  
+  &.switch-control {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    .control-label {
+      margin-bottom: 0;
+      flex-shrink: 0;
+    }
+  }
 }
 
 .control-label {

@@ -1,43 +1,11 @@
 <script setup lang="ts" name="compress-image">
 import { useMessage } from "@/hooks/message";
 import { Download, Refresh, Delete, View, Upload, Setting, Crop, Document } from "@element-plus/icons-vue";
-import { ElProgress, ElSlider, ElRadioButton, ElRadioGroup } from "element-plus";
+import { ElProgress, ElSlider, ElRadioButton, ElRadioGroup, ElSwitch } from "element-plus";
 import { ImageCompressor, CompressOptions, CompressResult, CompressProgress } from "@/utils/compressImage";
 import theDialog from "@/components/Dialog/index.vue";
-// 图标样式
-const iconStyle = {
-  width: "16px",
-  height: "16px",
-  fill: "#fff"
-};
-
-// 原始图片信息接口
-interface OriginalImageInfo {
-  id: string;
-  file: File;
-  name: string;
-  size: number;
-  type: string;
-  imgUrl: string;
-  status: "ready" | "compressing" | "success" | "error";
-  progress?: CompressProgress;
-  result?: CompressResult;
-  error?: string;
-}
-
-// 状态管理接口
-interface StateType {
-  originalImages: OriginalImageInfo[];
-  quality: number;
-  maxWidth: number;
-  maxHeight: number;
-  outputFormat: "jpeg" | "png" | "webp";
-  isCompressing: boolean;
-  compressProgress: number;
-  previewImage: string;
-  showPreview: boolean;
-}
-
+import { iconStyle, OriginalImageInfo, StateType } from "./options"
+import { generateUUID } from "@/utils/other"
 // 压缩器实例
 let compressor: ImageCompressor | undefined = undefined;
 
@@ -48,6 +16,8 @@ const state = reactive<StateType>({
   maxWidth: 1920,
   maxHeight: 1080,
   outputFormat: "jpeg",
+  enableSmoothing: true,
+  enableCustomSize: true,
   isCompressing: false,
   compressProgress: 0,
   previewImage: "",
@@ -56,17 +26,7 @@ const state = reactive<StateType>({
 
 // 初始化压缩器
 const initCompressor = () => {
-  compressor = new ImageCompressor({
-    quality: state.quality / 100,
-    maxWidth: state.maxWidth,
-    maxHeight: state.maxHeight,
-    outputFormat: state.outputFormat
-  });
-};
-
-// 生成唯一ID
-const generateId = () => {
-  return Date.now().toString(36) + Math.random().toString(36).substr(2);
+  compressor = new ImageCompressor();
 };
 
 // 文件上传处理
@@ -94,7 +54,7 @@ const handleFileUpload = (event: Event) => {
     const reader = new FileReader();
     reader.onload = e => {
       const imageInfo: OriginalImageInfo = {
-        id: generateId(),
+        id: generateUUID(),
         file,
         name: file.name,
         size: file.size,
@@ -146,6 +106,8 @@ const compressSingleImage = async (imageInfo: OriginalImageInfo) => {
       maxWidth: state.maxWidth,
       maxHeight: state.maxHeight,
       outputFormat: state.outputFormat,
+      enableSmoothing: state.enableSmoothing,
+      enableCustomSize: state.enableCustomSize,
       onProgress: (progress: CompressProgress) => {
         imageInfo.progress = progress;
       }
@@ -297,11 +259,6 @@ const getStatusType = (status: string): string => {
   }
 };
 
-// 监听设置变化，重新初始化压缩器
-watch([() => state.quality, () => state.maxWidth, () => state.maxHeight, () => state.outputFormat], () => {
-  initCompressor();
-});
-
 // 初始化
 onMounted(() => {
   initCompressor();
@@ -354,7 +311,7 @@ onMounted(() => {
               <el-slider v-model="state.quality" :min="10" :max="100" :step="5" show-input class="control-slider" />
             </div>
 
-            <div class="control-item">
+            <div class="control-item" v-show="state.enableCustomSize">
               <label class="control-label">
                 <el-icon><Crop /></el-icon>
                 最大宽度: {{ state.maxWidth }}px
@@ -362,7 +319,7 @@ onMounted(() => {
               <el-slider v-model="state.maxWidth" :min="500" :max="4000" :step="100" show-input class="control-slider" />
             </div>
 
-            <div class="control-item">
+            <div class="control-item" v-show="state.enableCustomSize">
               <label class="control-label">
                 <el-icon><Crop /></el-icon>
                 最大高度: {{ state.maxHeight }}px
@@ -382,6 +339,24 @@ onMounted(() => {
                 <el-radio-button label="png">PNG</el-radio-button>
                 <el-radio-button label="webp">WebP</el-radio-button>
               </el-radio-group>
+            </div>
+          </div>
+
+          <div class="control-row">
+            <div class="control-item switch-control">
+              <label class="control-label">
+                <el-icon><Setting /></el-icon>
+                高质量渲染
+              </label>
+              <el-switch v-model="state.enableSmoothing" active-text="开启" inactive-text="关闭" />
+            </div>
+
+            <div class="control-item switch-control">
+              <label class="control-label">
+                <el-icon><Crop /></el-icon>
+                自定义尺寸
+              </label>
+              <el-switch v-model="state.enableCustomSize" active-text="开启" inactive-text="关闭" />
             </div>
           </div>
         </div>
@@ -487,7 +462,7 @@ onMounted(() => {
     </el-card>
 
     <!-- 图片预览对话框 -->
-    <the-dialog v-model:vis="state.showPreview" title="图片预览" width="80%" center>
+    <the-dialog v-model:visible="state.showPreview" :show-btns="false" :show-close="true" title="图片预览" width="80%">
       <div class="preview-container">
         <img :src="state.previewImage" alt="预览图片" class="preview-image" />
       </div>

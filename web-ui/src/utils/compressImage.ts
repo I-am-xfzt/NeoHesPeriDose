@@ -65,6 +65,8 @@ export interface CompressOptions {
   outputFormat?: 'jpeg' | 'png' | 'webp';
   /** 是否启用高质量渲染，默认 true */
   enableSmoothing?: boolean;
+  /** 是否启用自定义尺寸，默认 true，false 时使用原始尺寸 */
+  enableCustomSize?: boolean;
   /** 进度回调函数 */
   onProgress?: ProgressCallback;
 }
@@ -76,21 +78,25 @@ export interface CompressOptions {
  * @example
  * ```typescript
  * // 创建压缩器实例
- * const compressor = new ImageCompressor({
+ * const compressor = new ImageCompressor();
+ * 
+ * // 压缩单个图片
+ * const file = // 获取的图片文件
+ * const result = await compressor.compress(file, {
  *   quality: 0.8,
  *   maxWidth: 1920,
  *   maxHeight: 1080,
  *   outputFormat: 'jpeg'
  * });
- * 
- * // 压缩单个图片
- * const file = // 获取的图片文件
- * const result = await compressor.compress(file);
  * console.log('压缩结果:', result);
  * 
  * // 批量压缩
  * const files = // 图片文件数组
- * const results = await compressor.compressBatch(files);
+ * const results = await compressor.compressBatch(files, {
+ *   quality: 0.8,
+ *   maxWidth: 1920,
+ *   maxHeight: 1080
+ * });
  * ```
  */
 export class ImageCompressor {
@@ -100,23 +106,22 @@ export class ImageCompressor {
     maxHeight: 1080,
     outputFormat: 'jpeg',
     enableSmoothing: true,
+    enableCustomSize: true,
     onProgress: null
   };
 
-  private options: Required<Omit<CompressOptions, 'onProgress'>> & { onProgress: ProgressCallback | null };
-
   /**
    * 创建图片压缩器实例
-   * @param options - 压缩配置选项
+   * 不需要传入初始化参数，压缩参数在调用压缩方法时传入
    */
-  constructor(options: CompressOptions = {}) {
-    this.options = { ...this.defaultOptions, ...options };
+  constructor() {
+    // 构造函数为空，不需要初始化参数
   }
 
   /**
    * 压缩单个图片
    * @param file - 要压缩的图片文件
-   * @param customOptions - 自定义压缩选项（可选）
+   * @param options - 压缩配置选项（必需）
    * @returns Promise<CompressResult> 压缩结果
    * @throws {Error} 当文件类型不正确或压缩过程中出错时抛出异常
    * 
@@ -127,6 +132,12 @@ export class ImageCompressor {
    * 
    * try {
    *   const result = await compressor.compress(file, {
+   *     quality: 0.8,
+   *     maxWidth: 1920,
+   *     maxHeight: 1080,
+   *     outputFormat: 'jpeg',
+   *     enableSmoothing: true,
+   *     enableCustomSize: true,
    *     onProgress: (progress) => {
    *       console.log(`${progress.stage}: ${progress.progress}% - ${progress.message}`);
    *     }
@@ -139,10 +150,10 @@ export class ImageCompressor {
    * }
    * ```
    */
-  async compress(file: File, customOptions?: Partial<CompressOptions>): Promise<CompressResult> {
+  async compress(file: File, options: CompressOptions): Promise<CompressResult> {
     const startTime = performance.now();
-    const options = customOptions ? { ...this.options, ...customOptions } : this.options;
-    const onProgress = options.onProgress || this.options.onProgress;
+    const finalOptions = { ...this.defaultOptions, ...options };
+    const onProgress = finalOptions.onProgress;
     
     // 通知开始读取文件
     onProgress?.({
@@ -197,14 +208,16 @@ export class ImageCompressor {
               message: '正在处理图片...'
             });
 
-            const { width, height } = this.calculateNewDimensions(
-              img.width,
-              img.height,
-              options.maxWidth,
-              options.maxHeight
-            );
+            const { width, height } = finalOptions.enableCustomSize
+              ? this.calculateNewDimensions(
+                  img.width,
+                  img.height,
+                  finalOptions.maxWidth,
+                  finalOptions.maxHeight
+                )
+              : { width: img.width, height: img.height };
 
-            const canvas = this.createCanvas(width, height, options.enableSmoothing);
+            const canvas = this.createCanvas(width, height, finalOptions.enableSmoothing);
             const ctx = canvas.getContext('2d')!;
             
             ctx.drawImage(img, 0, 0, width, height);
@@ -218,8 +231,8 @@ export class ImageCompressor {
             // 模拟编码进度
             setTimeout(() => {
               try {
-                const mimeType = this.getMimeType(options.outputFormat);
-                const dataUrl = canvas.toDataURL(mimeType, options.quality);
+                const mimeType = this.getMimeType(finalOptions.outputFormat);
+                const dataUrl = canvas.toDataURL(mimeType, finalOptions.quality);
                 const compressedSize = this.calculateDataUrlSize(dataUrl);
                 const compressionRatio = this.calculateCompressionRatio(originalSize, compressedSize);
                 const duration = Math.round(performance.now() - startTime);
@@ -260,7 +273,7 @@ export class ImageCompressor {
   /**
    * 批量压缩图片
    * @param files - 图片文件数组
-   * @param customOptions - 自定义压缩选项（可选）
+   * @param options - 压缩配置选项（必需）
    * @param onBatchProgress - 批量进度回调函数（可选）
    * @returns Promise<CompressResult[]> 压缩结果数组
    * 
@@ -270,6 +283,10 @@ export class ImageCompressor {
    * const files = Array.from(document.querySelector('input[type="file"]').files);
    * 
    * const results = await compressor.compressBatch(files, {
+   *   quality: 0.8,
+   *   maxWidth: 1920,
+   *   maxHeight: 1080,
+   *   outputFormat: 'jpeg',
    *   onProgress: (progress) => {
    *     // 单个文件的进度
    *     console.log(`文件 ${progress.currentIndex + 1}/${progress.totalCount}: ${progress.progress}%`);
@@ -284,7 +301,7 @@ export class ImageCompressor {
    */
   async compressBatch(
     files: File[],
-    customOptions?: Partial<CompressOptions>,
+    options: CompressOptions,
     onBatchProgress?: (current: number, total: number, overallProgress: number) => void
   ): Promise<CompressResult[]> {
     const results: CompressResult[] = [];
@@ -294,8 +311,8 @@ export class ImageCompressor {
       const file = files[i];
       try {
         // 为每个文件创建带批量信息的进度回调
-        const fileOptions: Partial<CompressOptions> = {
-          ...customOptions,
+        const fileOptions: CompressOptions = {
+          ...options,
           onProgress: (progress: CompressProgress) => {
             // 添加批量信息
             const batchProgress: CompressProgress = {
@@ -305,7 +322,7 @@ export class ImageCompressor {
             };
             
             // 调用原始的进度回调
-            customOptions?.onProgress?.(batchProgress);
+            options?.onProgress?.(batchProgress);
           }
         };
 
@@ -375,36 +392,11 @@ export class ImageCompressor {
   }
 
   /**
-   * 更新压缩器配置
-   * @param newOptions - 新的配置选项
-   * 
-   * @example
-   * ```typescript
-   * const compressor = new ImageCompressor();
-   * compressor.updateOptions({ 
-   *   quality: 0.9, 
-   *   maxWidth: 2048,
-   *   onProgress: (progress) => console.log(progress)
-   * });
-   * ```
+   * 获取默认配置
+   * @returns 默认压缩配置
    */
-  updateOptions(newOptions: Partial<CompressOptions>): void {
-    this.options = { ...this.options, ...newOptions };
-  }
-
-  /**
-   * 获取当前配置
-   * @returns 当前压缩配置
-   */
-  getOptions(): Required<Omit<CompressOptions, 'onProgress'>> & { onProgress: ProgressCallback | null } {
-    return { ...this.options };
-  }
-
-  /**
-   * 重置为默认配置
-   */
-  resetOptions(): void {
-    this.options = { ...this.defaultOptions };
+  getDefaultOptions(): Required<Omit<CompressOptions, 'onProgress'>> & { onProgress: ProgressCallback | null } {
+    return { ...this.defaultOptions };
   }
 
   /**
@@ -529,8 +521,14 @@ export async function compressImage(
   file: File,
   options: CompressOptions = {}
 ): Promise<CompressResult> {
-  const compressor = new ImageCompressor(options);
-  return compressor.compress(file);
+  const compressor = new ImageCompressor();
+  const defaultOptions = compressor.getDefaultOptions();
+  const finalOptions: CompressOptions = { 
+    ...defaultOptions, 
+    ...options,
+    onProgress: options.onProgress || undefined
+  };
+  return compressor.compress(file, finalOptions);
 }
 
 /**
@@ -544,8 +542,14 @@ export async function compressImages(
   files: File[],
   options: CompressOptions = {}
 ): Promise<CompressResult[]> {
-  const compressor = new ImageCompressor(options);
-  return compressor.compressBatch(files);
+  const compressor = new ImageCompressor();
+  const defaultOptions = compressor.getDefaultOptions();
+  const finalOptions: CompressOptions = { 
+    ...defaultOptions, 
+    ...options,
+    onProgress: options.onProgress || undefined
+  };
+  return compressor.compressBatch(files, finalOptions);
 }
 
 /**

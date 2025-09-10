@@ -278,7 +278,7 @@
     {
       "path": "/assembly",
       "name": "assembly",
-      "redirect": "/assembly/guide",
+      "redirect": "/assembly/chatAI",
       "meta": {
         "icon": "FunCom",
         "title": "功能组件",
@@ -289,6 +289,20 @@
         "isKeepAlive": true
       },
       "children": [
+        {
+          "path": "/assembly/chatAI",
+          "name": "chatAI",
+          "component": "/assembly/chatAI/index",
+          "meta": {
+            "icon": "ChartMsg",
+            "title": "AI聊天",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
         {
           "path": "/assembly/guide",
           "name": "guide",

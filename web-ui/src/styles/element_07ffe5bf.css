@@ -8924,7 +8924,7 @@
   --el-input-transparent-border: 0 0 0 1px transparent inset;
   --el-input-border-color: var(--el-border-color);
   --el-input-border-radius: var(--el-border-radius-base);
-  --el-input-bg-color: var(--el-fill-color-blank);
+  --el-input-bg-color: #154584;
   --el-input-icon-color: var(--el-text-color-placeholder);
   --el-input-placeholder-color: var(--el-text-color-placeholder);
   --el-input-hover-border-color: var(--el-border-color-hover);
@@ -8940,11 +8940,11 @@
 
 .el-textarea__inner {
   -webkit-appearance: none;
-  background-color: var(--el-input-bg-color, var(--el-fill-color-blank));
+  background-color: var(--el-input-bg-color);
   background-image: none;
   border: none;
   border-radius: var(--el-input-border-radius, var(--el-border-radius-base));
-  box-shadow: 0 0 0 1px var(--el-input-border-color, var(--el-border-color)) inset;
+  /* box-shadow: 0 0 0 1px var(--el-input-border-color, var(--el-border-color)) inset; */
   box-sizing: border-box;
   color: var(--el-input-text-color, var(--el-text-color-regular));
   display: block;
@@ -8967,16 +8967,15 @@
 }
 
 .el-textarea__inner:hover {
-  box-shadow: 0 0 0 1px var(--el-input-hover-border-color) inset;
+  /* box-shadow: 0 0 0 1px var(--el-input-hover-border-color) inset; */
 }
 
 .el-textarea__inner:focus {
-  box-shadow: 0 0 0 1px var(--el-input-focus-border-color) inset;
+  /* box-shadow: 0 0 0 1px var(--el-input-focus-border-color) inset; */
   outline: none;
 }
 
 .el-textarea .el-input__count {
-  background: var(--el-fill-color-blank);
   bottom: 5px;
   color: var(--el-color-info);
   font-size: 12px;
