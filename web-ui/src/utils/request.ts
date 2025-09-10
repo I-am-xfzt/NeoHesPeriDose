@@ -31,9 +31,9 @@ export class BaseHttpClient {
     503: "服务不可用",
     504: "网关超时"
   };
-  constructor(baseURL: string, apiName: string = '/base-api') {
+  constructor(baseURL: string, apiName: string = "/base-api") {
     this.instance = axios.create({
-      baseURL: apiName+baseURL,
+      baseURL: apiName + baseURL,
       timeout: 15000,
       paramsSerializer: {
         serialize: params => qs.stringify(params, { arrayFormat: "repeat" })
@@ -125,6 +125,7 @@ export class BaseHttpClient {
       this.clearToken();
       ElMessage.error("登录已过期，请重新登录");
       // 这里可以跳转到登录页
+      !window.location.href.includes("/login") && (window.location.href = "/login");
       return Promise.reject(error);
     }
   }
@@ -137,23 +138,19 @@ export class BaseHttpClient {
     return response.token;
   }
   private clearToken(): void {
-    // 子类需要实现清除token的逻辑
+    Session.remove("token");
   }
 
   // 公共请求方法
   public request<T = any>(config: IRequestConfig): Promise<T> {
     return this.instance(config);
   }
-  public static async login() {
-    const { generateUUID } = await import("@/utils/other");
-    const token = generateUUID();
-    Session.set('token', token)
-    return Promise.resolve({
-      code: 200,
-      data: {
-        token
-      }
-    });
+  public static async login(params: { username: string; password: string }) {
+    const {
+      data
+    } = await axios.post("/login-api/login", params);
+    Session.set("token", data.token);
+    return data;
   }
   public get<T = any>(url: string, params?: any, config?: IRequestConfig): Promise<T> {
     return this.request({ method: "get", url, params, ...config });

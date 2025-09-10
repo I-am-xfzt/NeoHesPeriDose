@@ -46,7 +46,7 @@ import { User, Lock } from "@element-plus/icons-vue";
 import { BaseHttpClient } from "@/utils/request";
 import { initControlRoutes } from "@/router/modules/routerController";
 import { useMessage } from "@/hooks/message";
-
+import { NextLoading } from "@/utils/loading"
 const router = useRouter();
 const { success, error } = useMessage();
 
@@ -84,19 +84,14 @@ const handleLogin = async () => {
 
     loading.value = true;
 
-    // 模拟网络延迟
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
     // 调用登录接口
-    const res = await BaseHttpClient["login"]();
+    const res = await BaseHttpClient["login"](loginForm);
 
     if (res.code === 200) {
       // 初始化路由权限
       await initControlRoutes();
-
       // 显示成功消息
       success("登录成功！");
-
       // 跳转到首页
       router.push("/");
     } else {
@@ -107,6 +102,7 @@ const handleLogin = async () => {
     error("登录失败，请稍后再试");
   } finally {
     loading.value = false;
+    NextLoading.done();
   }
 };
 

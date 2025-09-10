@@ -1,9 +1,11 @@
+// @ts-nocheck
 const Koa = require("koa");
 const Router = require("koa-router");
 const cors = require("@koa/cors");
 const fs = require("fs");
 const path = require("path");
 const serve = require("koa-static");
+const crypto = require("crypto");
 
 // 创建Koa应用实例
 const app = new Koa();
@@ -14,6 +16,41 @@ app.use(serve(path.join(__dirname, "public")));
 
 // 基础路径 - 改为同级目录下的GLBS文件夹
 const BASE_PATH = path.join(__dirname, "GLBS");
+
+// 存储有效的token（在生产环境中应该使用Redis或数据库）
+const validTokens = new Set();
+
+// Token验证中间件
+const validateToken = async (ctx, next) => {
+  try {
+    // 从请求头获取token
+    const authHeader = ctx.headers.authorization;
+    const token = authHeader && authHeader.startsWith('Bearer ') 
+      ? authHeader.substring(7) 
+      : null;
+    
+    // 检查token是否存在且有效
+    if (!token || !validTokens.has(token)) {
+      ctx.status = 401;
+      ctx.body = {
+        success: false,
+        message: "未授权访问，请先登录",
+        code: 401
+      };
+      return;
+    }
+    
+    // token有效，继续执行下一个中间件
+    await next();
+  } catch (err) {
+    ctx.status = 401;
+    ctx.body = {
+      success: false,
+      message: "Token验证失败",
+      code: 401
+    };
+  }
+};
 
 // 安全中间件 - 验证路径合法性
 const validatePath = async (ctx, next) => {
@@ -54,8 +91,75 @@ const validatePath = async (ctx, next) => {
 
 // 定义API路由
 
+// 登录接口
+router.post("/api/login-module/login", async (ctx) => {
+  try {
+    console.log('登录接口被调用');
+    
+    const { username, password } = ctx.request.body;
+    
+    // 校验账号密码
+    if (username === "admin" && password === "123456") {
+      // 生成UUID格式的token
+      const token = crypto.randomUUID();
+      
+      // 将token添加到有效token集合中
+      validTokens.add(token);
+      
+      ctx.body = {
+        success: true,
+        code: 200,
+        message: "登录成功",
+        token: token
+      };
+    } else {
+      ctx.status = 401;
+      ctx.body = {
+        success: false,
+        code: 401,
+        message: "用户名或密码错误"
+      };
+    }
+  } catch (err) {
+    ctx.status = 500;
+    ctx.body = {
+      success: false,
+      code: 500,
+      message: `登录失败: ${err.message}`
+    };
+  }
+});
+
+// 登出接口
+router.post("/api/login-module/logout", validateToken, async (ctx) => {
+  try {
+    const authHeader = ctx.headers.authorization;
+    const token = authHeader && authHeader.startsWith('Bearer ') 
+      ? authHeader.substring(7) 
+      : null;
+    
+    if (token) {
+      // 从有效token集合中移除token
+      validTokens.delete(token);
+    }
+    
+    ctx.body = {
+      success: true,
+      code: 200,
+      message: "登出成功"
+    };
+  } catch (err) {
+    ctx.status = 500;
+    ctx.body = {
+      success: false,
+      code: 500,
+      message: `登出失败: ${err.message}`
+    };
+  }
+});
+
 // 获取目录内容
-router.get("/api/files", validatePath, async (ctx) => {
+router.get("/api/files", validateToken, validatePath, async (ctx) => {
   try {
     const stats = fs.statSync(ctx.state.fullPath);
 
@@ -76,6 +180,7 @@ router.get("/api/files", validatePath, async (ctx) => {
 
       ctx.body = {
         success: true,
+        code: 200,
         data: files.sort((a, b) => {
           // 目录排在前面
           if (a.type === "directory" && b.type !== "directory") return -1;
@@ -87,6 +192,7 @@ router.get("/api/files", validatePath, async (ctx) => {
       // 如果是单个文件也返回统一格式
       ctx.body = {
         success: true,
+        code: 200,
         data: [
           {
             name: path.basename(ctx.state.fullPath),
@@ -102,13 +208,14 @@ router.get("/api/files", validatePath, async (ctx) => {
   } catch (err) {
     ctx.body = {
       success: false,
+      code: 500,
       message: `读取目录失败: ${err.message}`,
     };
   }
 });
 
 // 获取二进制文件
-router.get("/api/binary-file", validatePath, async (ctx) => {
+router.get("/api/binary-file", validateToken, validatePath, async (ctx) => {
   try {
     const filePath = ctx.state.fullPath;
     const stats = fs.statSync(filePath);
@@ -144,7 +251,7 @@ router.get("/api/binary-file", validatePath, async (ctx) => {
 });
 
 // JSON文件操作接口
-router.post("/api/json/:operation", validatePath, async (ctx) => {
+router.post("/api/json/:operation", validateToken, validatePath, async (ctx) => {
   try {
     const filePath = ctx.state.fullPath;
     const operation = ctx.params.operation;
@@ -208,6 +315,7 @@ router.post("/api/json/:operation", validatePath, async (ctx) => {
 
     ctx.body = {
       success: true,
+      code: 200,
       message: `JSON文件${operation}操作成功`,
       data: jsonData,
     };
@@ -245,6 +353,7 @@ app.on("error", (err, ctx) => {
   console.error("服务器错误:", err);
   ctx.body = {
     success: false,
+    code: 500,
     message: "内部服务器错误",
   };
 });

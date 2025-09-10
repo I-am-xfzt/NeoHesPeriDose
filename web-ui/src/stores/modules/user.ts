@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import piniaPersistConfig from "@/stores/helper/persist";
 import { getUserInfoApi } from "@/api/user";
 import { Session } from "@/utils/storage";
+import { BaseHttpClient } from "@/utils/request"
 const getUserInfos = (): UserInfos => ({
   name: "",
   userName: "",
@@ -41,7 +42,9 @@ export const useUserStore = defineStore("neohesperidose-user", {
     clearUserInfo() {
       this.userInfo = getUserInfos();
     },
-    loginOut(callback: Function){
+    async loginOut(callback: Function){
+      const http = new BaseHttpClient('/','/login-api');
+      await http.post('logout');
       this.clearToken();
       this.clearUserInfo();
       callback()
