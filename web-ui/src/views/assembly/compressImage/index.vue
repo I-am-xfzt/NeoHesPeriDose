@@ -1,11 +1,10 @@
 <script setup lang="ts" name="compress-image">
 import { useMessage } from "@/hooks/message";
 import { Download, Refresh, Delete, View, Upload, Setting, Crop, Document } from "@element-plus/icons-vue";
-import { ElProgress, ElSlider, ElRadioButton, ElRadioGroup, ElSwitch } from "element-plus";
+import { ElProgress, ElSlider, ElRadio, ElRadioGroup, ElSwitch, ElImageViewer } from "element-plus";
 import { ImageCompressor, CompressOptions, CompressResult, CompressProgress } from "@/utils/compressImage";
-import theDialog from "@/components/Dialog/index.vue";
-import { iconStyle, OriginalImageInfo, StateType } from "./options"
-import { generateUUID } from "@/utils/other"
+import { iconStyle, OriginalImageInfo, StateType } from "./options";
+import { FileToDataUrl, generateUUID } from "@/utils/other";
 // 压缩器实例
 let compressor: ImageCompressor | undefined = undefined;
 
@@ -20,8 +19,9 @@ const state = reactive<StateType>({
   enableCustomSize: true,
   isCompressing: false,
   compressProgress: 0,
-  previewImage: "",
-  showPreview: false
+  previewImages: [],
+  showPreview: false,
+  currentPreviewIndex: 0
 });
 
 // 初始化压缩器
@@ -50,27 +50,21 @@ const handleFileUpload = (event: Event) => {
       useMessage().error(`文件 ${file.name} 超过10MB大小限制`);
       continue;
     }
-
-    const reader = new FileReader();
-    reader.onload = e => {
+    FileToDataUrl(file).then(render => {
       const imageInfo: OriginalImageInfo = {
         id: generateUUID(),
         file,
         name: file.name,
         size: file.size,
         type: file.type,
-        imgUrl: e.target?.result as string,
-        status: "ready"
+        imgUrl: render.result as string,
+        status: "ready",
+        isCompressed: false // 初始状态为未压缩
       };
-
       state.originalImages.push(imageInfo);
-    };
-
-    reader.onerror = () => {
+    }).catch(error => {
       useMessage().error(`读取文件 ${file.name} 失败`);
-    };
-
-    reader.readAsDataURL(file);
+    });
   }
 
   // 清空input值，允许重复选择同一文件
@@ -87,13 +81,37 @@ const removeImage = (id: string) => {
 };
 
 // 预览图片
-const previewImage = (imgUrl: string) => {
-  state.previewImage = imgUrl;
+const previewImage = (imageInfo: OriginalImageInfo, type: 'original' | 'compressed' = 'original') => {
+  const images = [];
+  
+  // 添加原始图片
+  images.push(imageInfo.imgUrl);
+  
+  // 如果有压缩后的图片，也添加进去
+  if (imageInfo.result) {
+    images.push(imageInfo.result.dataUrl);
+  }
+  
+  state.previewImages = images;
+  state.currentPreviewIndex = type === 'compressed' && imageInfo.result ? 1 : 0;
   state.showPreview = true;
+};
+
+// 关闭预览
+const closePreview = () => {
+  state.showPreview = false;
+  state.previewImages = [];
+  state.currentPreviewIndex = 0;
 };
 
 // 压缩单个图片
 const compressSingleImage = async (imageInfo: OriginalImageInfo) => {
+  // 如果已经压缩过，直接返回
+  if (imageInfo.isCompressed && imageInfo.result) {
+    useMessage().info(`图片 ${imageInfo.name} 已经压缩过，跳过压缩`);
+    return imageInfo.result;
+  }
+
   if (!compressor) {
     initCompressor();
   }
@@ -115,6 +133,7 @@ const compressSingleImage = async (imageInfo: OriginalImageInfo) => {
 
     imageInfo.result = result;
     imageInfo.status = "success";
+    imageInfo.isCompressed = true; // 标记为已压缩
 
     return result;
   } catch (error) {
@@ -279,14 +298,14 @@ onMounted(() => {
         class="mb15"
       ></el-alert>
       <div class="card-body">
-        <div class="upload-area">
+        <div class="upload-area mb20">
           <label for="compress" class="upload-label">
-            <div class="upload-content">
+            <div class="upload-content pt40 pb40 pl20 pr20 t-center">
               <el-icon size="48" color="#409eff">
                 <Upload />
               </el-icon>
-              <h3>点击上传图片（支持多选）</h3>
-              <p>支持 JPG、PNG、WebP 格式，最大 10MB</p>
+              <h3 class="mt15 mb10">点击上传图片（支持多选）</h3>
+              <p class="m-auto">支持 JPG、PNG、WebP 格式，最大 10MB</p>
             </div>
             <input
               type="file"
@@ -301,26 +320,26 @@ onMounted(() => {
         </div>
 
         <!-- 控制面板 -->
-        <div class="controls-panel" v-if="state.originalImages.length > 0">
-          <div class="control-row">
-            <div class="control-item">
-              <label class="control-label">
+        <div class="controls-panel mt20 mb20 pt20 pb20 pl20 pr20 rounded-10" v-if="state.originalImages.length > 0">
+          <div class="control-row flex gap-20 mb20">
+            <div class="control-item flex1">
+              <label class="control-label flx-align-center gap-8 mb10">
                 <el-icon><Setting /></el-icon>
                 压缩质量: {{ state.quality }}%
               </label>
               <el-slider v-model="state.quality" :min="10" :max="100" :step="5" show-input class="control-slider" />
             </div>
 
-            <div class="control-item" v-show="state.enableCustomSize">
-              <label class="control-label">
+            <div class="control-item flex1" v-show="state.enableCustomSize">
+              <label class="control-label flx-align-center gap-8 mb10">
                 <el-icon><Crop /></el-icon>
                 最大宽度: {{ state.maxWidth }}px
               </label>
               <el-slider v-model="state.maxWidth" :min="500" :max="4000" :step="100" show-input class="control-slider" />
             </div>
 
-            <div class="control-item" v-show="state.enableCustomSize">
-              <label class="control-label">
+            <div class="control-item flex1" v-show="state.enableCustomSize">
+              <label class="control-label flx-align-center gap-8 mb10">
                 <el-icon><Crop /></el-icon>
                 最大高度: {{ state.maxHeight }}px
               </label>
@@ -328,31 +347,31 @@ onMounted(() => {
             </div>
           </div>
 
-          <div class="control-row">
-            <div class="control-item format-control">
-              <label class="control-label">
+          <div class="control-row flex gap-20 mb20">
+            <div class="control-item format-control flex1">
+              <label class="control-label flx-align-center gap-8 mb10">
                 <el-icon><Document /></el-icon>
                 输出格式
               </label>
               <el-radio-group v-model="state.outputFormat">
-                <el-radio-button label="jpeg">JPEG</el-radio-button>
-                <el-radio-button label="png">PNG</el-radio-button>
-                <el-radio-button label="webp">WebP</el-radio-button>
+                <el-radio label="jpeg">JPEG</el-radio>
+                <el-radio label="png">PNG</el-radio>
+                <el-radio label="webp">WebP</el-radio>
               </el-radio-group>
             </div>
           </div>
 
-          <div class="control-row">
-            <div class="control-item switch-control">
-              <label class="control-label">
+          <div class="control-row flex gap-20">
+            <div class="control-item switch-control FlexBox gap-12">
+              <label class="control-label flx-align-center gap-8">
                 <el-icon><Setting /></el-icon>
                 高质量渲染
               </label>
               <el-switch v-model="state.enableSmoothing" active-text="开启" inactive-text="关闭" />
             </div>
 
-            <div class="control-item switch-control">
-              <label class="control-label">
+            <div class="control-item switch-control FlexBox gap-12">
+              <label class="control-label flx-align-center gap-8">
                 <el-icon><Crop /></el-icon>
                 自定义尺寸
               </label>
@@ -362,7 +381,7 @@ onMounted(() => {
         </div>
       </div>
       <!-- 操作按钮 -->
-      <div class="action-buttons" v-if="state.originalImages.length > 0">
+      <div class="action-buttons flx-center gap-15 mt20 mb20" v-if="state.originalImages.length > 0">
         <el-button type="primary" :icon="Refresh" @click="compressAllImages" :loading="state.isCompressing">
           {{ state.isCompressing ? `压缩中... ${state.compressProgress}%` : "开始压缩" }}
         </el-button>
@@ -380,78 +399,92 @@ onMounted(() => {
       </div>
 
       <!-- 图片列表 -->
-      <div class="image-list" v-if="state.originalImages.length > 0">
-        <div class="list-header">
+      <div class="image-list mt30" v-if="state.originalImages.length > 0">
+        <div class="list-header mb20">
           <h4>图片列表 ({{ state.originalImages.length }} 张)</h4>
         </div>
 
-        <div class="image-cards">
-          <div v-for="imageInfo in state.originalImages" :key="imageInfo.id" class="image-card">
+        <div class="image-cards gap-20">
+          <div v-for="imageInfo in state.originalImages" :key="imageInfo.id" class="image-card rounded-10 pt15 pb15 pl15 pr15">
             <!-- 图片预览 -->
-            <div class="image-preview">
-              <img :src="imageInfo.imgUrl" :alt="imageInfo.name" @click="previewImage(imageInfo.imgUrl)" />
-              <div class="image-overlay">
-                <el-button type="primary" :icon="View" circle @click="previewImage(imageInfo.imgUrl)" />
+            <div class="image-preview relative mb15">
+              <img :src="imageInfo.imgUrl" :alt="imageInfo.name" @click="previewImage(imageInfo, 'original')" class="wh100 rounded-8" />
+              <div class="image-overlay absolute gap-5">
+                <el-button type="primary" :icon="View" circle @click="previewImage(imageInfo, 'original')" />
                 <el-button type="danger" :icon="Delete" circle @click="removeImage(imageInfo.id)" />
               </div>
             </div>
 
             <!-- 图片信息 -->
             <div class="image-info">
-              <div class="image-name" :title="imageInfo.name">
+              <div class="image-name sle mb10" :title="imageInfo.name">
                 {{ imageInfo.name }}
               </div>
 
-              <div class="image-details">
-                <div class="detail-row">
+              <div class="image-details mb15">
+                <div class="detail-row flx-justify-between mb5">
                   <span class="label">原始大小:</span>
                   <span class="value">{{ formatFileSize(imageInfo.size) }}</span>
                 </div>
 
-                <div class="detail-row" v-if="imageInfo.result">
+                <div class="detail-row flx-justify-between mb5" v-if="imageInfo.result">
                   <span class="label">压缩后:</span>
                   <span class="value success">{{ formatFileSize(imageInfo.result.size) }}</span>
                 </div>
 
-                <div class="detail-row" v-if="imageInfo.result">
+                <div class="detail-row flx-justify-between mb5" v-if="imageInfo.result">
                   <span class="label">压缩比:</span>
                   <span class="value success">{{ getCompressionRatio(imageInfo) }}</span>
                 </div>
 
-                <div class="detail-row">
+                <div class="detail-row flx-justify-between mb5">
                   <span class="label">状态:</span>
-                  <el-tag :type="getStatusType(imageInfo.status)">
-                    {{ getStatusText(imageInfo) }}
-                  </el-tag>
+                  <div class="flx-align-center gap-8">
+                    <el-tag :type="getStatusType(imageInfo.status)">
+                      {{ getStatusText(imageInfo) }}
+                    </el-tag>
+                    <el-tag v-if="imageInfo.isCompressed" type="success" size="small">
+                      已压缩
+                    </el-tag>
+                  </div>
                 </div>
               </div>
 
               <!-- 进度条 -->
-              <div class="progress-section" v-if="imageInfo.status === 'compressing' && imageInfo.progress">
+              <div class="progress-section mt15 mb15" v-if="imageInfo.status === 'compressing' && imageInfo.progress">
                 <el-progress
                   :percentage="imageInfo.progress.progress"
                   :status="imageInfo.progress.progress === 100 ? 'success' : undefined"
                 />
-                <div class="progress-text">{{ imageInfo.progress.message }}</div>
+                <div class="progress-text mt5">{{ imageInfo.progress.message }}</div>
               </div>
 
               <!-- 错误信息 -->
-              <div class="error-section" v-if="imageInfo.status === 'error'">
+              <div class="error-section mt15 mb15" v-if="imageInfo.status === 'error'">
                 <el-alert :title="imageInfo.error || '压缩失败'" type="error" :closable="false" />
               </div>
 
               <!-- 操作按钮 -->
-              <div class="image-actions">
+              <div class="image-actions flex gap-10">
+                <el-button
+                  v-if="!imageInfo.isCompressed && imageInfo.status !== 'compressing'"
+                  type="primary"
+                  :icon="Refresh"
+                  @click="compressSingleImage(imageInfo)"
+                >
+                  压缩
+                </el-button>
+
                 <el-button
                   v-if="imageInfo.status === 'success'"
-                  type="primary"
+                  type="success"
                   :icon="Download"
                   @click="downloadImage(imageInfo)"
                 >
                   下载
                 </el-button>
 
-                <el-button v-if="imageInfo.result" type="info" :icon="View" @click="previewImage(imageInfo.result.dataUrl)">
+                <el-button v-if="imageInfo.result" type="add" :icon="View" @click="previewImage(imageInfo, 'compressed')">
                   预览压缩后
                 </el-button>
               </div>
@@ -461,12 +494,14 @@ onMounted(() => {
       </div>
     </el-card>
 
-    <!-- 图片预览对话框 -->
-    <the-dialog v-model:visible="state.showPreview" :show-btns="false" :show-close="true" title="图片预览" width="80%">
-      <div class="preview-container">
-        <img :src="state.previewImage" alt="预览图片" class="preview-image" />
-      </div>
-    </the-dialog>
+    <!-- 图片预览器 -->
+    <el-image-viewer
+      v-if="state.showPreview"
+      :url-list="state.previewImages"
+      :initial-index="state.currentPreviewIndex"
+      @close="closePreview"
+      teleported
+    />
   </div>
 </template>
 <style lang="scss" scoped>

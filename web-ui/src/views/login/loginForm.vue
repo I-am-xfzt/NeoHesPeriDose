@@ -90,10 +90,10 @@ const handleLogin = async () => {
     if (res.code === 200) {
       // 初始化路由权限
       await initControlRoutes();
+      // 跳转到首页
+      await router.push("/");
       // 显示成功消息
       success("登录成功！");
-      // 跳转到首页
-      router.push("/");
     } else {
       error("登录失败，请检查用户名和密码");
     }

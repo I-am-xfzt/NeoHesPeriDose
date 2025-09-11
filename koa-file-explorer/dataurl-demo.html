@@ -367,7 +367,7 @@
 
         async function checkService() {
             try {
-                const response = await fetch('http://localhost:3000/api/ai/providers');
+                const response = await fetch('http://localhost:4001/api/ai/providers');
                 const data = await response.json();
                 console.log('服务状态:', data.data);
             } catch (error) {
@@ -424,7 +424,7 @@
             showLoading();
 
             try {
-                const response = await fetch('http://localhost:3000/api/ai/analyze-image-dataurl', {
+                const response = await fetch('http://localhost:4001/api/ai/analyze-image-dataurl', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

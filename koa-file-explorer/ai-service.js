@@ -17,6 +17,212 @@ class AIService {
     this.maxHistoryLength = 10; // 最大历史记录条数
   }
 
+  // 统一的axios请求封装
+  async makeRequest(endpoint, data, options = {}) {
+    try {
+      const provider = this.providers[this.currentProvider];
+      if (!provider.apiKey) {
+        throw new Error(`${this.currentProvider} API密钥未配置`);
+      }
+
+      const config = {
+        method: options.method || 'POST',
+        url: `${provider.baseURL}${endpoint}`,
+        data: data,
+        headers: {
+          'Authorization': `Bearer ${provider.apiKey}`,
+          ...options.headers
+        },
+        timeout: options.timeout || 0, // 0表示无超时限制
+        ...options.axiosConfig
+      };
+
+      // 如果不是multipart/form-data，则设置Content-Type
+      if (!options.headers || !options.headers['content-type']) {
+        config.headers['Content-Type'] = 'application/json';
+      }
+
+      // 打印请求参数（隐藏敏感信息）
+      const logConfig = {
+        method: config.method,
+        url: config.url,
+        headers: { ...config.headers, 'Authorization': 'Bearer ***' },
+        dataType: data && data.constructor ? data.constructor.name : typeof data
+      };
+      console.log('AI请求参数:', JSON.stringify(logConfig, null, 2));
+      
+      // 如果是JSON数据，打印数据内容（排除FormData）
+      if (data && typeof data === 'object' && data.constructor.name !== 'FormData') {
+        console.log('请求数据:', JSON.stringify(data, null, 2));
+      } else if (data && data.constructor.name === 'FormData') {
+        console.log('请求数据: FormData (文件上传)');
+      }
+
+      const response = await axios(config);
+      return {
+        success: true,
+        data: response.data,
+        status: response.status,
+        headers: response.headers
+      };
+    } catch (error) {
+      console.error('API请求错误:', error.response?.data || error.message);
+      return {
+        success: false,
+        error: error.response?.data?.error?.message || error.message,
+        status: error.response?.status,
+        data: error.response?.data
+      };
+    }
+  }
+
+  // 获取文件类型映射
+  getFileType(fileName) {
+    const ext = fileName.split('.').pop().toLowerCase();
+    const typeMap = {
+      'pdf': 'PDF',
+      'docx': 'DOCX',
+      'doc': 'DOC',
+      'xls': 'XLS',
+      'xlsx': 'XLSX',
+      'ppt': 'PPT',
+      'pptx': 'PPTX',
+      'png': 'PNG',
+      'jpg': 'JPG',
+      'jpeg': 'JPEG',
+      'csv': 'CSV',
+      'txt': 'TXT',
+      'md': 'MD',
+      'html': 'HTML',
+      'epub': 'EPUB',
+      'bmp': 'BMP',
+      'gif': 'GIF',
+      'webp': 'WEBP',
+      'heic': 'HEIC',
+      'eps': 'EPS',
+      'icns': 'ICNS',
+      'im': 'IM',
+      'pcx': 'PCX',
+      'ppm': 'PPM',
+      'tiff': 'TIFF',
+      'xbm': 'XBM',
+      'heif': 'HEIF',
+      'jp2': 'JP2'
+    };
+    return typeMap[ext] || 'TXT';
+  }
+
+  // 创建文件解析任务
+  async createParseTask(file, options = {}) {
+    try {
+      console.log('创建文件解析任务入参:');
+      console.log('- 文件名:', file.originalname || file.name);
+      console.log('- 文件大小:', file.size || (file.buffer ? file.buffer.length : 'unknown'));
+      console.log('- MIME类型:', file.mimetype || 'unknown');
+      console.log('- Buffer类型:', file.buffer ? file.buffer.constructor.name : 'none');
+      console.log('- 选项:', JSON.stringify(options, null, 2));
+      
+      const FormData = require('form-data');
+      const formData = new FormData();
+      
+      // 处理文件缓冲区
+      let fileBuffer;
+      if (Array.isArray(file.buffer)) {
+        // 如果buffer是数组，转换为Buffer对象
+        fileBuffer = Buffer.from(file.buffer);
+      } else if (Buffer.isBuffer(file.buffer)) {
+        // 如果已经是Buffer对象，直接使用
+        fileBuffer = file.buffer;
+      } else {
+        throw new Error('不支持的文件缓冲区格式');
+      }
+      
+      // 添加文件
+      formData.append('file', fileBuffer, {
+        filename: file.originalname || file.name,
+        contentType: file.mimetype || 'application/octet-stream'
+      });
+      
+      // 添加解析工具类型
+      const toolType = options.toolType || 'lite';
+      formData.append('tool_type', toolType);
+      
+      // 添加文件类型
+      const fileType = this.getFileType(file.originalname || file.name);
+      formData.append('file_type', fileType);
+
+      const response = await this.makeRequest('/files/parser/create', formData, {
+        method: 'POST',
+        headers: formData.getHeaders()
+      });
+
+      return response;
+    } catch (error) {
+      console.error('创建文件解析任务错误:', error.message);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  }
+
+  // 获取文件解析结果
+  async getParseResult(taskId, formatType = 'text') {
+    try {
+      const response = await this.makeRequest(`/files/parser/result/${taskId}/${formatType}`, null, {
+        method: 'GET'
+      });
+
+      return response;
+    } catch (error) {
+      console.error('获取文件解析结果错误:', error.message);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  }
+
+  // 轮询等待解析完成
+  async waitForParseCompletion(taskId, maxWaitTime = 900000, pollInterval = 300000) {
+    const startTime = Date.now();
+    
+    while (Date.now() - startTime < maxWaitTime) {
+      const result = await this.getParseResult(taskId, 'text');
+      
+      if (!result.success) {
+        return result;
+      }
+      
+      const status = result.data.status;
+      
+      if (status === 'succeeded') {
+        return {
+          success: true,
+          content: result.data.content,
+          taskId: taskId,
+          message: result.data.message
+        };
+      } else if (status === 'failed') {
+        return {
+          success: false,
+          error: result.data.message || '文件解析失败',
+          taskId: taskId
+        };
+      }
+      
+      // 等待一段时间后继续轮询
+      await new Promise(resolve => setTimeout(resolve, pollInterval));
+    }
+    
+    // 超时
+    return {
+      success: false,
+      error: '文件解析超时',
+      taskId: taskId
+    };
+  }
+
   // 设置当前使用的AI提供商
   setProvider(provider) {
     if (this.providers[provider]) {
@@ -66,6 +272,12 @@ class AIService {
   // 通用聊天接口（支持上下文）
   async chat(message, options = {}) {
     try {
+      console.log('\n=== AI聊天请求 ===');
+      console.log('聊天入参:');
+      console.log('- 消息:', message);
+      console.log('- 选项:', JSON.stringify(options, null, 2));
+      console.log('- 历史记录长度:', this.conversationHistory.length);
+      
       const provider = this.providers[this.currentProvider];
       if (!provider.apiKey) {
         throw new Error(`${this.currentProvider} API密钥未配置`);
@@ -83,26 +295,25 @@ class AIService {
       const recentHistory = this.conversationHistory.slice(-this.maxHistoryLength * 2);
       messages.push(...recentHistory);
 
-      const response = await axios.post(
-        `${provider.baseURL}/chat/completions`,
-        {
-          model: options.model || this.getDefaultModel(),
-          messages: messages,
-          max_tokens: options.maxTokens || 2000,
-          temperature: options.temperature || 0.7,
-          stream: options.stream || false,
-          top_p: options.topP || 0.9,
-          presence_penalty: options.presencePenalty || 0.1,
-          frequency_penalty: options.frequencyPenalty || 0.1
-        },
-        {
-          headers: {
-            'Authorization': `Bearer ${provider.apiKey}`,
-            'Content-Type': 'application/json'
-          },
-          timeout: 30000
-        }
-      );
+      const requestData = {
+        model: options.model || this.getDefaultModel(),
+        messages: messages,
+        max_tokens: options.maxTokens || 2000,
+        temperature: options.temperature || 0.7,
+        stream: options.stream || false,
+        top_p: options.topP || 0.9,
+        presence_penalty: options.presencePenalty || 0.1,
+        frequency_penalty: options.frequencyPenalty || 0.1
+      };
+
+      const response = await this.makeRequest('/chat/completions', requestData);
+
+      if (!response.success) {
+        return {
+          success: false,
+          error: response.error
+        };
+      }
 
       const aiResponse = response.data.choices[0].message.content;
       
@@ -117,55 +328,76 @@ class AIService {
         historyLength: this.conversationHistory.length / 2 // 返回对话轮数
       };
     } catch (error) {
-      console.error('AI聊天错误:', error.response?.data || error.message);
+      console.error('AI聊天错误:', error.message);
       return {
         success: false,
-        error: error.response?.data?.error?.message || error.message
+        error: error.message
       };
     }
   }
 
-  // 文件内容分析
-  async analyzeFile(filePath, options = {}) {
+  // 文件内容分析（修改为接受file对象并使用新的文件解析接口）
+  async analyzeFile(file, options = {}) {
+    // 智谱ai 2025.10.08 开始收费0.01元/次， 解析缓慢，只有一行字的txt文件就要解析好几分钟
     try {
-      const stats = fs.statSync(filePath);
+      console.log('\n=== 开始文件分析 ===');
+      console.log('文件分析入参:');
+      console.log('- 文件对象:', {
+        originalname: file.originalname || file.name,
+        size: file.size,
+        mimetype: file.mimetype,
+        bufferType: file.buffer ? file.buffer.constructor.name : 'none',
+        bufferLength: file.buffer ? file.buffer.length : 0
+      });
+      console.log('- 分析选项:', JSON.stringify(options, null, 2));
       
-      if (stats.size > 10 * 1024 * 1024) { // 10MB限制
+      // 检查文件大小限制
+      if (file.size > 10 * 1024 * 1024) { // 10MB限制
         return {
           success: false,
           error: '文件过大，无法分析'
         };
       }
 
-      const ext = path.extname(filePath).toLowerCase();
-      let content = '';
-      let fileType = '';
+      const fileName = file.originalname || file.name || 'unknown';
+      console.log(`开始分析文件: ${fileName}`);
 
-      // 根据文件类型处理
-      if (['.txt', '.md', '.json', '.js', '.py', '.html', '.css'].includes(ext)) {
-        content = fs.readFileSync(filePath, 'utf-8');
-        fileType = 'text';
-      } else if (['.png', '.jpg', '.jpeg', '.gif', '.bmp'].includes(ext)) {
-        // 图片文件使用base64编码
-        const imageBuffer = fs.readFileSync(filePath);
-        content = imageBuffer.toString('base64');
-        fileType = 'image';
-      } else {
+      // 创建文件解析任务
+      console.log('创建文件解析任务...');
+      const createResult = await this.createParseTask(file, options);
+      
+      if (!createResult.success) {
         return {
           success: false,
-          error: '不支持的文件类型'
+          error: `创建解析任务失败: ${createResult.error}`
         };
       }
 
-      let prompt = options.prompt || '';
-      if (fileType === 'text') {
-        prompt = prompt || `请分析以下文件内容：\n\n${content}`;
-        return await this.chat(prompt, options);
-      } else if (fileType === 'image') {
-        return await this.analyzeImage(content, filePath, options);
+      const taskId = createResult.data.task_id;
+      console.log(`文件解析任务创建成功，任务ID: ${taskId}`);
+      
+      // 等待解析完成
+      console.log('等待文件解析完成...');
+      const parseResult = await this.waitForParseCompletion(taskId);
+      
+      if (!parseResult.success) {
+        return {
+          success: false,
+          error: `文件解析失败: ${parseResult.error}`
+        };
       }
 
+      console.log('文件解析完成');
+      return {
+        success: true,
+        content: parseResult.content,
+        taskId: taskId,
+        fileName: fileName,
+        fileSize: file.size
+      };
+
     } catch (error) {
+      console.error('文件分析错误:', error.message);
       return {
         success: false,
         error: error.message
@@ -176,6 +408,12 @@ class AIService {
   // 图片分析（支持上下文）
   async analyzeImage(base64Image, filePath, options = {}) {
     try {
+      console.log('\n=== 图片分析请求 ===');
+      console.log('图片分析入参:');
+      console.log('- 文件路径:', filePath);
+      console.log('- base64数据长度:', base64Image ? base64Image.length : 0);
+      console.log('- 分析选项:', JSON.stringify(options, null, 2));
+      
       const provider = this.providers[this.currentProvider];
       if (!provider.apiKey) {
         throw new Error(`${this.currentProvider} API密钥未配置`);
@@ -210,25 +448,24 @@ class AIService {
         ]
       });
 
-      const response = await axios.post(
-        `${provider.baseURL}/chat/completions`,
-        {
-          model: options.model || 'glm-4.5v',
-          messages: messages,
-          max_tokens: options.maxTokens || 2000,
-          temperature: options.temperature || 0.7,
-          top_p: 0.9,
-          presence_penalty: 0.1,
-          frequency_penalty: 0.1
-        },
-        {
-          headers: {
-            'Authorization': `Bearer ${provider.apiKey}`,
-            'Content-Type': 'application/json'
-          },
-          timeout: 60000
-        }
-      );
+      const requestData = {
+        model: options.model || 'glm-4.5v',
+        messages: messages,
+        max_tokens: options.maxTokens || 2000,
+        temperature: options.temperature || 0.7,
+        top_p: 0.9,
+        presence_penalty: 0.1,
+        frequency_penalty: 0.1
+      };
+
+      const response = await this.makeRequest('/chat/completions', requestData);
+
+      if (!response.success) {
+        return {
+          success: false,
+          error: response.error
+        };
+      }
 
       const aiResponse = response.data.choices[0].message.content;
       
@@ -243,10 +480,10 @@ class AIService {
         historyLength: this.conversationHistory.length / 2
       };
     } catch (error) {
-      console.error('图片分析错误:', error.response?.data || error.message);
+      console.error('图片分析错误:', error.message);
       return {
         success: false,
-        error: error.response?.data?.error?.message || error.message
+        error: error.message
       };
     }
   }

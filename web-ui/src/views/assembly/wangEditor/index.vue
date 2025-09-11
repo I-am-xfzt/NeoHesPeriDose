@@ -3,7 +3,7 @@
     <el-card shadow="hover" header="富文本编辑器 🍓🍇🍈🍉">
       <div class="flex-column FlexBox gap-12">
         <WangEditor v-model:value="content" height="400px" />
-      <el-button type="primary" style="margin: auto;" @click="dialogVisible = true"> 内容预览 </el-button>
+      <el-button type="primary" :disabled="!content" style="margin: auto;" @click="dialogVisible = true"> 内容预览 </el-button>
       </div>
     </el-card>
     <theDialog v-model:visible="dialogVisible" title="富文本内容预览" width="1300px" top="50px">

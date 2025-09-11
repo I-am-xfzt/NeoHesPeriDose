@@ -18,6 +18,7 @@ export interface OriginalImageInfo {
   progress?: CompressProgress;
   result?: CompressResult;
   error?: string;
+  isCompressed: boolean; // 标记是否已经压缩过
 }
 
 // 状态管理接口
@@ -31,6 +32,7 @@ export interface StateType {
   enableCustomSize: boolean;
   isCompressing: boolean;
   compressProgress: number;
-  previewImage: string;
+  previewImages: string[];
   showPreview: boolean;
+  currentPreviewIndex: number;
 }

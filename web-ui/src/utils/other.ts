@@ -33,7 +33,7 @@ export const lazyImg = async (el: string, arr: EmptyArrayType) => {
         v.target.src = img;
         v.target.onload = () => {
           io.unobserve(v.target);
-          arr[key]["loading"] = false;
+          arr[key] = false;
         };
       }
     });
@@ -525,6 +525,39 @@ const getNonDuplicateID = (length = 8) => {
 const addUnit = (value: string | number, unit = "px") => {
   return !Object.is(Number(value), NaN) ? `${value}${unit}` : value;
 };
+/**
+ * @description 文件转dataUrl
+ * @param {File} file 文件
+ */
+export const FileToDataUrl = (file: File)  => {
+  return new Promise<FileReader>(resolve => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      resolve(e.target!);
+    };
+    reader.onerror = (e) => {
+      resolve(e.target!);
+    };
+    reader.readAsDataURL(file);
+  });
+};
+/**
+ * 将 Base64 数据 URL 转换为 File 对象
+ * @param dataUrl
+ * @param filename
+ * @returns
+ */
+export const dataUrlToFile = (dataUrl: string, filename: string): File => {
+  const arr = dataUrl.split(",");
+  const mimeMatch = arr[0].match(/:(.*?);/);
+  const mime = mimeMatch ? mimeMatch[1] : "image/jpeg";
+  const bstr = atob(arr[1]);
+  const u8arr = new Uint8Array(bstr.length);
 
+  for (let i = 0; i < bstr.length; i++) {
+    u8arr[i] = bstr.charCodeAt(i);
+  }
+  return new File([u8arr], filename, { type: mime });
+};
 // 统一批量导出
 export default other;

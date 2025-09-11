@@ -1,12 +1,13 @@
 <template>
   <div>
     <the-dialog
-      title="更换头像"
+      title="裁剪图片"
       @cancel="onCancel"
-      :confirm-text="`更换`"
+      :confirm-text="`裁剪`"
       @confirm="onSubmit"
       v-model:visible="state.isShowDialog"
       width="769px"
+      clickConfirmNoclose
     >
       <div class="cropper-warp">
         <div class="cropper-warp-left"></div>
@@ -27,7 +28,7 @@
         </div>
       </div>
       <template #other_btn v-if="state.cropperImgBase64">
-        <el-button type="add" @click="downloadDataUrl(state.cropperImgBase64)">下载</el-button>
+        <el-button type="add" @click="downloadDataUrl(state.cropperImgBase64); state.isShowDialog = false">下载</el-button>
       </template>
     </the-dialog>
   </div>

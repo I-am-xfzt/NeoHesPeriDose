@@ -7,6 +7,17 @@
         <div class="status-indicator" :class="{ 'status-error': !isConnected }"></div>
       </div>
       <div class="FlexBox gap-12">
+        <el-upload
+          ref="uploadRef"
+          :auto-upload="false"
+          :show-file-list="false"
+          :on-change="handleFileChange"
+          :before-upload="beforeUpload"
+          accept=".pdf,.docx,.doc,.txt,.md,.png,.jpg,.jpeg"
+          class="file-upload"
+        >
+          <el-button :icon="Upload" type="primary">点上传文件进行AI分析</el-button>
+        </el-upload>
         <el-select v-model="selectedModel" style="width: 200px">
           <el-option label="GLM-4.5 (推荐)" value="glm-4.5"></el-option>
           <el-option label="GLM-4.5-Air（高性价比）" value="glm-4.5-air"></el-option>
@@ -22,7 +33,9 @@
       <el-scrollbar ref="scrollbarRef" style="height: 100%">
         <div class="messages-container flex-column gap-15" ref="messagesContainer">
           <div v-if="messages.length === 0" class="empty-state t-center l-t-center flex-column">
-            <div class="empty-state-icon">N</div>
+            <div class="logo-core">
+              <div class="logo-center">N</div>
+            </div>
             <h3>欢迎使用NeoHesPeriDose AI助手</h3>
             <p>输入你的问题开始对话</p>
           </div>
@@ -76,9 +89,9 @@
 </template>
 
 <script setup lang="ts" name="chatAI">
-import { ElMessage, ElMessageBox } from "element-plus";
-import { Loading, Promotion } from "@element-plus/icons-vue";
-
+import { ElMessage, ElMessageBox, ElUpload } from "element-plus";
+import { Loading, Promotion, Upload } from "@element-plus/icons-vue";
+import { connectionStatus, getChartMsg, getAnalyzeFile } from "@/api/AI";
 // 接口定义
 interface Message {
   role: "user" | "ai";
@@ -94,6 +107,11 @@ const selectedModel = ref("glm-4.5");
 const systemPrompt = ref("你是NeoHesPeriDose智能助手，是一名专业的AI助手，你无所不能。请用中文回答问题。");
 const messagesContainer = ref<HTMLElement>();
 const scrollbarRef = ref();
+
+// 文件分析相关状态
+const isAnalyzing = ref(false);
+const analyzingFileName = ref("");
+const uploadRef = ref();
 
 // 滚动到底部
 const scrollToBottom = () => {
@@ -123,28 +141,17 @@ const sendMessage = async () => {
   isTyping.value = true;
 
   try {
-    const response = await fetch("http://localhost:4001/api/ai/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+    const aiMessage: Message = {
+      role: "ai",
+      content: await getChartMsg({
         message: originalMessage,
         options: {
           model: selectedModel.value,
           systemPrompt: systemPrompt.value
         }
       })
-    });
-
-    const data = await response.json();
-    if (data.success) {
-      const aiMessage: Message = {
-        role: "ai",
-        content: data.content
-      };
-      messages.value.push(aiMessage);
-    } else {
-      throw new Error(data.error);
-    }
+    };
+    messages.value.push(aiMessage);
   } catch (error: any) {
     ElMessage.error("发送失败: " + error.message);
     messages.value.pop();
@@ -179,12 +186,103 @@ const clearChat = () => {
 // 检查连接状态
 const checkConnection = async () => {
   try {
-    const response = await fetch("http://localhost:4001/api/ai/providers");
-    const data = await response.json();
-    isConnected.value = data.data?.available?.includes("zhipu") || true;
+    isConnected.value = await connectionStatus();
   } catch (error) {
     isConnected.value = false;
     ElMessage.error("无法连接到NeoHesPeriDose AI服务，请确保服务已启动");
+  }
+};
+
+// 文件上传处理
+const handleFileChange = (file: any) => {
+  if (file.raw) {
+    analyzeFile(file.raw);
+  }
+};
+
+// 文件上传前验证
+const beforeUpload = (file: File) => {
+  // 检查文件大小
+  const maxSize = 50 * 1024 * 1024; // 50MB
+  if (file.size > maxSize) {
+    ElMessage.error("文件大小不能超过50MB");
+    return false;
+  }
+
+  // 检查文件类型
+  const allowedExtensions = [".pdf", ".docx", ".doc", ".txt", ".md", ".png", ".jpg", ".jpeg"];
+  const fileName = file.name.toLowerCase();
+  const isValidType = allowedExtensions.some(ext => fileName.endsWith(ext));
+
+  if (!isValidType) {
+    ElMessage.error("不支持的文件格式！请上传：PDF、Word文档(.docx/.doc)、文本文件(.txt/.md)或图片文件(.png/.jpg/.jpeg)");
+    return false;
+  }
+
+  return true;
+};
+
+// 分析文件
+const analyzeFile = async (file: File) => {
+  if (isAnalyzing.value || isTyping.value) {
+    ElMessage.warning("当前正在处理中，请稍候");
+    return;
+  }
+
+  isAnalyzing.value = true;
+  analyzingFileName.value = file.name;
+
+  try {
+    // 添加用户消息显示上传的文件
+    const userMessage: Message = {
+      role: "user",
+      content: `📎 上传文件：${file.name} (${(file.size / 1024 / 1024).toFixed(2)}MB)`
+    };
+    messages.value.push(userMessage);
+    scrollToBottom();
+
+    // 添加AI思考状态
+    isTyping.value = true;
+
+    // 调用文件分析API
+    const result = await getAnalyzeFile(file);
+
+    // 处理分析结果
+    let analysisContent = "文件分析完成！\n\n";
+
+    if (result.success) {
+      analysisContent += result.content || "文件分析成功，但没有返回具体内容。";
+    } else {
+      analysisContent += `分析过程中出现错误：${result.error || "未知错误"}`;
+    }
+
+    // 添加AI回复消息
+    const aiMessage: Message = {
+      role: "ai",
+      content: analysisContent
+    };
+    messages.value.push(aiMessage);
+
+    ElMessage.success("文件分析完成");
+  } catch (error: any) {
+    ElMessage.error("文件分析失败: " + error.message);
+
+    // 添加错误消息
+    const errorMessage: Message = {
+      role: "ai",
+      content: `文件分析失败：${error.message}。请检查文件格式是否支持，或稍后重试。`
+    };
+    messages.value.push(errorMessage);
+  } finally {
+    isAnalyzing.value = false;
+    analyzingFileName.value = "";
+    isTyping.value = false;
+    scrollToBottom();
+
+    // 清空上传组件
+    if (uploadRef.value) {
+      uploadRef.value.clearFiles();
+    }
   }
 };
 
@@ -195,7 +293,7 @@ onMounted(() => {
   messages.value.push({
     role: "ai",
     content:
-      "你好！我是NeoHesPeriDose AI助手，我可以帮您分析代码、处理文件、解答技术问题，以及协助系统维护工作。请直接输入消息开始对话！"
+      "你好！我是NeoHesPeriDose AI助手，我可以帮您分析代码、处理文件、解答技术问题，以及协助系统维护工作。请直接输入消息开始对线，我无所不能哦！"
   });
 });
 </script>
@@ -292,7 +390,7 @@ onMounted(() => {
   }
 
   .chat-area {
-    height: calc(100% - 148px);
+    height: calc(100% - 198px);
   }
 
   .messages-container {
@@ -329,13 +427,13 @@ onMounted(() => {
 
     &.user {
       flex-direction: row-reverse;
-      
+
       &.message-entering {
         opacity: 0;
         transform: translateY(20px) scale(0.9);
       }
     }
-    
+
     &.ai.message-entering {
       opacity: 0;
       transform: translateY(20px) scale(0.9);
@@ -355,7 +453,8 @@ onMounted(() => {
     }
 
     &.ai .message-avatar {
-      background: #67c23a;
+      background: radial-gradient(circle, #4fc3f7, #29b6f6, #0288d1);
+      box-shadow: 0 0 20px rgba(79, 195, 247, 0.6);
       color: white;
     }
 
@@ -436,6 +535,27 @@ onMounted(() => {
 }
 
 // 动画定义
+@keyframes uploadIconPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 @keyframes backgroundShift {
   0%,
   100% {

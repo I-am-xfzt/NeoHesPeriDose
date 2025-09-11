@@ -41,6 +41,10 @@ const props = defineProps({
   showBtns: {
     type: Boolean,
     default: true
+  },
+  clickConfirmNoclose: {
+    type: Boolean,
+    default: false
   }
 });
 
@@ -54,7 +58,7 @@ const close = () => {
 };
 const handleDialog = (event: "update:visible" | "confirm" | "cancel") => {
   emits(event);
-  close();
+  (event === "confirm" ? !props.clickConfirmNoclose : true) && close();
 };
 </script>
 

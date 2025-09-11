@@ -11,7 +11,7 @@
         <div class="mb15 mt15">
           <img class="cropper-img" :src="state.cropperImg" />
         </div>
-        <el-button type="primary" size="default" @click="onCropperDialogOpen"> 更换头像 </el-button>
+        <el-button type="primary" size="default" @click="onCropperDialogOpen"> 开始裁剪 </el-button>
       </div>
       <div class="t-center" v-else>
         <el-button type="primary">
@@ -27,6 +27,8 @@
 </template>
 
 <script setup lang="ts" name="funCropper">
+import { FileToDataUrl } from "@/utils/other";
+
 // 引入组件
 const CropperDialog = defineAsyncComponent(() => import("./cropperCom.vue"));
 
@@ -35,14 +37,11 @@ const cropperDialogRef = ref();
 const state = reactive({
   cropperImg: ""
 });
-const avatarUp = (e: any) => {
-  const file = e.target.files[0];
+const avatarUp = async (e: Event) => {
+  const file = (e.target as HTMLInputElement).files![0];
   if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    state.cropperImg = e.target!.result as string;
-  };
-  reader.readAsDataURL(file);
+  const render = await FileToDataUrl(file)
+  state.cropperImg = render.result as string;
 };
 // 打开裁剪弹窗
 const onCropperDialogOpen = () => {

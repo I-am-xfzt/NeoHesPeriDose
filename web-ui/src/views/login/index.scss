@@ -117,16 +117,6 @@
   }
 }
 
-.logo-core {
-  width: 60px;
-  height: 60px;
-  background: radial-gradient(circle, #4FC3F7, #29B6F6, #0288D1);
-  border-radius: 50%;
-  position: relative;
-  @extend .l-t-center;
-  box-shadow: 0 0 20px rgba(79, 195, 247, 0.6);
-}
-
 .logo-center {
   font-size: 28px;
   font-weight: 900;

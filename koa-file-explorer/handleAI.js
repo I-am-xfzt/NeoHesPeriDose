@@ -81,178 +81,42 @@ router.post('/api/ai/chat', async (ctx) => {
   }
 });
 
-// 路由：分析文件
+// 路由：分析文件（接受前端传入的文件对象）
 router.post('/api/ai/analyze-file', async (ctx) => {
   try {
-    const { filePath, options = {} } = ctx.request.body;
+    const { file, options = {} } = ctx.request.body;
     
-    if (!filePath) {
+    // 检查是否有文件对象
+    if (!file) {
       ctx.body = {
         success: false,
-        error: '请提供文件路径'
+        error: '请提供文件对象'
       };
       return;
     }
 
-    // 构建完整路径
-    const fullPath = path.join('D:/', filePath);
-    
-    if (!fs.existsSync(fullPath)) {
+    // 验证文件对象必要属性
+    if (!file.buffer || !file.originalname) {
       ctx.body = {
         success: false,
-        error: '文件不存在'
+        error: '文件对象格式不正确，需要包含buffer和originalname属性'
       };
       return;
     }
+    
+    console.log(`收到文件分析请求: ${file.originalname}, 大小: ${file.size || file.buffer.length} bytes`);
 
-    const result = await aiService.analyzeFile(fullPath, options);
-    ctx.body = result;
-  } catch (error) {
+    // 调用AI服务分析文件
+    const result = await aiService.analyzeFile(file, options);
+    
+    // 返回结果
     ctx.body = {
-      success: false,
-      error: error.message
-    };
-  }
-});
-
-// 路由：批量分析文件
-router.post('/api/ai/batch-analyze', async (ctx) => {
-  try {
-    const { filePaths, options = {} } = ctx.request.body;
-    
-    if (!Array.isArray(filePaths) || filePaths.length === 0) {
-      ctx.body = {
-        success: false,
-        error: '请提供文件路径数组'
-      };
-      return;
-    }
-
-    // 构建完整路径
-    const fullPaths = filePaths.map(filePath => path.join('D:/', filePath));
-    
-    // 验证文件存在
-    const validPaths = fullPaths.filter(fullPath => fs.existsSync(fullPath));
-    
-    if (validPaths.length === 0) {
-      ctx.body = {
-        success: false,
-        error: '所有文件都不存在'
-      };
-      return;
-    }
-
-    const results = await aiService.batchAnalyze(validPaths, options);
-    ctx.body = {
-      success: true,
-      data: results
+      ...result,
+      fileName: file.originalname,
+      fileSize: file.size || file.buffer.length
     };
   } catch (error) {
-    ctx.body = {
-      success: false,
-      error: error.message
-    };
-  }
-});
-
-// 路由：通过dataUrl解析图片（支持GLM-4.5V）
-router.post('/api/ai/analyze-image-dataurl', async (ctx) => {
-  const { dataUrl, prompt, model = 'glm-4.5v', maxTokens = 2000, temperature = 0.7 } = ctx.request.body;
-  
-  if (!dataUrl) {
-    ctx.status = 400;
-    ctx.body = {
-      success: false,
-      error: '请提供图片的dataUrl'
-    };
-    return;
-  }
-
-  if (!prompt) {
-    ctx.status = 400;
-    ctx.body = {
-      success: false,
-      error: '请提供分析提示词'
-    };
-    return;
-  }
-
-  try {
-    console.log(`收到图片分析请求 - 模型: ${model}, 提示词: ${prompt.substring(0, 50)}...`);
-    
-    // 解析dataUrl获取图片数据
-    const matches = dataUrl.match(/^data:(image\/[a-zA-Z+]+);base64,(.+)$/);
-    if (!matches) {
-      throw new Error('无效的dataUrl格式');
-    }
-
-    const imageType = matches[1];
-    const base64Data = matches[2];
-    
-    // 验证图片类型
-    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/bmp'];
-    if (!validTypes.includes(imageType)) {
-      throw new Error(`不支持的图片类型: ${imageType}`);
-    }
-
-    // 将base64转换为Buffer
-    const imageBuffer = Buffer.from(base64Data, 'base64');
-    
-    // 检查图片大小（限制10MB）
-    if (imageBuffer.length > 10 * 1024 * 1024) {
-      throw new Error('图片大小超过10MB限制');
-    }
-
-    // 创建临时文件路径
-    const tempDir = path.join(__dirname, 'temp');
-    if (!fs.existsSync(tempDir)) {
-      fs.mkdirSync(tempDir, { recursive: true });
-    }
-
-    const extension = imageType.split('/')[1];
-    const tempFileName = `temp_${Date.now()}.${extension}`;
-    const tempFilePath = path.join(tempDir, tempFileName);
-
-    // 保存临时图片文件
-    fs.writeFileSync(tempFilePath, imageBuffer);
-
-    try {
-      // 使用AI服务分析图片
-      const startTime = Date.now();
-      const result = await aiService.analyzeImage(tempFilePath, prompt, {
-        model,
-        maxTokens,
-        temperature
-      });
-
-      const duration = Date.now() - startTime;
-
-      // 清理临时文件
-      fs.unlinkSync(tempFilePath);
-
-      ctx.body = {
-        success: true,
-        data: {
-          analysis: result.analysis,
-          model: result.model,
-          duration: duration,
-          imageSize: imageBuffer.length,
-          imageType: imageType,
-          historyLength: result.historyLength
-        }
-      };
-
-    } catch (error) {
-      // 清理临时文件（即使出错）
-      if (fs.existsSync(tempFilePath)) {
-        fs.unlinkSync(tempFilePath);
-      }
-      throw error;
-    }
-
-  } catch (error) {
-    console.error('图片分析失败:', error.message);
-    ctx.status = 500;
+    console.error('文件分析错误:', error);
     ctx.body = {
       success: false,
       error: error.message
@@ -404,13 +268,15 @@ app.listen(PORT, () => {
     * GET  /api/ai/providers      - 获取AI提供商
     * POST /api/ai/set-provider  - 设置AI提供商
     * POST /api/ai/chat          - AI聊天
-    * POST /api/ai/analyze-file  - 分析单个文件
+    * POST /api/ai/analyze-file  - 分析单个文件（接受文件对象）
     * POST /api/ai/batch-analyze - 批量分析文件
     * GET  /api/ai/file-preview  - 文件内容预览
   
   环境变量配置:
   - ZHIPU_API_KEY: ${process.env.ZHIPU_API_KEY ? '已配置 ✓' : '未配置 ✗'}
   - AI_PORT: ${PORT}
+  
+  注意: /api/ai/analyze-file 接受包含buffer和originalname的文件对象
   `);
 });
 

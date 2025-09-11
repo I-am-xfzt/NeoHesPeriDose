@@ -5,7 +5,7 @@
  * @author neohes-peridose
  * @since 2025-09-09
  */
-
+import { dataUrlToFile } from "./other"
 /**
  * 压缩进度信息接口
  * @interface CompressProgress
@@ -356,17 +356,7 @@ export class ImageCompressor {
    * ```
    */
   dataUrlToFile(dataUrl: string, filename: string): File {
-    const arr = dataUrl.split(',');
-    const mimeMatch = arr[0].match(/:(.*?);/);
-    const mime = mimeMatch ? mimeMatch[1] : 'image/jpeg';
-    const bstr = atob(arr[1]);
-    const u8arr = new Uint8Array(bstr.length);
-
-    for (let i = 0; i < bstr.length; i++) {
-      u8arr[i] = bstr.charCodeAt(i);
-    }
-
-    return new File([u8arr], filename, { type: mime });
+     return dataUrlToFile(dataUrl, filename);
   }
 
   /**
@@ -550,18 +540,6 @@ export async function compressImages(
     onProgress: options.onProgress || undefined
   };
   return compressor.compressBatch(files, finalOptions);
-}
-
-/**
- * 将 dataURL 转换为 File 对象（函数式接口）
- * @param dataUrl - Base64 数据 URL
- * @param filename - 文件名
- * @returns File 对象
- * @deprecated 推荐使用 ImageCompressor 类的实例方法
- */
-export function dataUrlToFile(dataUrl: string, filename: string): File {
-  const compressor = new ImageCompressor();
-  return compressor.dataUrlToFile(dataUrl, filename);
 }
 
 /**
