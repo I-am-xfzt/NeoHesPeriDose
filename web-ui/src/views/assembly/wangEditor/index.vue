@@ -6,7 +6,7 @@
       <el-button type="primary" style="margin: auto;" @click="dialogVisible = true"> 内容预览 </el-button>
       </div>
     </el-card>
-    <theDialog v-model="dialogVisible" title="富文本内容预览" width="1300px" top="50px">
+    <theDialog v-model:visible="dialogVisible" title="富文本内容预览" width="1300px" top="50px">
       <div class="view" v-html="content"></div>
     </theDialog>
   </div>

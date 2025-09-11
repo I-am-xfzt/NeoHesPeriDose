@@ -32,6 +32,7 @@ declare interface coordinateInfoType {
     targetType: string;
     sourceType: string;
     source: string;
+    target: string;
 }
 // 用户信息
 declare interface UserInfos {

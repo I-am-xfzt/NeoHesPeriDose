@@ -8,7 +8,6 @@
     "start:server": "cd koa-file-explorer && npm start",
     "start:web": "cd web-ui && pnpm dev",
     "dev": "npm-run-all --parallel start:*",
-    "install:all": "npm i && npm-run-all --parallel install:*",
     "install:server": "cd koa-file-explorer && npm i",
     "install:web": "cd web-ui && pnpm i"
   }

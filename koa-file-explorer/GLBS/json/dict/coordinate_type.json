@@ -1,0 +1,39 @@
+{
+    "code": 0,
+    "msg": null,
+    "data": [
+        {
+            "id": "1957717461894041602",
+            "dictId": "1957717238543159297",
+            "label": "WGS84",
+            "dictType": "coordinate_type",
+            "description": "success",
+            "sortOrder": 0,
+            "updateBy": " ",
+            "createTime": "2025-08-19 16:13:10",
+            "value": "wgs84"
+        },
+        {
+            "id": "1957717543926239234",
+            "dictId": "1957717238543159297",
+            "label": "GCJ02",
+            "dictType": "coordinate_type",
+            "description": "info",
+            "sortOrder": 0,
+            "updateBy": " ",
+            "createTime": "2025-08-19 16:13:30",
+            "value": "gcj02"
+        },
+        {
+            "id": "1957717543926239234",
+            "dictId": "1957717238543159297",
+            "label": "BD09",
+            "dictType": "coordinate_type",
+            "description": "info",
+            "sortOrder": 0,
+            "updateBy": " ",
+            "createTime": "2025-08-19 16:13:30",
+            "value": "bd09"
+        }
+    ]
+}

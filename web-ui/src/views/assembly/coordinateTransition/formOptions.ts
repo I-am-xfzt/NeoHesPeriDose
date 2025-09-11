@@ -7,35 +7,26 @@ const getElCom = new allElFormItemsOptions(),
       getElCom.getSelect({
         span: 12,
         label: "源坐标系",
-        prop: "sourceSystem"
-        // options: [
-        //   { label: "WGS84", value: "wgs84" },
-        //   { label: "GCJ02", value: "gcj02" },
-        //   { label: "BD09", value: "bd09" }
-        // ]
+        prop: "sourceSystem",
+        dict: 'coordinate_type',
       }),
       getElCom.getSelect({
         span: 12,
         label: "目标坐标系",
-        prop: "targetSystem"
-        // options: [
-        //   { label: "WGS84", value: "wgs84" },
-        //   { label: "GCJ02", value: "gcj02" },
-        //   { label: "BD09", value: "bd09" }
-        // ]
+        prop: "targetSystem",
+        dict: 'coordinate_type'
       })
     ],
     [
       getElCom.getInput({
         span: 12,
-        label: "源坐标",
-        prop: "inputCoordinates"
+        label: "源坐标X",
+        prop: "inputX"
       }),
       getElCom.getInput({
         span: 12,
-        label: "目标坐标",
-        prop: "outputCoordinate",
-        disabled: true
+        label: "源坐标Y",
+        prop: "inputY"
       })
     ]
   ];

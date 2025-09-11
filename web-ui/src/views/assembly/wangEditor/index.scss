@@ -1,7 +1,71 @@
 .el-button {
   margin-top: 20px;
 }
+
 :deep(.el-dialog__body) {
   height: 700px !important;
   overflow: auto;
+  background: rgba(15, 30, 55, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+/* 富文本预览内容样式 */
+.view {
+  color: #ffffff;
+  background: transparent;
+  
+  p {
+    color: #ffffff;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    color: #ffffff;
+  }
+  
+  a {
+    color: #64b5f6;
+  }
+  
+  ul, ol {
+    color: #ffffff;
+    
+    li {
+      color: #ffffff;
+    }
+  }
+  
+  table {
+    border-color: rgba(255, 255, 255, 0.2);
+    
+    th, td {
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+    }
+    
+    th {
+      background-color: rgba(14, 40, 71, 0.5);
+    }
+  }
+  
+  pre {
+    background-color: rgba(7, 18, 31, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    
+    code {
+      color: #ffffff;
+    }
+  }
+  
+  code {
+    background-color: rgba(7, 18, 31, 0.6);
+    color: #64b5f6;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  blockquote {
+    border-left-color: #64b5f6;
+    background-color: rgba(14, 40, 71, 0.3);
+    color: #ffffff;
+  }
 }

@@ -21,7 +21,7 @@ const { uploadImg, uploadVideo } = {
   uploadImg: ()=> Promise.resolve(),
   uploadVideo: () => Promise.resolve()
 }
-import "@wangeditor/editor/dist/css/style.css";
+import "@/styles/editor.css";
 import { formContextKey, formItemContextKey } from "element-plus";
 
 // 富文本 DOM 元素
