@@ -25,21 +25,19 @@ const validateToken = async (ctx, next) => {
   try {
     // 从请求头获取token
     const authHeader = ctx.headers.authorization;
-    const token = authHeader && authHeader.startsWith('Bearer ') 
-      ? authHeader.substring(7) 
-      : null;
-    
+    const token = authHeader && authHeader.startsWith("Bearer ") ? authHeader.substring(7) : null;
+
     // 检查token是否存在且有效
     if (!token || !validTokens.has(token)) {
       ctx.status = 401;
       ctx.body = {
         success: false,
         message: "未授权访问，请先登录",
-        code: 401
+        code: 401,
       };
       return;
     }
-    
+
     // token有效，继续执行下一个中间件
     await next();
   } catch (err) {
@@ -47,7 +45,7 @@ const validateToken = async (ctx, next) => {
     ctx.body = {
       success: false,
       message: "Token验证失败",
-      code: 401
+      code: 401,
     };
   }
 };
@@ -94,30 +92,30 @@ const validatePath = async (ctx, next) => {
 // 登录接口
 router.post("/api/login-module/login", async (ctx) => {
   try {
-    console.log('登录接口被调用');
-    
+    console.log("登录接口被调用");
+
     const { username, password } = ctx.request.body;
-    
+
     // 校验账号密码
     if (username === "admin" && password === "123456") {
       // 生成UUID格式的token
       const token = crypto.randomUUID();
-      
+
       // 将token添加到有效token集合中
       validTokens.add(token);
-      
+
       ctx.body = {
         success: true,
         code: 200,
         message: "登录成功",
-        token: token
+        token: token,
       };
     } else {
       ctx.status = 401;
       ctx.body = {
         success: false,
         code: 401,
-        message: "用户名或密码错误"
+        message: "用户名或密码错误",
       };
     }
   } catch (err) {
@@ -125,7 +123,7 @@ router.post("/api/login-module/login", async (ctx) => {
     ctx.body = {
       success: false,
       code: 500,
-      message: `登录失败: ${err.message}`
+      message: `登录失败: ${err.message}`,
     };
   }
 });
@@ -134,26 +132,24 @@ router.post("/api/login-module/login", async (ctx) => {
 router.post("/api/login-module/logout", validateToken, async (ctx) => {
   try {
     const authHeader = ctx.headers.authorization;
-    const token = authHeader && authHeader.startsWith('Bearer ') 
-      ? authHeader.substring(7) 
-      : null;
-    
+    const token = authHeader && authHeader.startsWith("Bearer ") ? authHeader.substring(7) : null;
+
     if (token) {
       // 从有效token集合中移除token
       validTokens.delete(token);
     }
-    
+
     ctx.body = {
       success: true,
       code: 200,
-      message: "登出成功"
+      message: "登出成功",
     };
   } catch (err) {
     ctx.status = 500;
     ctx.body = {
       success: false,
       code: 500,
-      message: `登出失败: ${err.message}`
+      message: `登出失败: ${err.message}`,
     };
   }
 });
@@ -247,6 +243,108 @@ router.get("/api/binary-file", validateToken, validatePath, async (ctx) => {
     ctx.body = fs.createReadStream(filePath);
   } catch (err) {
     ctx.throw(500, `读取二进制文件失败: ${err.message}`);
+  }
+});
+
+// 获取models目录下的3D模型文件（无需token验证）
+router.get("/api/models/:category/:filename", async (ctx) => {
+  try {
+    const { category, filename } = ctx.params;
+
+    // 验证分类目录（只允许访问BabyLon和THREE目录）
+    const allowedCategories = ["BabyLon", "THREE"];
+    if (!allowedCategories.includes(category)) {
+      ctx.status = 403;
+      ctx.body = {
+        success: false,
+        code: 403,
+        message: "只能访问BabyLon或THREE分类目录",
+      };
+      return;
+    }
+
+    // 验证文件扩展名（只允许.gltf、.glb、.splat文件）
+    const ext = path.extname(filename).toLowerCase();
+    const allowedExtensions = [".gltf", ".glb", ".splat", ".png", ".jpg", ".jpeg", ".bin"];
+    if (!allowedExtensions.includes(ext)) {
+      ctx.status = 403;
+      ctx.body = {
+        success: false,
+        code: 403,
+        message: "只支持.gltf、.glb、.splat格式的文件",
+      };
+      return;
+    }
+
+    // 构建文件路径
+    const modelsPath = path.join(BASE_PATH, "models", category, filename);
+
+    // 安全检查：确保路径在models目录内
+    const normalizedPath = path.normalize(modelsPath);
+    const modelsBasePath = path.normalize(path.join(BASE_PATH, "models"));
+    if (!normalizedPath.startsWith(modelsBasePath)) {
+      ctx.status = 403;
+      ctx.body = {
+        success: false,
+        code: 403,
+        message: "路径安全检查失败",
+      };
+      return;
+    }
+
+    // 检查文件是否存在
+    if (!fs.existsSync(normalizedPath)) {
+      ctx.status = 404;
+      ctx.body = {
+        success: false,
+        code: 404,
+        message: "文件不存在",
+      };
+      return;
+    }
+
+    const stats = fs.statSync(normalizedPath);
+
+    // 确保是文件而不是目录
+    if (stats.isDirectory()) {
+      ctx.status = 400;
+      ctx.body = {
+        success: false,
+        code: 400,
+        message: "请求路径是目录而不是文件",
+      };
+      return;
+    }
+
+    // 设置适当的Content-Type
+    const contentType =
+      {
+        ".gltf": "model/gltf-binary",
+        ".glb": "model/gltf-binary",
+        ".splat": "application/octet-stream",
+        ".png": "image/png",
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+      }[ext] || "application/octet-stream";
+
+    // 设置响应头
+    ctx.set("Content-Type", contentType);
+    ctx.set("Content-Length", stats.size);
+    ctx.set("Content-Disposition", `inline; filename="${filename}"`);
+    ctx.set("Cache-Control", "public, max-age=3600"); // 缓存1小时
+
+    // 创建文件流并返回
+    ctx.body = fs.createReadStream(normalizedPath);
+
+    console.log(`成功返回模型文件: ${category}/${filename}, 大小: ${stats.size} bytes`);
+  } catch (err) {
+    console.error("获取模型文件错误:", err);
+    ctx.status = 500;
+    ctx.body = {
+      success: false,
+      code: 500,
+      message: `获取模型文件失败: ${err.message}`,
+    };
   }
 });
 

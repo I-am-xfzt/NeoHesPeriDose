@@ -203,6 +203,11 @@
     padding-left: #{$i}px !important;
   }
 }
+
+// 添加特殊圆角类
+.rounded-50 {
+  border-radius: 50% !important;
+}
 $pagePadding: 15px;
 .wh100 {
   width: 100%;
@@ -267,15 +272,4 @@ $pagePadding: 15px;
 .l-t-center {
   @extend .FlexBox;
   @extend .s-row-center;
-}
-
-
-.logo-core {
-  width: 60px;
-  height: 60px;
-  background: radial-gradient(circle, #4FC3F7, #29B6F6, #0288D1);
-  border-radius: 50%;
-  position: relative;
-  @extend .l-t-center;
-  box-shadow: 0 0 20px rgba(79, 195, 247, 0.6);
 }

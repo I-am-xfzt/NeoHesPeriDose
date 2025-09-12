@@ -9,6 +9,7 @@ import { LOGIN_URL } from "@/config";
 import { RouteRecordRaw } from "vue-router";
 // 前端控制路由
 const modules = import.meta.glob("@/views/**/index.vue");
+export const replaceLogin = () => router.replace(LOGIN_URL)
 /**
  * 前端控制路由：初始化方法，防止刷新时路由丢失
  * @method  NextLoading 界面 loading 动画开始执行
@@ -32,7 +33,7 @@ export const initControlRoutes = async () => {
       type: "warning",
       duration: 3000
     });
-    userStore.loginOut(() => router.replace(LOGIN_URL));
+    userStore.loginOut(replaceLogin);
     return Promise.reject("No permission");
   }
   // 设置递归过滤有权限的路由到 pinia routesList 中（已处理成多级嵌套路由）及缓存多级嵌套数组处理后的一维数组

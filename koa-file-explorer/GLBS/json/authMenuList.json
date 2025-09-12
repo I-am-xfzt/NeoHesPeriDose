@@ -490,7 +490,7 @@
         },
         {
           "path": "/assembly/coordinateTransition",
-          "name": "coordinateTransition",
+          "name": "Router.coordinateTransition",
           "component": "/assembly/coordinateTransition/index",
           "meta": {
             "icon": "LngLatTra",
@@ -503,18 +503,18 @@
           }
         },
         {
-          "path": "/fyh-com-demo",
-          "name": "Router.FyhComDemo",
+          "path": "/assembly/casual-game",
+          "name": "Router.casualGame",
+          "component": "/assembly/casual-game/index",
           "meta": {
-            "title": "配置表单",
-            "icon": "ComponentFilled",
+            "title": "休闲游戏",
+            "icon": "casual-game",
             "isLink": "",
             "isHide": false,
             "isFull": false,
             "isAffix": false,
             "isKeepAlive": true
-          },
-          "component": "demos/fyh-com-demo"
+          }
         }
       ]
     },

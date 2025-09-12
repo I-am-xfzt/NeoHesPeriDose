@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试 Models API 接口</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .error {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .success {
+            border-left-color: #28a745;
+            background: #d1eddd;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Models API 接口测试</h1>
+        <p>测试新添加的 /api/models/:category/:filename 接口</p>
+        
+        <div class="test-section">
+            <h3>测试 BabyLon 目录的 GLB 文件</h3>
+            <button class="test-button" onclick="testModelFile('BabyLon', 'UV3.glb')">
+                测试 UV3.glb
+            </button>
+            <button class="test-button" onclick="testModelFile('BabyLon', 'underground.glb')">
+                测试 underground.glb
+            </button>
+            <div id="babylon-result" class="result" style="display:none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>测试 THREE 目录的 GLTF 文件</h3>
+            <button class="test-button" onclick="testModelFile('THREE', 'fengji_scene.gltf')">
+                测试 fengji_scene.gltf
+            </button>
+            <button class="test-button" onclick="testModelFile('THREE', 'scene7.gltf')">
+                测试 scene7.gltf
+            </button>
+            <div id="three-result" class="result" style="display:none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>错误情况测试</h3>
+            <button class="test-button" onclick="testModelFile('InvalidCategory', 'test.glb')">
+                测试无效分类
+            </button>
+            <button class="test-button" onclick="testModelFile('BabyLon', 'test.txt')">
+                测试无效文件类型
+            </button>
+            <button class="test-button" onclick="testModelFile('BabyLon', 'nonexistent.glb')">
+                测试不存在的文件
+            </button>
+            <div id="error-result" class="result" style="display:none;"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:4000';
+        
+        async function testModelFile(category, filename) {
+            const url = `${API_BASE}/api/models/${category}/${filename}`;
+            const resultId = getResultId(category);
+            const resultDiv = document.getElementById(resultId);
+            
+            resultDiv.style.display = 'block';
+            resultDiv.textContent = `正在请求: ${url}\\n`;
+            resultDiv.className = 'result';
+            
+            try {
+                const response = await fetch(url);
+                
+                if (response.ok) {
+                    const contentType = response.headers.get('content-type');
+                    const contentLength = response.headers.get('content-length');
+                    const cacheControl = response.headers.get('cache-control');
+                    
+                    resultDiv.textContent += `✅ 成功!\\n`;
+                    resultDiv.textContent += `状态码: ${response.status}\\n`;
+                    resultDiv.textContent += `Content-Type: ${contentType}\\n`;
+                    resultDiv.textContent += `Content-Length: ${contentLength} bytes\\n`;
+                    resultDiv.textContent += `Cache-Control: ${cacheControl}\\n`;
+                    resultDiv.textContent += `文件可以正常下载`;
+                    resultDiv.className = 'result success';
+                } else {
+                    const errorData = await response.json();
+                    resultDiv.textContent += `❌ 失败!\\n`;
+                    resultDiv.textContent += `状态码: ${response.status}\\n`;
+                    resultDiv.textContent += `错误信息: ${errorData.message}`;
+                    resultDiv.className = 'result error';
+                }
+            } catch (error) {
+                resultDiv.textContent += `❌ 网络错误!\\n`;
+                resultDiv.textContent += `错误: ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+        
+        function getResultId(category) {
+            if (category === 'BabyLon') return 'babylon-result';
+            if (category === 'THREE') return 'three-result';
+            return 'error-result';
+        }
+    </script>
+</body>
+</html>

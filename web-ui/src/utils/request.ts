@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
-import { ElMessage } from "element-plus";
+import { useMessage, useMessageBox } from "@/hooks/message";
 import qs from "qs";
 import { Session } from "@/utils/storage";
 // 基础类型定义
@@ -91,11 +91,11 @@ export class BaseHttpClient {
     const requestConfig = config as IRequestConfig,
       errorMessage = response?.data?.message || response?.data?.msg || error.message;
     if (errorMessage) {
-      ElMessage.error(`请求失败: ${errorMessage}`);
+      useMessage().error(`请求失败: ${errorMessage}`);
     } else {
       for (const code in this.errorCodeMap) {
         if (response?.status === Number(code)) {
-          ElMessage.error(this.errorCodeMap[code]);
+          useMessage().error(this.errorCodeMap[code]);
           break;
         }
       }
@@ -110,33 +110,26 @@ export class BaseHttpClient {
 
   // 处理token过期
   private async handleTokenExpired(error: AxiosError): Promise<any> {
-    if (!this.tokenRefreshPromise) {
-      this.tokenRefreshPromise = this.refreshToken().finally(() => {
-        this.tokenRefreshPromise = null;
-      });
-    }
-
     try {
       const newToken = await this.tokenRefreshPromise;
       const originalRequest = error.config!;
       originalRequest.headers.Authorization = `Bearer ${newToken}`;
       return this.instance(originalRequest);
     } catch (refreshError) {
+      const { useUserStore } = await import("@/stores/modules/user");
+      const { replaceLogin } = await import("@/router/modules/routerController");
       this.clearToken();
-      ElMessage.error("登录已过期，请重新登录");
-      // 这里可以跳转到登录页
-      !window.location.href.includes("/login") && (window.location.href = "/login");
+      useMessageBox().confirm("登录已过期，请重新登录", {
+        showCancelButton: false
+      });
+      useUserStore().loginOut(replaceLogin);
       return Promise.reject(error);
     }
   }
   protected getToken(): string {
     return Session.getToken() as string;
   }
-  protected async refreshToken(): Promise<string> {
-    const response = await this.post<{ token: string }>("/auth/refresh");
-    localStorage.setItem("auth_token", response.token);
-    return response.token;
-  }
+  
   private clearToken(): void {
     Session.remove("token");
   }
@@ -146,10 +139,7 @@ export class BaseHttpClient {
     return this.instance(config);
   }
   public static async login(params: { username: string; password: string }) {
-    const {
-      data
-    } = await axios.post("/login-api/login", params);
-    Session.set("token", data.token);
+    const { data } = await axios.post("/login-api/login", params);
     return data;
   }
   public get<T = any>(url: string, params?: any, config?: IRequestConfig): Promise<T> {

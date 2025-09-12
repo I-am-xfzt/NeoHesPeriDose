@@ -173,7 +173,7 @@ export class ThreeModel {
     this.positionVector3 = theVector3(...position)
     this.raycaster = new Raycaster() // 光线投射，用于进行鼠标拾取（在三维空间中计算出鼠标移过了什么物体）
     this.dracoLoader = new DRACOLoader()
-    this.loader = new GLTFLoader().setPath('/base-api/THREE/')
+    this.loader = new GLTFLoader().setPath('/model-api/THREE/')
     this.loader.setMeshoptDecoder(MeshoptDecoder)
     this.dracoLoader.setDecoderPath('THREE/draco/')
     this.dracoLoader.setDecoderConfig({ type: 'js' }) //使用兼容性强的draco_decoder.js解码器

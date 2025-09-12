@@ -79,7 +79,7 @@ export function useMessageBox() {
         }
 
         // 确认窗体
-        confirm(msg: string, options: EmptyObjectType) {
+        confirm(msg: string, options: EmptyObjectType = {}) {
             return ElMessageBox.confirm(msg, '系统提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
