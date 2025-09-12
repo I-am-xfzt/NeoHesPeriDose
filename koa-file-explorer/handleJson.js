@@ -247,9 +247,11 @@ router.get("/api/binary-file", validateToken, validatePath, async (ctx) => {
 });
 
 // 获取models目录下的3D模型文件（无需token验证）
-router.get("/api/models/:category/:filename", async (ctx) => {
+router.get(/^\/api\/models\/([^/]+)\/(.+)$/, async (ctx) => {
   try {
-    const { category, filename } = ctx.params;
+    // 使用正则表达式捕获参数
+    const category = decodeURIComponent(ctx.captures[0]); // 第一个捕获组：分类
+    const filePath = decodeURIComponent(ctx.captures[1]); // 第二个捕获组：文件路径（URL解码）
 
     // 验证分类目录（只允许访问BabyLon和THREE目录）
     const allowedCategories = ["BabyLon", "THREE"];
@@ -263,7 +265,19 @@ router.get("/api/models/:category/:filename", async (ctx) => {
       return;
     }
 
-    // 验证文件扩展名（只允许.gltf、.glb、.splat文件）
+    // 检查文件路径是否存在
+    if (!filePath) {
+      ctx.status = 400;
+      ctx.body = {
+        success: false,
+        code: 400,
+        message: "请提供文件路径",
+      };
+      return;
+    }
+
+    // 验证文件扩展名（只允许.gltf、.glb、.splat及相关纹理文件）
+    const filename = path.basename(filePath);
     const ext = path.extname(filename).toLowerCase();
     const allowedExtensions = [".gltf", ".glb", ".splat", ".png", ".jpg", ".jpeg", ".bin"];
     if (!allowedExtensions.includes(ext)) {
@@ -271,18 +285,29 @@ router.get("/api/models/:category/:filename", async (ctx) => {
       ctx.body = {
         success: false,
         code: 403,
-        message: "只支持.gltf、.glb、.splat格式的文件",
+        message: "只支持.gltf、.glb、.splat、.png、.jpg、.jpeg、.bin格式的文件",
       };
       return;
     }
 
-    // 构建文件路径
-    const modelsPath = path.join(BASE_PATH, "models", category, filename);
+    // 安全检查：防止路径遍历攻击
+    if (filePath.includes('../') || filePath.includes('..\\')) {
+      ctx.status = 403;
+      ctx.body = {
+        success: false,
+        code: 403,
+        message: "检测到非法路径字符",
+      };
+      return;
+    }
 
-    // 安全检查：确保路径在models目录内
+    // 构建完整文件路径
+    const modelsPath = path.join(BASE_PATH, "models", category, filePath);
+
+    // 安全检查：确保路径在指定分类目录内
     const normalizedPath = path.normalize(modelsPath);
-    const modelsBasePath = path.normalize(path.join(BASE_PATH, "models"));
-    if (!normalizedPath.startsWith(modelsBasePath)) {
+    const categoryBasePath = path.normalize(path.join(BASE_PATH, "models", category));
+    if (!normalizedPath.startsWith(categoryBasePath)) {
       ctx.status = 403;
       ctx.body = {
         success: false,
@@ -294,11 +319,23 @@ router.get("/api/models/:category/:filename", async (ctx) => {
 
     // 检查文件是否存在
     if (!fs.existsSync(normalizedPath)) {
+      console.log(`文件不存在调试信息:`);
+      console.log(`- 原始分类: ${ctx.captures[0]}`);
+      console.log(`- 原始文件路径: ${ctx.captures[1]}`);
+      console.log(`- 解码后分类: ${category}`);
+      console.log(`- 解码后文件路径: ${filePath}`);
+      console.log(`- 完整路径: ${normalizedPath}`);
+      
       ctx.status = 404;
       ctx.body = {
         success: false,
         code: 404,
         message: "文件不存在",
+        debug: {
+          category,
+          filePath,
+          fullPath: normalizedPath
+        }
       };
       return;
     }
@@ -319,12 +356,13 @@ router.get("/api/models/:category/:filename", async (ctx) => {
     // 设置适当的Content-Type
     const contentType =
       {
-        ".gltf": "model/gltf-binary",
+        ".gltf": "model/gltf+json",
         ".glb": "model/gltf-binary",
         ".splat": "application/octet-stream",
         ".png": "image/png",
         ".jpg": "image/jpeg",
         ".jpeg": "image/jpeg",
+        ".bin": "application/octet-stream",
       }[ext] || "application/octet-stream";
 
     // 设置响应头
@@ -336,7 +374,7 @@ router.get("/api/models/:category/:filename", async (ctx) => {
     // 创建文件流并返回
     ctx.body = fs.createReadStream(normalizedPath);
 
-    console.log(`成功返回模型文件: ${category}/${filename}, 大小: ${stats.size} bytes`);
+    console.log(`成功返回模型文件: ${category}/${filePath}, 大小: ${stats.size} bytes`);
   } catch (err) {
     console.error("获取模型文件错误:", err);
     ctx.status = 500;

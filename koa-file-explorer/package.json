@@ -5,14 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently \"node handleJson.js\" \"node handleAI.js\"",
-    "dev": "nodemon server.js"
+    "start": "concurrently \"node handleJson.js\" \"node handleAI.js\" "
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@cloudbase/node-sdk": "^3.10.1",
     "@koa/cors": "^5.0.0",
     "axios": "^1.6.0",
     "dotenv": "^16.6.1",

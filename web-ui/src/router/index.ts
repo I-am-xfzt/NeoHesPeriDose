@@ -20,7 +20,7 @@ router.beforeEach(async (to, from, next) => {
   document.title = `${import.meta.env.VITE_GLOB_APP_TITLE}-${to.meta.title as unknown as string}`;
   NProgress.start();
   const token = Session.getToken();
-  if (to.path.toLocaleLowerCase() === LOGIN_URL) {
+  if (to.path === LOGIN_URL) {
     if (token) return next(from.fullPath);
     return next();
   }

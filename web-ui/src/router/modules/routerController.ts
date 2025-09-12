@@ -9,7 +9,7 @@ import { LOGIN_URL } from "@/config";
 import { RouteRecordRaw } from "vue-router";
 // 前端控制路由
 const modules = import.meta.glob("@/views/**/index.vue");
-export const replaceLogin = () => router.replace(LOGIN_URL)
+export const replaceLogin = () => router.replace(LOGIN_URL);
 /**
  * 前端控制路由：初始化方法，防止刷新时路由丢失
  * @method  NextLoading 界面 loading 动画开始执行
@@ -33,8 +33,8 @@ export const initControlRoutes = async () => {
       type: "warning",
       duration: 3000
     });
-    userStore.loginOut(replaceLogin);
-    return Promise.reject("No permission");
+    // userStore.loginOut(replaceLogin);
+    return Promise.reject(false);
   }
   // 设置递归过滤有权限的路由到 pinia routesList 中（已处理成多级嵌套路由）及缓存多级嵌套数组处理后的一维数组
   await setMenuViewRoutes();
@@ -71,21 +71,25 @@ export function setFilterRoute(chil: any) {
  * @link 参考：https://next.router.vuejs.org/zh/api/#addroute
  */
 export const setMenuViewRoutes = async () => {
-  const authStore = useAuthStore(pinia);
-  await authStore.getAuthMenuList();
-  await authStore.getAuthButtonList();
-  // 3.添加动态路由
-  authStore.flatMenuListGet.forEach(item => {
-    item.children && delete item.children;
-    if (item.component && typeof item.component == "string") {
-      item.component = modules["/src/views" + item.component + ".vue"];
-    }
-    if (item.meta.isFull) {
-      router.addRoute(item as unknown as RouteRecordRaw);
-    } else {
-      router.addRoute("Router.layout", item as unknown as RouteRecordRaw);
-    }
-  });
+  try {
+    const authStore = useAuthStore(pinia);
+    await authStore.getAuthMenuList();
+    await authStore.getAuthButtonList();
+    // 3.添加动态路由
+    authStore.flatMenuListGet.forEach(item => {
+      item.children && delete item.children;
+      if (item.component && typeof item.component == "string") {
+        item.component = modules["/src/views" + item.component + ".vue"];
+      }
+      if (item.meta.isFull) {
+        router.addRoute(item as unknown as RouteRecordRaw);
+      } else {
+        router.addRoute("Router.layout", item as unknown as RouteRecordRaw);
+      }
+    });
+  } catch (error: any) {
+    throw new Error(`${error}`);
+  }
 };
 
 /**

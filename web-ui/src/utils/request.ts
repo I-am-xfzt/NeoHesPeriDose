@@ -110,26 +110,20 @@ export class BaseHttpClient {
 
   // 处理token过期
   private async handleTokenExpired(error: AxiosError): Promise<any> {
-    try {
-      const newToken = await this.tokenRefreshPromise;
-      const originalRequest = error.config!;
-      originalRequest.headers.Authorization = `Bearer ${newToken}`;
-      return this.instance(originalRequest);
-    } catch (refreshError) {
-      const { useUserStore } = await import("@/stores/modules/user");
-      const { replaceLogin } = await import("@/router/modules/routerController");
-      this.clearToken();
-      useMessageBox().confirm("登录已过期，请重新登录", {
+    const { useUserStore } = await import("@/stores/modules/user");
+    const { replaceLogin } = await import("@/router/modules/routerController");
+    this.clearToken();
+    useMessageBox()
+      .confirm("登录已过期，请重新登录", {
         showCancelButton: false
-      });
-      useUserStore().loginOut(replaceLogin);
-      return Promise.reject(error);
-    }
+      })
+      .then(() => useUserStore().loginOut(replaceLogin));
+    return Promise.reject(error);
   }
   protected getToken(): string {
     return Session.getToken() as string;
   }
-  
+
   private clearToken(): void {
     Session.remove("token");
   }

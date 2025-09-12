@@ -30,12 +30,12 @@
 
       <!-- 登录按钮 -->
       <el-form-item>
-        <button class="login-button" size="large" @click="handleLogin">
+        <div class="login-button hand" @click.stop="handleLogin">
           <div class="button-content">
             <span v-if="!loading" class="button-text">登录</span>
             <span v-else class="button-text">登录中...</span>
           </div>
-        </button>
+        </div>
       </el-form-item>
     </el-form>
   </div>
@@ -46,7 +46,7 @@ import { User, Lock } from "@element-plus/icons-vue";
 import { BaseHttpClient } from "@/utils/request";
 import { initControlRoutes } from "@/router/modules/routerController";
 import { useMessage } from "@/hooks/message";
-import { NextLoading } from "@/utils/loading"
+import { NextLoading } from "@/utils/loading";
 import { Session } from "@/utils/storage";
 const router = useRouter();
 const { success, error } = useMessage();
@@ -88,11 +88,13 @@ const handleLogin = async () => {
     Session.set("token", res.token);
     if (res.code === 200) {
       // 初始化路由权限
-      await initControlRoutes();
-      // 跳转到首页
-      await router.push("/");
-      // 显示成功消息
-      success("登录成功！");
+      const isNormal = await initControlRoutes();
+      if (isNormal) {
+        // 跳转到首页
+        await router.push("/");
+        // 显示成功消息
+        success("登录成功！");
+      }
     } else {
       error("登录失败，请检查用户名和密码");
     }
