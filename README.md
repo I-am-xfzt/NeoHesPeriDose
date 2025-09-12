@@ -78,7 +78,7 @@ NeoHesPeriDose 是一个现代化的前后端分离 Web 应用项目，专为作
 
 ```bash
 # 1. 克隆项目
-git clone https://github.com/neohes/neohes-peridose.git
+git clone https://gitee.com/xfhhh/neohes-peridose.git
 cd neohes-peridose
 
 # 2. 安装依赖
