@@ -279,13 +279,13 @@ router.get(/^\/api\/models\/([^/]+)\/(.+)$/, async (ctx) => {
     // 验证文件扩展名（只允许.gltf、.glb、.splat及相关纹理文件）
     const filename = path.basename(filePath);
     const ext = path.extname(filename).toLowerCase();
-    const allowedExtensions = [".gltf", ".glb", ".splat", ".png", ".jpg", ".jpeg", ".bin"];
+    const allowedExtensions = [".gltf", ".glb", ".splat", ".png", ".jpg", ".jpeg", ".bin", ".webp"];
     if (!allowedExtensions.includes(ext)) {
       ctx.status = 403;
       ctx.body = {
         success: false,
         code: 403,
-        message: "只支持.gltf、.glb、.splat、.png、.jpg、.jpeg、.bin格式的文件",
+        message: "只支持.gltf、.glb、.splat、.png、.jpg、.webp、.jpeg、.bin格式的文件",
       };
       return;
     }
@@ -362,6 +362,7 @@ router.get(/^\/api\/models\/([^/]+)\/(.+)$/, async (ctx) => {
         ".png": "image/png",
         ".jpg": "image/jpeg",
         ".jpeg": "image/jpeg",
+        ".webp": "image/webp",
         ".bin": "application/octet-stream",
       }[ext] || "application/octet-stream";
 
