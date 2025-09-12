@@ -33,6 +33,7 @@ export const glbModelFiles = [
   'science_sceen_uv_ys.glb',
   'fengji_science_ys.glb',
   'fengji-unfold-ys.glb',
+  'cloudsabovetexas/cloudsabovetexas.gltf'
 ] as const
 
 /**
