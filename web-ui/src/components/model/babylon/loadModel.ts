@@ -445,7 +445,7 @@ export class BabyLonModel {
     return new Promise((resolve, reject) => {
       SceneLoader.ImportMeshAsync(
         '',
-        '/BABYLON/uploads/',
+        '/model-api/BabyLon/',
         modelName,
         this.scene
       )
