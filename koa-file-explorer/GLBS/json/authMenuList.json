@@ -211,7 +211,7 @@
                 "isAffix": false,
                 "isKeepAlive": true
               },
-              "component": "/windElectricity/valley/index"
+              "component": "/three-example/windElectricity/valley/index"
             },
             {
               "path": "/wind-power/operation-and-maintenance",
@@ -225,7 +225,7 @@
                 "isAffix": false,
                 "isKeepAlive": true
               },
-              "component": "/windElectricity/OperationAndMaintenance/index"
+              "component": "/three-example/windElectricity/OperationAndMaintenance/index"
             },
             {
               "path": "/wind-power/device",
@@ -239,7 +239,7 @@
                 "isAffix": false,
                 "isKeepAlive": true
               },
-              "component": "/windElectricity/Device/index"
+              "component": "/three-example/windElectricity/Device/index"
             }
           ]
         }
@@ -263,7 +263,7 @@
           "path": "/smart-parking-lot",
           "name": "Router.smartParkingLot",
           "meta": {
-            "title": "汽车大屏",
+            "title": "停车场大屏",
             "icon": "CarScreen",
             "isLink": "",
             "isHide": false,
@@ -271,7 +271,21 @@
             "isAffix": false,
             "isKeepAlive": true
           },
-          "component": "/smartParkingLot/index"
+          "component": "/babylon-example/index"
+        },
+        {
+          "path": "/babylon-example/casual-game",
+          "name": "Router.casualGame",
+          "component": "/babylon-example/casual-game/index",
+          "meta": {
+            "title": "休闲游戏",
+            "icon": "casual-game",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
         }
       ]
     },
@@ -495,20 +509,6 @@
           "meta": {
             "icon": "LngLatTra",
             "title": "坐标转换",
-            "isLink": "",
-            "isHide": false,
-            "isFull": false,
-            "isAffix": false,
-            "isKeepAlive": true
-          }
-        },
-        {
-          "path": "/assembly/casual-game",
-          "name": "Router.casualGame",
-          "component": "/assembly/casual-game/index",
-          "meta": {
-            "title": "休闲游戏",
-            "icon": "casual-game",
             "isLink": "",
             "isHide": false,
             "isFull": false,

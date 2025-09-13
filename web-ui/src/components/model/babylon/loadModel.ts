@@ -52,12 +52,6 @@ interface CameraInitParams {
   other: ArcRotateHelperOptions
 }
 
-interface SetLightParams {
-  direction: Vector3Tuple
-  intensity: number
-  color: string
-}
-
 interface LightsInterface {
   SpotLight: SpotLight
   // PointLight: null,
@@ -110,11 +104,7 @@ export const sceneOptions: SceneOptions = {
   },
   //handleMeshNames = [],
   glbModelFiles = [
-    'UV3.glb',
-    'UV4.glb',
-    'chargingvwhicle.glb',
-    'underground.glb',
-    '管道布局12.13改细1_3.glb'
+    'sm_car.gltf'
   ] as const
 export type GlbModelFilesType = ModelFilesNameType<typeof glbModelFiles>
 export const theVector3 = (...args: Vector3Tuple): Vector3 => {
@@ -172,10 +162,10 @@ export class BabyLonModel {
     this.mixer = null
     this.animationModel = []
   }
-  public setLight({ direction, intensity, color }: SetLightParams): void {
+  public setLight({ direction, intensity, color }: LightsOptions): void {
     this.DirectionalLight = new HemisphericLight(
       'DirectionalLight',
-      theVector3(...direction),
+      theVector3(...direction!),
       this.scene
     )
     this.DirectionalLight.groundColor = new Color3().fromHexString(color)
@@ -455,7 +445,7 @@ export class BabyLonModel {
     return new Promise((resolve, reject) => {
       SceneLoader.ImportMeshAsync(
         '',
-        '/BABYLON/uploads/',
+        '/model-api/BabyLon/',
         modelName,
         this.scene
       )
