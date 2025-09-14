@@ -520,8 +520,8 @@
     },
     {
       "path": "/amap-example",
-      "name": "amap-example",
-      "redirect": "/amap-example/index",
+      "name": "Router.amapExample",
+      "redirect": "/amap-example/render/index",
       "meta": {
         "icon": "Amap",
         "title": "高德示例",
@@ -533,12 +533,26 @@
       },
       "children": [
         {
-          "path": "/amap-example/index",
-          "name": "amap-exampleIndex",
-          "component": "/amap-example/index",
+          "path": "/amap-example/render/index",
+          "name": "Router.amapRender",
+          "component": "/amap-example/render/index",
           "meta": {
-            "icon": "DataScreen",
-            "title": "高德地图",
+            "icon": "render",
+            "title": "地图渲染",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/amap-example/track-playback/index",
+          "name": "Router.trackPlayback",
+          "component": "/amap-example/track-playback/index",
+          "meta": {
+            "icon": "trackPlayback",
+            "title": "轨迹回放",
             "isLink": "",
             "isHide": false,
             "isFull": false,

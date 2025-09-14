@@ -1,7 +1,4 @@
 
-:deep(.el-card__body){
-    height: calc(100% - 56px);
-}
 .image-grid {
   height: calc(100% - 60px);
   :deep(.el-scrollbar__view) {

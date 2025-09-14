@@ -1578,6 +1578,7 @@
 }
 
 .el-card__body {
+  height: calc(100% - 56px);
   padding: var(--el-card-padding);
 }
 

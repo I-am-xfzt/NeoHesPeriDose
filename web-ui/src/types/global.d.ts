@@ -23,6 +23,9 @@ declare interface Window {
   chartScale: number;
   echartsPortrait: boolean;
   nextLoading: boolean;
+  _AMapSecurityConfig: {
+    securityJsCode: string
+  }
 }
 
 // 声明路由当前项类型
@@ -153,6 +156,8 @@ declare interface ViteEnv {
   readonly VITE_DEVTOOLS: boolean;
   readonly VITE_PUBLIC_PATH: string;
   readonly VITE_PROXY: [string, string][];
+  readonly VITE_SYS_AMAP_KEY: string;
+  readonly VITE_SYS_AMAP_CODE: string;
 }
 // 鼠标滚轮滚动类型
 declare interface WheelEventType extends WheelEvent {

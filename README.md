@@ -5,6 +5,10 @@
 ![Koa](https://img.shields.io/badge/Koa-33333D?style=flat-square&logo=koa&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white)
 ![Pinia](https://img.shields.io/badge/Pinia-FFC226?style=flat-square&logo=pinia&logoColor=white)
+## 系统部分截图
+<img src="https://img.cdn1.vip/i/68c53026734be_1757753382.webp" width="512" height="254" />
+<img src="https://img.cdn1.vip/i/68c5304e6b9e6_1757753422.webp" width="512" height="254" />
+<img src="https://img.cdn1.vip/i/68c53053b75f2_1757753427.webp" width="512" height="288" />
 
 ## 📖 项目介绍
 
@@ -274,7 +278,7 @@ neohes-peridose/
 │   │   │   │   ├── coordinateTransition/ # 🌍 坐标转换
 │   │   │   │   └── casual-game/      # 🎮 休闲游戏
 │   │   │   ├── amap-example/ # 🗺️ 高德地图示例
-│   │   │   │   └── index.vue # 高德地图集成示例
+│   │   │   │   └── render/ # 高德地图渲染
 │   │   │   ├── smartCampus/  # 🏫 智慧校园 (扩展模块)
 │   │   │   ├── demos/        # 🧪 演示页面
 │   │   │   ├── example/      # 📚 示例页面

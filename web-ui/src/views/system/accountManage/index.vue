@@ -14,7 +14,7 @@ const state = reactive<BasicTableProps>({
   pageList
 });
 const { getDataList, resetData, tableStyle, currentChangeHandle, sizeChangeHandle } = useTable(state);
-const { cellFunStyle, headerCellStyle, rowStyle } = tableStyle(8);
+const { cellFunStyle, headerCellStyle, rowStyle } = toRefs( tableStyle(8));
 const openDialog = (id: number) => {};
 const handleDelete = (id: number) => {
   state.dataList = state.dataList!.filter(item => item.id !== id);

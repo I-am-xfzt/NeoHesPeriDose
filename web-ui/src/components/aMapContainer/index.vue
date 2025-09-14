@@ -1,5 +1,5 @@
 <template>
-  <div id="the-amap-container" class="wh100 pos">
+  <div id="the-amap-container" class="wh100">
     <slot></slot>
   </div>
 </template>
@@ -98,10 +98,5 @@ onUnmounted(() => {
 <style>
 .amap-logo, .amap-copyright{
   display: none !important;
-}
-.pos {
-  position: absolute;
-  left: 0;
-  top: 0;
 }
 </style>
