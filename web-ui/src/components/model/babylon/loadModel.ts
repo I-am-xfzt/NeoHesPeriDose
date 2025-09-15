@@ -104,7 +104,8 @@ export const sceneOptions: SceneOptions = {
   },
   //handleMeshNames = [],
   glbModelFiles = [
-    'sm_car.gltf'
+    'sm_car.gltf',
+    'Espilit.binary.babylon'
   ] as const
 export type GlbModelFilesType = ModelFilesNameType<typeof glbModelFiles>
 export const theVector3 = (...args: Vector3Tuple): Vector3 => {
@@ -196,11 +197,12 @@ export class BabyLonModel {
       depthOfField.depthOfField.fStop = 1.4
     }
   }
-  private render(): void {
+
+  public render(call?: Function): void {
     let frameCount = 0
-    const renderFrequency = 2 // 每 2 帧渲染一次
+    const renderFrequency = 4 // 每 2 帧渲染一次
     this.engine.runRenderLoop(() => {
-      if (frameCount % renderFrequency === 0) this.scene.render(true)
+      if (frameCount % renderFrequency === 0)  (call && call(), this.scene.render(true))
       frameCount++
     })
     window.addEventListener('resize', () => {
@@ -497,8 +499,6 @@ export class BabyLonModel {
   public async init(
     getLoadModelOptions: loadModelOptionsType<GlbModelFilesType>
   ): Promise<ISceneLoaderAsyncResult[]> {
-
-    this.render()
     NextLoading.done(500)
     return await Promise.all(getLoadModelOptions.map((v) => this.loadModel(...v)))
   }

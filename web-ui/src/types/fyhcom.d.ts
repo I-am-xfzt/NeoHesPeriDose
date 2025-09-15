@@ -34,13 +34,13 @@ declare interface FormItemsOptionsType {
   label?: string;
   labelPosition?: positionEnum;
   labelWidth?: string;
-  required?: boolean;
+  required: boolean;
   rules?: Function | EmptyObjectType;
 }
 
 declare interface FyhComOptions {
   form: FormOptions;
-  rules?: Function | EmptyObjectType;
+  rules?: (model: EmptyObjectType) => EmptyObjectType;
   columns: Array<elComAttrAndFunType[]>;
   dicts?: string[];
   countInter?: string[];

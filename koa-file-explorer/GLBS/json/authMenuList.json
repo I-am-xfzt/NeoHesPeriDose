@@ -248,7 +248,7 @@
     {
       "path": "/babylon",
       "name": "Router.BabyLon",
-      "redirect": "/smart-parking-lot",
+      "redirect": "/babylon-example/casual-game",
       "meta": {
         "icon": "BabyLon",
         "title": "BabyLon",
@@ -259,20 +259,6 @@
         "isKeepAlive": true
       },
       "children": [
-        {
-          "path": "/smart-parking-lot",
-          "name": "Router.smartParkingLot",
-          "meta": {
-            "title": "停车场大屏",
-            "icon": "CarScreen",
-            "isLink": "",
-            "isHide": false,
-            "isFull": true,
-            "isAffix": false,
-            "isKeepAlive": true
-          },
-          "component": "/babylon-example/index"
-        },
         {
           "path": "/babylon-example/casual-game",
           "name": "Router.casualGame",
@@ -286,6 +272,34 @@
             "isAffix": false,
             "isKeepAlive": true
           }
+        },
+        {
+          "path": "/babylon-example/exhibition-gallery",
+          "name": "Router.exhibitionGallery",
+          "component": "/babylon-example/exhibition-gallery/index",
+          "meta": {
+            "title": "3D展馆",
+            "icon": "exhibitionGallery",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/smart-parking-lot",
+          "name": "Router.smartParkingLot",
+          "meta": {
+            "title": "停车场大屏",
+            "icon": "CarScreen",
+            "isLink": "",
+            "isHide": false,
+            "isFull": true,
+            "isAffix": false,
+            "isKeepAlive": true
+          },
+          "component": "/babylon-example/index"
         }
       ]
     },

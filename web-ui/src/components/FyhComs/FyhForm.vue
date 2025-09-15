@@ -1,30 +1,17 @@
 <template>
-  <component
-    :is="'el-form'"
-    v-bind="theOptions.form"
-    :disabled="formDisabled"
-    ref="FyhFormRef"
-    :model="model"
-    :class="{ flexForm: theOptions.form.inline }"
-  >
+  <component :is="'el-form'" v-bind="theOptions.form" :disabled="formDisabled" ref="FyhFormRef" :model="model"
+    :class="{ flexForm: theOptions.form.inline }" :rules="theRules">
     <template v-for="item in theOptions.columns">
       <el-row :gutter="gutter">
         <el-col v-for="v in item" :span="v.span" :key="v.formItem.prop">
           <component :is="'el-form-item'" v-bind="v.formItem">
             <slot v-if="v.slot" :name="v.slot" :val="model"></slot>
             <template v-else>
-              <component
-                :is="`el-${v.typeName}`"
-                v-bind="v.attrs"
-                v-model="model[v.formItem.prop]"
-                v-on:[v.methods!.event]="(...val: any) => handleEmit(val, v)"
-              >
-                <component
-                  :is="tagOptions[v.typeName as keyof typeof tagOptions]"
-                  v-for="dict in dictMaps[v.dict as keyof typeof dictMaps]"
-                  :key="dict.value"
-                  :value="dict.value"
-                  >{{ dict.label }}
+              <component :is="`el-${v.typeName}`" v-bind="v.attrs" v-model="model[v.formItem.prop]"
+                v-on:[v.methods!.event]="(...val: any) => handleEmit(val, v)">
+                <component :is="tagOptions[v.typeName as keyof typeof tagOptions]"
+                  v-for="dict in dictMaps[v.dict as keyof typeof dictMaps]" :key="dict.value" :value="dict.value">{{
+                    dict.label }}
                 </component>
               </component>
             </template>
@@ -43,7 +30,9 @@
 <script setup lang="ts" name="fyh-form">
 import { loadModule } from "@/utils/index";
 import { useDict } from "@/hooks/dict";
-
+import type { FormInstance } from "element-plus"
+const theRules = ref({})
+const FyhFormRef = ref<FormInstance>()
 interface baseProps {
   modelValue: {
     [key: string]: any;
@@ -54,7 +43,6 @@ interface baseProps {
   gutter?: number; // 表单列间距
   fileName?: string; // 所需要加载的文件中导出的配置项对象名字 默认default
 }
-
 const dictMaps = ref<Record<string, SelectOptionType[]>>({});
 const tagOptions = {
   select: "el-option",
@@ -88,16 +76,20 @@ const model = computed({
   get: () => props.modelValue,
   set: (val: any) => theEmit("update:modelValue", val)
 });
-const handleEmit = (val: any, row: elComAttrAndFunType) => {};
+const handleEmit = (val: any, row: elComAttrAndFunType) => { };
 const getDictData = () => {
   dictMaps.value = useDict(...theOptions.value.dicts!);
 };
 const initOptions = async () => {
   const res = <EmptyObjectType<FyhComOptions>>await loadModule(props.modulePath);
   theOptions.value = res[props.fileName] || {};
+  theRules.value = theOptions.value.rules!(model.value)
   theOptions.value.dicts && theOptions.value.dicts.length > 0 && getDictData();
-  console.log(theOptions.value, 'theOptions');
+  console.log(theOptions.value, 'theOptions', theRules.value);
 };
+defineExpose({
+  FyhFormRef
+})
 onBeforeMount(initOptions);
 </script>
 
@@ -106,13 +98,17 @@ onBeforeMount(initOptions);
   :deep(.el-form-item) {
     margin-right: 0px;
 
-    .el-form-item__content > div {
+    .el-form-item__content>div {
       width: 100%;
     }
   }
 }
 
 .flexForm {
+  :deep(.el-form-item.is-required) {
+    margin-bottom: 18px !important;
+  }
+
   :deep(.el-form-item) {
     margin-bottom: 10px;
     width: 100%;

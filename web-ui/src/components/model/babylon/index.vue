@@ -1,10 +1,12 @@
 <template>
   <canvas id="babylonContainer"></canvas>
+  <div class="absolute fps">{{ fps }}</div>
 </template>
 
 <script setup lang="ts">
 import { BabyLonModel, glbModelFiles, LightsOptions } from "./loadModel";
 import type { GlbModelFilesType } from "./loadModel";
+const fps = ref("0fps");
 interface thePropsType {
   sliceParams: string; // 模型文件的名字
   scale?: Vector3Tuple; // 缩放值
@@ -65,6 +67,11 @@ onMounted(() =>
     modelValue.value.initCamera(props.camera);
     // props.unLoad.ground && modelValue.value.initGround()
     props.unLoad.aperture && modelValue.value.createAuraPostProcess();
+    modelValue.value.render(() => {
+      setTimeout(() => {
+        fps.value = modelValue.value!.engine.getFps().toFixed(0) + "fps";
+      }, 1000);
+    });
     modelValue.value.init(getLoadModelOptions);
   })
 );
@@ -74,5 +81,10 @@ onMounted(() =>
 #babylonContainer {
   width: 100%;
   height: 100%;
+}
+.fps {
+  color: #fff;
+  left: 0;
+  top: 100px;
 }
 </style>

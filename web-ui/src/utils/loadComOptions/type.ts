@@ -17,10 +17,11 @@ export namespace abCreateComOptions {
         width?: string;
         eventName?: string,
         disabled?: boolean,
+        placeholder?: string;
     }
     export interface ruleDataInter {
         otherRules?: FormItemRule[];
-        rule: [string, theTrigger | theTrigger[], thePattern, FormItemRule['validator'], FormItemRule['type'], FormItemRule['transform']]
+        rule: [theTrigger | theTrigger[], string | undefined, thePattern?, FormItemRule['validator']?, FormItemRule['type']?, FormItemRule['transform']?]
     }
 
     /** Select组件配置接口 */
@@ -56,10 +57,10 @@ export namespace abCreateComOptions {
     /** 所有表单组件选项接口 */
     export interface IAllElFormItemsOptions {
 
-        getSelect(p: SelectConfig): elComAttrAndFunType;
+        getSelect(p: SelectConfig, itemOp: FormItemsOptionsType): elComAttrAndFunType;
 
-        getInput(p: InputConfig): elComAttrAndFunType;
+        getInput(p: InputConfig, itemOp: FormItemsOptionsType): elComAttrAndFunType;
 
-        getDatePicker(p: DatePickerConfig): elComAttrAndFunType;
+        getDatePicker(p: DatePickerConfig, itemOp: FormItemsOptionsType): elComAttrAndFunType;
     }
 }
