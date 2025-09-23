@@ -21,7 +21,6 @@ export async function progressExample() {
   const file = fileInput.files?.[0];
 
   if (!file) {
-    console.log('请选择一个图片文件');
     return;
   }
 
@@ -29,20 +28,10 @@ export async function progressExample() {
     // 压缩图片，带进度回调
     const result = await compressor.compress(file, {
       onProgress: (progress: CompressProgress) => {
-        console.log(`阶段: ${progress.stage}`);
-        console.log(`进度: ${progress.progress}%`);
-        console.log(`描述: ${progress.message}`);
-        
         // 可以在这里更新页面的进度条
         updateProgressBar(progress.progress, progress.message);
       }
     });
-    
-    console.log('压缩完成！');
-    console.log(`原始大小: ${compressor.formatFileSize(result.originalSize)}`);
-    console.log(`压缩后大小: ${compressor.formatFileSize(result.size)}`);
-    console.log(`压缩比率: ${result.compressionRatio}%`);
-    console.log(`压缩耗时: ${result.duration}ms`);
     
   } catch (error) {
     console.error('压缩失败:', error);
@@ -64,7 +53,6 @@ export async function batchProgressExample() {
   const files = Array.from(fileInput.files || []);
 
   if (files.length === 0) {
-    console.log('请选择多个图片文件');
     return;
   }
 
@@ -76,7 +64,6 @@ export async function batchProgressExample() {
         // 单个文件的压缩进度
         onProgress: (progress: CompressProgress) => {
           const { currentIndex = 0, totalCount = 1 } = progress;
-          console.log(`文件 ${currentIndex + 1}/${totalCount}: ${progress.stage} - ${progress.progress}%`);
           
           // 更新单个文件的进度条
           updateSingleFileProgress(currentIndex, progress.progress, progress.message);
@@ -84,21 +71,13 @@ export async function batchProgressExample() {
       },
       // 整体批量进度
       (current: number, total: number, overallProgress: number) => {
-        console.log(`批量进度: ${current}/${total} (${overallProgress}%)`);
-        
         // 更新整体进度条
         updateBatchProgress(current, total, overallProgress);
       }
     );
-
-    console.log('批量压缩完成！');
     const totalOriginalSize = results.reduce((sum, r) => sum + r.originalSize, 0);
     const totalCompressedSize = results.reduce((sum, r) => sum + r.size, 0);
     const averageRatio = Math.round(results.reduce((sum, r) => sum + r.compressionRatio, 0) / results.length);
-    
-    console.log(`总原始大小: ${compressor.formatFileSize(totalOriginalSize)}`);
-    console.log(`总压缩后大小: ${compressor.formatFileSize(totalCompressedSize)}`);
-    console.log(`平均压缩比率: ${averageRatio}%`);
 
   } catch (error) {
     console.error('批量压缩失败:', error);

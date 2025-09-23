@@ -75,7 +75,6 @@ const getAmapInstance = async ({ mapSetCenter, theAmapLoader, AmapInstance }: TH
   });
   loading.value = true;
   const { data: mapData } = await pageList();
-  console.log(mapData);
 
   amapMethos.value = {
     mapSetCenter: mapSetCenter,

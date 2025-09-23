@@ -40,8 +40,6 @@ onMounted(() => {
 watch(
   () => route.fullPath,
   () => {
-    console.log(tabsMenuList.value);
-    
     if (route.meta.isFull && route.meta.isHide) return;
     tabsMenuValue.value = route.fullPath;
     const tabsParams = {

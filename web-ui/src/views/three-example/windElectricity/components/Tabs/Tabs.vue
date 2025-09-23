@@ -17,7 +17,6 @@ type kes = keyof typeof options;
 interface thePropsType {
 	imgKey?: kes
 }
-console.log(staticUrl);
 const props = withDefaults(defineProps<thePropsType>(), {
 	imgKey: "windpower",
 }), baseUrl: string = staticUrl[props.imgKey],

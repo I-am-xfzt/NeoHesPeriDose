@@ -1,0 +1,26 @@
+[
+  {
+    "title": "SCSS 与 CSS 相比有哪些优势？",
+    "category": "SCSS基础",
+    "content": "请解释SCSS相比于原生CSS的主要优势。",
+    "answer": "SCSS（Sassy CSS）是CSS的预处理器，提供了许多原生CSS不具备的功能，主要优势包括：\n\n1. **变量（Variables）**：可以定义可复用的值，方便统一管理和修改样式\n2. **嵌套（Nesting）**：可以按照HTML的结构嵌套CSS选择器，使代码结构更清晰\n3. **混合宏（Mixins）**：可以定义可复用的样式块，支持参数传递\n4. **继承（Inheritance）**：可以让一个选择器继承另一个选择器的样式\n5. **函数（Functions）**：内置多种颜色处理和数学计算函数\n6. **导入（Import）**：支持将样式文件分割成多个小文件，便于组织和维护\n7. **条件语句和循环**：支持@if、@else、@for、@each等控制指令\n8. **注释**：支持单行注释（//），在编译后会被移除\n\n这些特性使SCSS能够编写更简洁、更易于维护和更灵活的样式代码，特别适合大型项目的样式管理。",
+    "code": "// 变量定义\n$primary-color: #3498db;\n$font-size: 16px;\n\n// 混合宏定义\n@mixin button-style($color: $primary-color) {\n  padding: 10px 20px;\n  background-color: $color;\n  color: white;\n  border-radius: 4px;\n  transition: background-color 0.3s;\n\n  &:hover {\n    background-color: darken($color, 10%);\n  }\n}\n\n// 嵌套示例\n.container {\n  width: 100%;\n  max-width: 1200px;\n  margin: 0 auto;\n\n  .header {\n    padding: 20px;\n    background-color: #f5f5f5;\n\n    h1 {\n      font-size: 24px;\n      color: #333;\n    }\n  }\n\n  .btn-primary {\n    @include button-style();\n  }\n\n  .btn-secondary {\n    @include button-style(#2ecc71);\n  }\n}",
+    "difficulty": "初级"
+  },
+  {
+    "title": "如何在SCSS中使用变量？",
+    "category": "变量",
+    "content": "请详细说明在SCSS中变量的定义、使用和作用域规则。",
+    "answer": "在SCSS中，变量是一种存储和复用值的机制，使用起来非常灵活。\n\n**变量的定义：**\n使用`$`符号作为前缀来定义变量，语法为：`$变量名: 变量值;`\n\n**变量的使用：**\n在需要使用变量的地方，直接引用变量名即可。\n\n**变量的作用域：**\n1. **局部变量**：在选择器、混合宏或函数内部定义的变量，仅在其定义的块级作用域内有效\n2. **全局变量**：在最外层定义的变量，或使用`!global`标志声明的变量，可以在整个样式文件中访问\n3. **默认变量**：使用`!default`标志声明的变量，如果该变量已经被定义则不会被覆盖\n\n**变量的类型：**\nSCSS支持多种类型的变量值，包括：\n- 数字（可带单位）\n- 字符串\n- 颜色\n- 布尔值\n- 空值\n- 列表\n- 映射\n\n**变量的特殊特性：**\n- 变量可以相互引用\n- 可以在变量定义中使用函数\n- 可以在CSS属性名中使用变量（需要使用`#{$变量名}`插值语法）\n\n合理使用变量可以使样式代码更易于维护，特别是在主题定制、颜色方案统一等场景下。",
+    "code": "// 全局变量定义\n$primary-color: #3498db;\n$font-family: 'Arial', sans-serif;\n$spacing-unit: 16px;\n\n// 默认变量\n$border-radius: 4px !default;\n$box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !default;\n\n// 局部变量示例\n.container {\n  $container-width: 1200px; // 局部变量\n  width: $container-width;\n  margin: 0 auto;\n  padding: $spacing-unit;\n  font-family: $font-family;\n\n  .card {\n    $card-bg: #ffffff;\n    background-color: $card-bg;\n    border-radius: $border-radius;\n    box-shadow: $box-shadow;\n    padding: $spacing-unit * 1.5; // 变量计算\n\n    .card-title {\n      color: $primary-color;\n      font-size: $spacing-unit * 1.25;\n    }\n  }\n}\n\n// 使用!global标志将局部变量提升为全局变量\n.theme {\n  $theme-color: #e74c3c !global;\n}\n\n.other-element {\n  color: $theme-color; // 可以访问全局变量\n}\n\n// 在属性名中使用变量\n@mixin set-property($property, $value) {\n  #{$property}: $value;\n}" ,
+    "difficulty": "初级"
+  },
+  {
+    "title": "什么是SCSS的嵌套规则？如何使用嵌套？",
+    "category": "嵌套",
+    "content": "请解释SCSS的嵌套规则及其应用场景。",
+    "answer": "SCSS的嵌套规则允许开发者按照HTML的结构层次来组织CSS选择器，使样式代码的结构更清晰、更易读。\n\n**基本嵌套：**\n在父选择器内部定义子选择器的样式，这对应于HTML中的父子关系。\n\n**&符号的使用：**\n`&`符号在嵌套中代表父选择器本身，常用于伪类、伪元素和组合选择器。\n\n**属性嵌套：**\n对于具有相同前缀的CSS属性（如font-、margin-、padding-等），可以进行属性嵌套。\n\n**嵌套的优缺点：**\n**优点：**\n- 代码结构更清晰，与HTML结构对应\n- 减少选择器的重复输入\n- 提高代码的可维护性\n\n**缺点：**\n- 过度嵌套会导致生成的CSS选择器过长，影响性能\n- 可能导致样式覆盖困难\n\n**最佳实践：**\n- 嵌套深度一般不超过3-4层\n- 合理使用&符号\n- 避免不必要的嵌套\n\n嵌套规则特别适合于组件化开发，可以很好地封装组件的样式。",
+    "code": "// 基本嵌套示例\n.nav {\n  background-color: #333;\n  padding: 10px 0;\n\n  .nav-list {\n    list-style: none;\n    margin: 0;\n    padding: 0;\n    display: flex;\n\n    .nav-item {\n      margin-right: 20px;\n\n      .nav-link {\n        color: white;\n        text-decoration: none;\n        padding: 5px 10px;\n\n        &:hover {\n          background-color: #555;\n          border-radius: 4px;\n        }\n\n        &.active {\n          background-color: #3498db;\n        }\n      }\n    }\n  }\n}\n\n// &符号的其他用法\n.button {\n  display: inline-block;\n  padding: 10px 20px;\n  background-color: #3498db;\n  color: white;\n  border-radius: 4px;\n  cursor: pointer;\n\n  &--primary {\n    background-color: #3498db;\n  }\n\n  &--secondary {\n    background-color: #2ecc71;\n  }\n\n  &:disabled {\n    opacity: 0.5;\n    cursor: not-allowed;\n  }\n}\n\n// 属性嵌套\n.text {\n  font: {\n    family: 'Arial', sans-serif;\n    size: 16px;\n    weight: bold;\n  }\n\n  margin: {\n    top: 10px;\n    bottom: 10px;\n    left: auto;\n    right: auto;\n  }\n}",
+    "difficulty": "初级"
+  }
+]

@@ -1,0 +1,65 @@
+[
+  {
+    "title": "JavaScript 中 == 和 === 有什么区别？",
+    "category": "基础语法",
+    "content": "请解释 == 和 === 操作符的区别，并给出使用场景。",
+    "answer": "JavaScript中 == 和 === 的主要区别在于它们的比较方式：\n\n1. **== (抽象相等)**：\n   - 进行类型转换后再比较值\n   - 会尝试将操作数转换为相同类型\n   - 例如：`1 == \"1\"` 返回 `true`，因为字符串 \"1\" 会被转换为数字 1\n   - 可能导致一些意外的结果，如 `0 == false` 返回 `true`\n\n2. **=== (严格相等)**：\n   - 不进行类型转换，直接比较值和类型\n   - 只有当两个操作数的类型相同且值相等时才返回true\n   - 例如：`1 === \"1\"` 返回 `false`，因为类型不同\n   - `0 === false` 返回 `false`，因为类型不同\n\n**使用场景建议：**\n- 优先使用 === 进行比较，因为它更严格，避免类型转换导致的意外\n- 只有在明确需要类型转换的比较场景下，才考虑使用 ==\n- 对于与 null 或 undefined 的比较，可以使用 `obj == null` 来同时检查 null 和 undefined",
+    "code": "// == 比较示例\nconsole.log(1 == \"1\"); // true\nconsole.log(0 == false); // true\nconsole.log(null == undefined); // true\n\n// === 比较示例\nconsole.log(1 === \"1\"); // false\nconsole.log(0 === false); // false\nconsole.log(null === undefined); // false",
+    "difficulty": "初级"
+  },
+  {
+    "title": "什么是闭包？闭包有什么作用？",
+    "category": "闭包",
+    "content": "请解释闭包的概念、形成条件以及实际应用场景。",
+    "answer": "**闭包（Closure）的概念：**\n闭包是指函数能够访问其词法作用域之外的变量，即使该函数在其定义的作用域之外执行。\n\n**闭包的形成条件：**\n1. 函数嵌套\n2. 内部函数引用了外部函数的变量\n3. 外部函数返回了内部函数\n\n**闭包的作用：**\n1. **封装数据**：创建私有变量，实现信息隐藏\n2. **保存状态**：让函数可以访问并操作创建它时的词法作用域\n3. **实现柯里化**：将多参数函数转化为单参数函数的过程\n4. **模块化开发**：实现模块模式，避免全局污染\n\n**闭包的实际应用场景：**\n- 防抖和节流函数\n- 实现私有变量\n- 函数柯里化\n- 事件处理函数\n- 回调函数\n\n**需要注意的问题：**\n- 闭包会导致变量一直保存在内存中，可能会造成内存泄漏\n- 在循环中创建闭包需要特别注意变量引用问题",
+    "code": "// 简单闭包示例\nfunction createCounter() {\n  let count = 0; // 私有变量\n  \n  return {\n    increment: function() {\n      count++;\n      return count;\n    },\n    decrement: function() {\n      count--;\n      return count;\n    },\n    getCount: function() {\n      return count;\n    }\n  };\n}\n\nconst counter = createCounter();\nconsole.log(counter.increment()); // 1\nconsole.log(counter.increment()); // 2\nconsole.log(counter.decrement()); // 1\nconsole.log(counter.getCount()); // 1\nconsole.log(count); // 报错：count is not defined\n\n// 模块模式示例\nconst module = (function() {\n  const privateVar = '私有变量';\n  \n  function privateMethod() {\n    return privateVar;\n  }\n  \n  return {\n    publicMethod: function() {\n      return privateMethod();\n    }\n  };\n})();\n\nconsole.log(module.publicMethod()); // '私有变量'",
+    "difficulty": "中级"
+  },
+  {
+    "title": "JavaScript 的原型链是什么？如何理解？",
+    "category": "原型链",
+    "content": "请解释原型链的概念、工作原理以及在JavaScript中的应用。",
+    "answer": "**原型链（Prototype Chain）的概念：**\n原型链是JavaScript中实现继承的机制，它允许对象访问其自身没有的属性和方法。\n\n**原型链的工作原理：**\n1. 每个JavaScript对象都有一个原型（prototype）对象\n2. 原型对象本身也是一个对象，也有自己的原型\n3. 当访问对象的属性或方法时，如果对象本身没有该属性，JavaScript会沿着原型链向上查找\n4. 这个查找过程会一直持续到找到该属性或到达原型链的末端（null）\n\n**原型相关的属性和方法：**\n- `__proto__`：对象的内部属性，指向其原型（不推荐直接使用）\n- `Object.getPrototypeOf(obj)`：获取对象的原型\n- `Object.prototype`：所有对象的最终原型\n- `constructor`：原型对象上的属性，指向构造函数\n- `prototype`：函数特有的属性，用于设置通过该函数创建的对象的原型\n\n**原型链的应用：**\n1. 实现对象间的继承\n2. 实现方法共享，节省内存\n3. 实现原型式编程范式\n\n**示例：**\n当我们访问`obj.toString()`时，如果obj本身没有toString方法，JavaScript会沿着原型链向上查找，最终在Object.prototype上找到toString方法。",
+    "code": "// 构造函数和原型链示例\nfunction Person(name) {\n  this.name = name;\n}\n\n// 在原型上添加方法\nPerson.prototype.sayHello = function() {\n  return 'Hello, my name is ' + this.name;\n};\n\n// 创建实例\nconst john = new Person('John');\n\nconsole.log(john.name); // 'John' - 实例自身的属性\nconsole.log(john.sayHello()); // 'Hello, my name is John' - 从原型上继承的方法\n\n// 原型链结构\n// john ---> Person.prototype ---> Object.prototype ---> null\n\nconsole.log(john.__proto__ === Person.prototype); // true\nconsole.log(Person.prototype.__proto__ === Object.prototype); // true\nconsole.log(Object.prototype.__proto__); // null\n\n// 检查原型链上的属性\nconsole.log(john.hasOwnProperty('name')); // true - 自身属性\nconsole.log(john.hasOwnProperty('sayHello')); // false - 原型上的属性\nconsole.log('sayHello' in john); // true - 检查原型链",
+    "difficulty": "中级"
+  },
+  {
+    "title": "JavaScript 中的异步编程方式有哪些？各有什么优缺点？",
+    "category": "异步编程",
+    "content": "请列举并比较JavaScript中常见的异步编程方式。",
+    "answer": "JavaScript中常见的异步编程方式包括：\n\n1. **回调函数（Callbacks）**\n   - **概念**：通过函数作为参数传递，在异步操作完成后被调用\n   - **优点**：简单直接，易于理解\n   - **缺点**：容易导致回调地狱（Callback Hell），代码难以维护\n   - **示例**：setTimeout、Node.js早期API\n\n2. **Promise**\n   - **概念**：ES6引入的异步编程解决方案，代表一个异步操作的最终完成（或失败）及其结果值\n   - **优点**：解决了回调地狱问题，可以链式调用\n   - **缺点**：仍然需要使用回调，错误处理相对复杂\n   - **示例**：fetch API、Promise.all、Promise.race\n\n3. **Async/Await**\n   - **概念**：ES2017引入的基于Promise的语法糖，使异步代码看起来像同步代码\n   - **优点**：代码更清晰易读，错误处理更直观（可以使用try/catch）\n   - **缺点**：需要理解Promise的工作原理\n   - **示例**：async函数和await表达式\n\n4. **事件监听**\n   - **概念**：通过监听和触发事件来处理异步操作\n   - **优点**：可以多次触发，适用于用户交互\n   - **缺点**：代码逻辑分散，难以追踪\n   - **示例**：DOM事件、Node.js的EventEmitter\n\n5. **发布/订阅模式**\n   - **概念**：通过消息通道实现发布者和订阅者的解耦\n   - **优点**：高度解耦，可扩展性强\n   - **缺点**：增加了系统复杂度\n   - **示例**：Redux、Vuex\n\n**选择建议：**\n- 对于简单的异步操作，使用回调函数或Promise\n- 对于复杂的异步流程，优先使用Async/Await\n- 对于需要多次触发的场景，使用事件监听或发布/订阅模式",
+    "code": "// 回调函数示例\nfunction fetchData(callback) {\n  setTimeout(() => {\n    callback('数据获取成功');\n  }, 1000);\n}\n\nfetchData((result) => {\n  console.log(result);\n});\n\n// Promise示例\nfunction fetchDataWithPromise() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      resolve('数据获取成功');\n      // reject(new Error('数据获取失败'));\n    }, 1000);\n  });\n}\n\nfetchDataWithPromise()\n  .then(result => {\n    console.log(result);\n  })\n  .catch(error => {\n    console.error(error);\n  });\n\n// Async/Await示例\nasync function fetchDataWithAsync() {\n  try {\n    const result = await fetchDataWithPromise();\n    console.log(result);\n  } catch (error) {\n    console.error(error);\n  }\n}\n\nfetchDataWithAsync();",
+    "difficulty": "中级"
+  },
+  {
+    "title": "ES6 有哪些新特性？请列举并简要说明。",
+    "category": "ES6+特性",
+    "content": "请列举ES6中引入的主要新特性及其用途。",
+    "answer": "ES6（ECMAScript 2015）引入了许多新特性，以下是一些主要的特性：\n\n1. **箭头函数（Arrow Functions）**\n   - 更简洁的函数语法\n   - 不会绑定自己的this，继承自外层作用域\n   - 适用于简短的回调函数\n\n2. **类（Classes）**\n   - 提供了更接近传统面向对象语言的语法糖\n   - 基于原型继承，提供了constructor、extends、super等关键字\n\n3. **模板字符串（Template Strings）**\n   - 允许嵌入表达式的字符串字面量\n   - 支持多行字符串和字符串插值\n\n4. **解构赋值（Destructuring Assignment）**\n   - 允许从数组或对象中提取值并赋给变量\n   - 简化了变量赋值和参数传递\n\n5. **默认参数（Default Parameters）**\n   - 允许为函数参数设置默认值\n   - 简化了参数处理逻辑\n\n6. **展开运算符（Spread Operator）**\n   - 允许将数组或对象展开为多个元素\n   - 用于数组和对象的浅拷贝、函数参数传递等\n\n7. **剩余参数（Rest Parameters）**\n   - 允许将不确定数量的参数表示为数组\n   - 替代了arguments对象\n\n8. **let和const**\n   - 块级作用域的变量声明\n   - let声明可变变量，const声明常量\n   - 避免了变量提升带来的问题\n\n9. **Promise**\n   - 异步编程解决方案\n   - 避免回调地狱，提供更优雅的异步代码编写方式\n\n10. **模块系统（Modules）**\n    - 支持export和import语句\n    - 允许代码分割和模块化开发\n\n11. **Set和Map数据结构**\n    - Set：存储唯一值的集合\n    - Map：键值对的集合，键可以是任意类型\n\n这些新特性极大地提升了JavaScript的开发体验和代码质量，使JavaScript更适合大型应用开发。",
+    "code": "// 箭头函数\nconst add = (a, b) => a + b;\n\n// 类\nclass Person {\n  constructor(name, age) {\n    this.name = name;\n    this.age = age;\n  }\n  \n  greet() {\n    return `Hello, my name is ${this.name}`;\n  }\n}\n\n// 模板字符串\nconst name = 'John';\nconst message = `Hello, ${name}!`;\n\n// 解构赋值\nconst [first, second] = [1, 2];\nconst { x, y } = { x: 1, y: 2 };\n\n// 默认参数\nfunction greet(name = 'Guest') {\n  return `Hello, ${name}!`;\n}\n\n// 展开运算符\nconst arr1 = [1, 2, 3];\nconst arr2 = [...arr1, 4, 5]; // [1, 2, 3, 4, 5]\n\n// 剩余参数\nfunction sum(...numbers) {\n  return numbers.reduce((total, num) => total + num, 0);\n}\n\n// let和const\nlet count = 0;\nconst MAX_COUNT = 100;\n\n// Promise\nconst promise = new Promise((resolve, reject) => {\n  // 异步操作\n});\n\n// Set和Map\nconst set = new Set([1, 2, 3, 3]); // Set {1, 2, 3}\nconst map = new Map([['key1', 'value1'], ['key2', 'value2']]);",
+    "difficulty": "初级"
+  },
+  {
+    "title": "JavaScript 性能优化的方法有哪些？",
+    "category": "性能优化",
+    "content": "在JavaScript开发中，有哪些常见的性能优化策略？",
+    "answer": "JavaScript性能优化可以从多个方面入手，以下是一些常见的优化方法：\n\n1. **减少DOM操作**\n   - 最小化DOM访问次数\n   - 使用文档片段（DocumentFragment）批量操作DOM\n   - 避免频繁的重排（Reflow）和重绘（Repaint）\n   - 使用虚拟DOM技术\n\n2. **优化JavaScript代码**\n   - 使用更高效的算法和数据结构\n   - 减少循环嵌套和复杂度\n   - 避免不必要的计算和函数调用\n   - 合理使用闭包，避免内存泄漏\n\n3. **内存管理**\n   - 及时清除不再使用的变量和引用\n   - 避免全局变量过多\n   - 注意事件监听器的移除\n   - 避免循环引用\n\n4. **网络优化**\n   - 减少HTTP请求数量\n   - 代码压缩和合并\n   - 使用CDN加速\n   - 启用Gzip压缩\n   - 实现懒加载\n\n5. **异步编程**\n   - 使用Promise、Async/Await处理异步操作\n   - 避免阻塞主线程\n   - 合理使用Web Workers处理计算密集型任务\n\n6. **数据处理优化**\n   - 对于大量数据，使用分页加载\n   - 使用缓存减少重复计算\n   - 优化数组操作，优先使用map、filter等高阶函数\n\n7. **浏览器特性利用**\n   - 使用requestAnimationFrame进行动画\n   - 使用localStorage缓存数据\n   - 利用浏览器的预加载和预解析\n\n8. **代码分割**\n   - 将代码分割为多个小块，按需加载\n   - 减少初始加载时间\n\n性能优化是一个持续的过程，需要根据具体项目情况进行分析和优化，同时使用性能分析工具（如Chrome DevTools）来找出性能瓶颈。",
+    "difficulty": "高级"
+  },
+  {
+    "title": "什么是防抖和节流？如何实现？",
+    "category": "性能优化",
+    "content": "请解释防抖和节流的概念、区别以及实现方法。",
+    "answer": "**防抖（Debounce）和节流（Throttle）**都是用于控制函数执行频率的技术，常用于优化浏览器事件处理。\n\n**防抖（Debounce）：**\n- **概念**：多次触发事件后，只在最后一次触发时执行函数\n- **原理**：当事件触发时，设置一个延迟时间，如果在延迟时间内再次触发，则重新计时\n- **应用场景**：搜索框输入、窗口大小调整、滚动事件等\n\n**节流（Throttle）：**\n- **概念**：在规定的时间间隔内，只执行一次函数\n- **原理**：当事件触发时，如果当前没有定时器，则设置一个定时器，在指定时间后执行函数\n- **应用场景**：鼠标移动、页面滚动、拖拽操作等\n\n**区别：**\n- 防抖是在事件停止触发后再执行，而节流是在事件持续触发时定期执行\n- 防抖适合于只需要执行一次的场景，节流适合于需要定期执行的场景\n\n**实现方法：**\n- 防抖可以通过设置定时器实现，每次触发时清除之前的定时器\n- 节流可以通过时间戳或定时器实现",
+    "code": "// 防抖函数实现\nfunction debounce(func, wait) {\n  let timeout;\n  return function executedFunction(...args) {\n    const later = () => {\n      clearTimeout(timeout);\n      func(...args);\n    };\n    clearTimeout(timeout);\n    timeout = setTimeout(later, wait);\n  };\n}\n\n// 使用示例\nconst debouncedSearch = debounce((query) => {\n  console.log('搜索:', query);\n}, 300);\n\n// 输入框事件监听\n// input.addEventListener('input', (e) => debouncedSearch(e.target.value));\n\n// 节流函数实现 - 时间戳版\nfunction throttle(func, limit) {\n  let inThrottle;\n  return function(...args) {\n    if (!inThrottle) {\n      func(...args);\n      inThrottle = true;\n      setTimeout(() => inThrottle = false, limit);\n    }\n  };\n}\n\n// 节流函数实现 - 定时器版\nfunction throttleTimer(func, limit) {\n  let timeout;\n  return function(...args) {\n    if (!timeout) {\n      func(...args);\n      timeout = setTimeout(() => {\n        timeout = null;\n      }, limit);\n    }\n  };\n}\n\n// 使用示例\nconst throttledScroll = throttle(() => {\n  console.log('滚动事件触发');\n}, 200);\n\n// 滚动事件监听\n// window.addEventListener('scroll', throttledScroll);",
+    "difficulty": "中级"
+  },
+  {
+    "title": "JavaScript 中的设计模式有哪些？请举例说明。",
+    "category": "设计模式",
+    "content": "请列举JavaScript中常见的设计模式及其应用场景。",
+    "answer": "JavaScript中常见的设计模式包括：\n\n1. **单例模式（Singleton）**\n   - **概念**：确保一个类只有一个实例，并提供一个全局访问点\n   - **应用场景**：配置管理、线程池、缓存、对话框等\n   - **示例**：Vuex的store、全局缓存对象\n\n2. **工厂模式（Factory）**\n   - **概念**：通过一个共同的接口来创建不同的对象，而不暴露创建逻辑\n   - **应用场景**：创建具有相似特性的对象、根据条件创建不同类型的对象\n   - **示例**：React的createElement方法\n\n3. **观察者模式（Observer）**\n   - **概念**：定义对象间的一种一对多依赖关系，当一个对象状态改变时，所有依赖它的对象都会得到通知并自动更新\n   - **应用场景**：事件处理、数据绑定、消息队列\n   - **示例**：DOM事件模型、Vue的响应式系统\n\n4. **发布-订阅模式（Publish-Subscribe）**\n   - **概念**：通过一个消息中心，发布者发布消息，订阅者订阅消息，两者不直接通信\n   - **应用场景**：组件通信、事件总线\n   - **示例**：Redux、Vue的EventBus\n\n5. **装饰器模式（Decorator）**\n   - **概念**：动态地给对象添加额外的职责，而不修改其原始结构\n   - **应用场景**：功能扩展、权限控制、日志记录\n   - **示例**：ES7的装饰器语法、高阶组件(HOC)\n\n6. **适配器模式（Adapter）**\n   - **概念**：将一个类的接口转换成客户端所期望的另一种接口\n   - **应用场景**：整合不同系统、兼容旧API\n   - **示例**：数据格式转换、API兼容层\n\n7. **代理模式（Proxy）**\n   - **概念**：为其他对象提供一种代理，以控制对这个对象的访问\n   - **应用场景**：权限控制、缓存、日志记录\n   - **示例**：ES6的Proxy、Vue3的响应式系统\n\n8. **模块模式（Module）**\n   - **概念**：通过闭包创建私有作用域，实现模块化\n   - **应用场景**：代码组织、避免全局污染\n   - **示例**：CommonJS、ES6 Modules\n\n这些设计模式可以帮助开发者编写更加可维护、可扩展的代码，解决常见的编程问题。在实际开发中，应根据具体需求选择合适的设计模式。",
+    "code": "// 单例模式示例\nconst Singleton = (function() {\n  let instance;\n  \n  function createInstance() {\n    const object = new Object({ name: 'Singleton' });\n    return object;\n  }\n  \n  return {\n    getInstance: function() {\n      if (!instance) {\n        instance = createInstance();\n      }\n      return instance;\n    }\n  };\n})();\n\n// 观察者模式示例\nclass ObserverPattern {\n  constructor() {\n    this.observers = [];\n  }\n  \n  subscribe(observer) {\n    this.observers.push(observer);\n  }\n  \n  unsubscribe(observer) {\n    this.observers = this.observers.filter(obs => obs !== observer);\n  }\n  \n  notify(data) {\n    this.observers.forEach(observer => observer.update(data));\n  }\n}\n\n// 模块模式示例\nconst Module = (function() {\n  const privateVar = '私有变量';\n  \n  function privateMethod() {\n    return privateVar;\n  }\n  \n  return {\n    publicMethod: function() {\n      return privateMethod();\n    }\n  };\n})();\n\n// ES6 Proxy示例\nconst target = { name: '目标对象' };\nconst proxy = new Proxy(target, {\n  get: function(obj, prop) {\n    console.log('访问属性:', prop);\n    return obj[prop];\n  },\n  set: function(obj, prop, value) {\n    console.log('设置属性:', prop, '为', value);\n    obj[prop] = value;\n    return true;\n  }\n});",
+    "difficulty": "高级"
+  }
+]

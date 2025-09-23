@@ -1,0 +1,340 @@
+/* 主要内容 */
+/* 变量定义 */
+$bg-card: #1e293b;
+$bg-card-dark: #0f172a;
+$text-primary: #e0e0e0;
+$text-secondary: #cbd5e1;
+$success-color: #42b883;
+$success-hover: #359b6c;
+$primary-color: #3b82f6;
+$primary-hover: #2563eb;
+$z-index-modal: 1000;
+$code-font: "Consolas", "Monaco", "Courier New", monospace;
+$breakpoint-mobile: 768px;
+
+/* 混合宏定义 */
+@mixin card-base-style {
+  background-color: rgba($bg-card, 0.8);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+@mixin card-section-base {
+  background-color: rgba($bg-card-dark, 0.8);
+}
+
+@mixin answer-section-style {
+  background-color: rgba($success-color, 0.1);
+  padding: 20px;
+  border-top: 1px solid rgba($success-color, 0.3);
+}
+
+@mixin button-style($color) {
+  padding: 8px 16px;
+  background-color: $color;
+  color: white;
+  border: none;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, filter 0.3s ease;
+
+  &:hover {
+    filter: brightness(0.9);
+  }
+}
+
+@mixin difficulty-badge($bg-color, $text-color) {
+  background-color: rgba($bg-color, 0.2);
+  color: $text-color;
+  border: 1px solid rgba($text-color, 0.3);
+}
+
+.main-content {
+  padding: 10px 0;
+}
+
+.question {
+  /* 题目卡片容器 */
+  .question-card {
+    @include card-base-style;
+    border-radius: 8px;
+    margin-bottom: 10px;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .question-header {
+      @include card-section-base;
+      padding: 18px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .question-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: $text-primary;
+      margin: 0;
+      line-height: 1.4;
+      flex: 1;
+    }
+
+    .question-category {
+      background-color: $success-color;
+      color: white;
+      font-size: 12px;
+      padding: 3px 8px;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+
+    .question-content {
+      padding: 20px;
+      color: $text-primary;
+    }
+
+    /* 答案部分 - 带背景 */
+    .answer-section {
+      @include answer-section-style;
+      color: $text-primary;
+
+      h4 {
+        margin-top: 0;
+        color: $text-primary;
+      }
+    }
+
+    /* 题目底部 */
+    .question-footer {
+      @include card-section-base;
+      padding: 15px 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+
+      .toggle-btn {
+        @include button-style($success-color);
+      }
+
+      .code-btn {
+        @include button-style($primary-color);
+      }
+
+      .question-meta {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+    }
+  }
+}
+
+.difficulty {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+
+  &.初级 {
+    @include difficulty-badge(#2e7d32, #81c784);
+  }
+
+  &.中级 {
+    @include difficulty-badge(#e65100, #ffb74d);
+  }
+
+  &.高级 {
+    @include difficulty-badge(#c62828, #ef9a9a);
+  }
+}
+
+/* 代码弹窗样式 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: $z-index-modal;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.code-modal {
+  background-color: $bg-card;
+  width: 90%;
+  max-width: 800px;
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+
+  .modal-header {
+    @include card-section-base;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h3 {
+      margin: 0;
+      color: $text-primary;
+      font-size: 1.1rem;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: $text-secondary;
+      font-size: 1.5rem;
+      width: 30px;
+      height: 30px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+
+  .modal-body {
+    max-height: calc(80vh - 60px);
+    overflow-y: auto;
+
+    pre {
+      margin: 0;
+      padding: 20px;
+      background-color: rgba(15, 23, 42, 0.6);
+      overflow-x: auto;
+
+      code {
+        font-family: $code-font;
+        font-size: 14px;
+        line-height: 1.6;
+        color: $text-primary;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+    }
+  }
+}
+
+/* 改善Markdown渲染样式 */
+.question-content,
+.answer-section {
+  strong {
+    color: $text-primary;
+    font-weight: 600;
+  }
+
+  h4 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+    color: $success-color;
+  }
+
+  /* 修复列表样式 */
+  ul,
+  ol {
+    margin: 10px 0;
+    padding-left: 25px;
+  }
+
+  li {
+    margin: 5px 0;
+  }
+
+  /* 修复段落间距 */
+  p {
+    margin: 10px 0;
+  }
+
+  /* 链接样式 */
+  a {
+    color: $primary-color;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  /* 代码样式 */
+  code {
+    font-family: $code-font;
+    background-color: rgba(15, 23, 42, 0.6);
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 0.9em;
+  }
+
+  /* 代码块样式 */
+  pre {
+    background-color: rgba(15, 23, 42, 0.6);
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+    margin: 15px 0;
+  }
+
+  pre code {
+    background: none;
+    padding: 0;
+  }
+
+  /* 响应式设计 */
+  @media (max-width: $breakpoint-mobile) {
+    .question-header,
+    .answer-section {
+      padding: 15px !important;
+    }
+  }    font-weight: 600;
+  }
+
+  ul {
+    margin: 12px 0;
+    padding-left: 24px;
+  }
+
+  li {
+    margin-bottom: 6px;
+    color: $text-secondary;
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: $breakpoint-mobile) {
+  .questions-card {
+    .question-header {
+      padding: 15px 16px;
+    }
+
+    .answer-section {
+      padding: 16px;
+    }
+  }
+}

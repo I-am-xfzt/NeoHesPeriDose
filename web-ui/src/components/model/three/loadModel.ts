@@ -229,7 +229,6 @@ export class ThreeModel {
       this.loader.load(
         modelName,
         (glbFile: GLTF) => {
-          console.log(glbFile)
           glbFile.scene.scale.set(
             ...(Object.values(this.scaleVector3) as Vector3Tuple)
           )
@@ -245,9 +244,7 @@ export class ThreeModel {
         ({ loaded, total, lengthComputable }: { loaded: number; total: number; lengthComputable: boolean }) => {
           if (lengthComputable) {
             progress.value = (loaded / total) * 100
-            console.log(`${progress.value.toFixed(2)}% loaded`)
           } else {
-            console.log(`Loaded ${loaded} bytes`)
           }
         },
         reject

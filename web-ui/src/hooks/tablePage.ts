@@ -96,7 +96,7 @@ export function useTable(options?: BasicTableProps) {
     ascs: [],
     // props属性配置对象，用于自定义数据属性，默认值为 {item:'records',totalCount:'total'}
     props: {
-      item: "records",
+      item: "data",
       totalCount: "total"
     }
   };

@@ -3,7 +3,17 @@ import { HOME_URL, LOGIN_URL } from "@/config"
 /**
  * staticRouter (静态路由)
  */
-export const staticRouter: RouteRecordRaw[] = [];
+export const staticRouter: RouteRecordRaw[] = [
+  {
+    path: "/workflow",
+    name: "workflow",
+    component: () => import("@/views/assembly/workflow/index.vue"),
+    meta: {
+      title: "工作流程图",
+      icon: "iconfont icon-flow-chart"
+    }
+  }
+];
 /**
  * 基础路由配置
  */
@@ -23,7 +33,7 @@ export const baseRouter: RouteRecordRaw[] = [
     redirect: HOME_URL,
     children: []
   }
-];
+  ];
 /**
  * errorRouter (错误页面路由)
  */

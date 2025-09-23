@@ -85,7 +85,6 @@ const initOptions = async () => {
   theOptions.value = res[props.fileName] || {};
   theRules.value = theOptions.value.rules!(model.value)
   theOptions.value.dicts && theOptions.value.dicts.length > 0 && getDictData();
-  console.log(theOptions.value, 'theOptions', theRules.value);
 };
 defineExpose({
   FyhFormRef

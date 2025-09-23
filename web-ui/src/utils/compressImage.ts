@@ -88,7 +88,6 @@ export interface CompressOptions {
  *   maxHeight: 1080,
  *   outputFormat: 'jpeg'
  * });
- * console.log('压缩结果:', result);
  * 
  * // 批量压缩
  * const files = // 图片文件数组
@@ -139,12 +138,8 @@ export class ImageCompressor {
    *     enableSmoothing: true,
    *     enableCustomSize: true,
    *     onProgress: (progress) => {
-   *       console.log(`${progress.stage}: ${progress.progress}% - ${progress.message}`);
    *     }
    *   });
-   *   console.log(`原始大小: ${compressor.formatFileSize(result.originalSize)}`);
-   *   console.log(`压缩后大小: ${compressor.formatFileSize(result.size)}`);
-   *   console.log(`压缩比率: ${result.compressionRatio}%`);
    * } catch (error) {
    *   console.error('压缩失败:', error.message);
    * }

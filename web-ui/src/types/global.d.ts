@@ -24,8 +24,8 @@ declare interface Window {
   echartsPortrait: boolean;
   nextLoading: boolean;
   _AMapSecurityConfig: {
-    securityJsCode: string
-  }
+    securityJsCode: string;
+  };
 }
 
 // 声明路由当前项类型
@@ -193,7 +193,7 @@ declare interface listResponse<T> {
   size: number;
   current: number;
   pages: number;
-  records: T[]
+  records: T[];
 }
 
-declare type themeType = 'info' | 'success' | 'warning' | 'danger' | 'primary' | 'default';
+declare type themeType = "info" | "success" | "warning" | "danger" | "primary" | "default";

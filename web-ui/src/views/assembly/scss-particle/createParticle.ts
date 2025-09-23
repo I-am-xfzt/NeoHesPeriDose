@@ -2,8 +2,6 @@ import { nextTick } from "vue";
 import '@/styles/scss-particle.scss';
 export const createParticle = (eleDom: HTMLDivElement) => {
   if(eleDom.querySelector('.sky')) return;
-  console.log('fgfg');
-  
   nextTick().then(() => {
     const div = <HTMLElement>document.createElement("div");
     div.setAttribute("class", "sky absolute posZero");

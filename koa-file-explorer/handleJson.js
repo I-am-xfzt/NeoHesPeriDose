@@ -211,7 +211,8 @@ router.get("/api/files", validateToken, validatePath, async (ctx) => {
 });
 
 // 获取二进制文件
-router.get("/api/binary-file", validateToken, validatePath, async (ctx) => {
+// 获取JSON文件数据（支持分页）
+router.get("/api/binary-json", validateToken, validatePath, async (ctx) => {
   try {
     const filePath = ctx.state.fullPath;
     const stats = fs.statSync(filePath);
@@ -221,28 +222,43 @@ router.get("/api/binary-file", validateToken, validatePath, async (ctx) => {
       ctx.throw(400, "请求路径是目录而不是文件");
     }
 
-    // 设置适当的Content-Type
+    // 检查是否为JSON文件
     const ext = path.extname(filePath).toLowerCase();
-    const contentType =
-      {
-        ".glb": "model/gltf-binary",
-        ".png": "image/png",
-        ".jpg": "image/jpeg",
-        ".jpeg": "image/jpeg",
-        ".gif": "image/gif",
-        ".pdf": "application/pdf",
-        ".json": "application/json",
-      }[ext] || "application/octet-stream";
+    if (ext !== ".json") {
+      ctx.throw(400, "此接口仅支持JSON文件");
+    }
 
-    // 设置响应头
-    ctx.set("Content-Type", contentType);
-    ctx.set("Content-Length", stats.size);
-    ctx.set("Content-Disposition", `inline; filename="${path.basename(filePath)}"`);
+    // 读取JSON文件内容
+    const fileContent = fs.readFileSync(filePath, "utf8");
+    let jsonData = JSON.parse(fileContent);
 
-    // 创建文件流并返回
-    ctx.body = fs.createReadStream(filePath);
+    // 获取分页参数
+    const page = parseInt(ctx.query.current);
+    const pageSize = parseInt(ctx.query.size);
+
+    // 检查jsonData是否为数组，如果是则进行分页
+    let resultData = jsonData;
+    let total = 1;
+    let pagination = {};
+    if (Array.isArray(jsonData) && page && pageSize) {
+      total = jsonData.length;
+      const startIndex = (page - 1) * pageSize;
+      const endIndex = Math.min(startIndex + pageSize, total);
+      resultData = jsonData.slice(startIndex, endIndex);
+      pagination = {
+        page: page, pageSize: pageSize, total: total, totalPages: Math.ceil(total / pageSize)
+      }
+    }
+    // 返回JSON数据和分页信息
+    ctx.body = {
+      success: true,
+      code: 200,
+      message: '获取数据成功',
+      msg: '获取数据成功',
+      data: { data: resultData, ...pagination },
+    };
   } catch (err) {
-    ctx.throw(500, `读取二进制文件失败: ${err.message}`);
+    ctx.throw(500, `读取JSON文件失败: ${err.message}`);
   }
 });
 
@@ -291,7 +307,7 @@ router.get(/^\/api\/models\/([^/]+)\/(.+)$/, async (ctx) => {
     }
 
     // 安全检查：防止路径遍历攻击
-    if (filePath.includes('../') || filePath.includes('..\\')) {
+    if (filePath.includes("../") || filePath.includes("..\\")) {
       ctx.status = 403;
       ctx.body = {
         success: false,
@@ -325,7 +341,7 @@ router.get(/^\/api\/models\/([^/]+)\/(.+)$/, async (ctx) => {
       console.log(`- 解码后分类: ${category}`);
       console.log(`- 解码后文件路径: ${filePath}`);
       console.log(`- 完整路径: ${normalizedPath}`);
-      
+
       ctx.status = 404;
       ctx.body = {
         success: false,
@@ -334,8 +350,8 @@ router.get(/^\/api\/models\/([^/]+)\/(.+)$/, async (ctx) => {
         debug: {
           category,
           filePath,
-          fullPath: normalizedPath
-        }
+          fullPath: normalizedPath,
+        },
       };
       return;
     }
@@ -364,7 +380,7 @@ router.get(/^\/api\/models\/([^/]+)\/(.+)$/, async (ctx) => {
         ".jpeg": "image/jpeg",
         ".webp": "image/webp",
         ".bin": "application/octet-stream",
-        ".babylon": "model/vnd.babylonjs.v3+json"
+        ".babylon": "model/vnd.babylonjs.v3+json",
       }[ext] || "application/octet-stream";
 
     // 设置响应头

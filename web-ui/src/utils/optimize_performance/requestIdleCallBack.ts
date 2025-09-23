@@ -222,7 +222,6 @@ export function createDemoFunctions(): (() => void)[] {
       while (performance.now() - start < Math.random() * 10) {
         // 忙等待模拟计算
       }
-      console.log(`函数 ${i + 1} 已执行`);
     });
   }
   
