@@ -39,8 +39,8 @@
     <div class="left-border borders"></div>
     <div class="right-border borders"></div>
     <div class="bottom-border borders"></div>
-    <div class="container-model wh100">
-      <Model sliceParams="sm_car.gltf" :camera="modelCaramOp" :modelPosition="[[0, 0, 0]]" />
+    <div class="container-model posCenter">
+      <Model sliceParams="sm_car.gltf" :renderFrequency="6" :camera="modelCaramOp" :modelPosition="[[0, 0, 0]]" />
     </div>
     <div v-for="(item, i) in Object.keys(componentsDistribution)" :key="i" :class="[`container-${item}`, 's-row-between']">
       <CollBorderBox v-for="com in componentsDistribution[item as keys]" v-bind="com" :key="com.is">
@@ -67,7 +67,7 @@ import centerChargeBg from "@/assets/BABYLONIMG/centerChargeBg.png";
 const systemTitle = "停车场智慧大屏";
 const modelCaramOp = {
   target: [0, 0, 0] as Vector3Tuple,
-  position: [-5, 4, 10] as Vector3Tuple,
+  position: [-5, 4, 5] as Vector3Tuple,
   other: {
     minPolarAngle: 60,
     maxPolarAngle: 180,

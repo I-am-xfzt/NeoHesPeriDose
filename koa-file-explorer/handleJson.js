@@ -315,7 +315,7 @@ router.get(/^\/api\/models\/([^/]+)\/(.+)$/, async (ctx) => {
     const filePath = decodeURIComponent(ctx.captures[1]); // 第二个捕获组：文件路径（URL解码）
 
     // 验证路径
-    const validation = validateModelPath(category, filePath);
+    const validation = validateModelPath(category, filePath, path, BASE_PATH);
     if (!validation.isValid) {
       ctx.status = validation.statusCode;
       ctx.body = createResponse(false, validation.statusCode, validation.error);
@@ -352,7 +352,7 @@ router.get(/^\/api\/models\/([^/]+)\/(.+)$/, async (ctx) => {
     }
 
     // 设置适当的Content-Type
-    const contentType = getModelContentType(filename);
+    const contentType = getModelContentType(filename, path);
 
     // 设置响应头
     ctx.set("Content-Type", contentType);

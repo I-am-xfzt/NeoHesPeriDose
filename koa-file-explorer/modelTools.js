@@ -15,7 +15,7 @@ const isValidModelCategory = (category) => {
  * @param {string} filename - 文件名
  * @returns {boolean} 是否为允许的扩展名
  */
-const isValidModelExtension = (filename) => {
+const isValidModelExtension = (filename, path) => {
   const ext = path.extname(filename).toLowerCase();
   const allowedExtensions = [".gltf", ".glb", ".splat", ".png", ".jpg", ".jpeg", ".bin", ".webp", ".babylon"];
   return allowedExtensions.includes(ext);
@@ -26,7 +26,7 @@ const isValidModelExtension = (filename) => {
  * @param {string} filename - 文件名
  * @returns {string} Content-Type
  */
-const getModelContentType = (filename) => {
+const getModelContentType = (filename, path) => {
   const ext = path.extname(filename).toLowerCase();
   const contentTypes = {
     ".gltf": "model/gltf+json",
@@ -48,7 +48,7 @@ const getModelContentType = (filename) => {
  * @param {string} filePath - 文件路径
  * @returns {object} 验证结果
  */
-const validateModelPath = (category, filePath) => {
+const validateModelPath = (category, filePath, path, BASE_PATH) => {
   // 验证分类目录
   if (!isValidModelCategory(category)) {
     return {
@@ -69,7 +69,7 @@ const validateModelPath = (category, filePath) => {
 
   // 验证文件扩展名
   const filename = path.basename(filePath);
-  if (!isValidModelExtension(filename)) {
+  if (!isValidModelExtension(filename, path)) {
     return {
       isValid: false,
       error: "只支持.gltf、.glb、.splat、.png、.jpg、.webp、.babylon、.jpeg、.bin格式的文件",

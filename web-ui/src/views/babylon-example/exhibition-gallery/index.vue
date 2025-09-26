@@ -8,10 +8,10 @@
 import {
   Engine,
   Scene,
-  Vector3,
   StandardMaterial,
   SceneLoader,
 } from "@babylonjs/core";
+import { useMessageBox } from "@/hooks/message"
 nextTick().then(() => {
   let canvas = document.getElementById("renderCanvas") as HTMLCanvasElement;
   let sceneChecked: boolean;
@@ -93,9 +93,6 @@ nextTick().then(() => {
     engine.resize();
   });
 
-  // UI
-  let panelIsClosed = true;
-
   engine.enableOfflineSupport = false;
 
   loadScene(() => {
@@ -105,21 +102,14 @@ nextTick().then(() => {
     scene.createOrUpdateSelectionOctree();
     scene.getMeshByName("Sol loin")!.useVertexColors = false;
     scene.gravity.scaleInPlace(0.5);
-
-    // var postProcess = new RefractionPostProcess(
-    //   "Refraction",
-    //   "/scenes/customs/refMap.jpg",
-    //   new Color3(1.0, 1.0, 1.0),
-    //   0.5,
-    //   0.5,
-    //   1.0,
-    //   scene.cameras[1]
-    // );
   });
+  useMessageBox().confirm('请按住W、A、S、D。进行移动', {
+    showClose: false
+  })
 });
 </script>
 
-<style>
+<style scoped>
 #renderCanvas {
   width: 100%;
   height: 100%;

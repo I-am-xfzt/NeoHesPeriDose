@@ -25,6 +25,7 @@ interface thePropsType {
   unLoad?: EmptyObjectType<boolean>; //
   color?: string; // 场景的颜色
   lightOptions?: LightsOptions;
+  renderFrequency?: number;
 }
 const modelValue = ref<BabyLonModel>();
 const props = withDefaults(defineProps<thePropsType>(), {
@@ -42,6 +43,7 @@ const props = withDefaults(defineProps<thePropsType>(), {
   }),
   modelPosition: () => [[-8.260836601257324, 1.139329195022583, -22.13763427734375]],
   color: "#0a1620",
+  renderFrequency: 4,
   lightOptions: () => ({
     direction: [0, 1, 0],
     color: "#abf7fd",
@@ -67,7 +69,7 @@ onMounted(() =>
     modelValue.value.initCamera(props.camera);
     // props.unLoad.ground && modelValue.value.initGround()
     props.unLoad.aperture && modelValue.value.createAuraPostProcess();
-    modelValue.value.render(() => {
+    modelValue.value.render(props.renderFrequency, () => {
       setTimeout(() => {
         fps.value = modelValue.value!.engine.getFps().toFixed(0) + "fps";
       }, 1000);
@@ -84,7 +86,7 @@ onMounted(() =>
 }
 .fps {
   color: #fff;
-  left: 0;
+  right: 140px;
   top: 100px;
 }
 </style>

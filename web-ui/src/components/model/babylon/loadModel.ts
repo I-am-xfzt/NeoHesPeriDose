@@ -198,9 +198,8 @@ export class BabyLonModel {
     }
   }
 
-  public render(call?: Function): void {
+  public render(renderFrequency: number, call?: Function): void {
     let frameCount = 0
-    const renderFrequency = 4 // 每 2 帧渲染一次
     this.engine.runRenderLoop(() => {
       if (frameCount % renderFrequency === 0)  (call && call(), this.scene.render(true))
       frameCount++
