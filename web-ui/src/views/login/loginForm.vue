@@ -85,7 +85,7 @@ const handleLogin = async () => {
     loading.value = true;
     // 调用登录接口
     const res = await BaseHttpClient["login"](loginForm);
-    Session.set("token", res.token);
+    Session.set("token", res.data);
     if (res.code === 200) {
       // 初始化路由权限
       const isNormal = await initControlRoutes();

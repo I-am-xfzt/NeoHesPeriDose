@@ -6,30 +6,22 @@ const getElCom = new allElFormItemsOptions(),
     [
       getElCom.getInput(
         {
-          span: 4
+          span: 6
         },
         {
-          label: "手机号",
-          prop: "phonenumber",
-        }
-      ),
-      getElCom.getInput(
-        {
-          span: 4
-        },
-        {
-          label: "用户名",
-          prop: "username"
+          label: "搜索字典值",
+          prop: "label",
         }
       ),
       getElCom.getSelect(
         {
-          span: 4,
-          dict: "account_status"
+          span: 6,
+          dict: "dict_list",
+          clearable: false
         },
         {
-          label: "账号状态",
-          prop: "status"
+          label: "切换字典类型",
+          prop: "dict"
         }
       ),
       {
@@ -43,7 +35,7 @@ const getElCom = new allElFormItemsOptions(),
   ];
 export default {
   form: getElComOption.getFormOptions({
-    labelWidth: "65px"
+    labelWidth: "90px"
   }),
   countInter: getElComOption.countInter(defaultColum()),
   dicts: getElComOption.countDict(defaultColum()),

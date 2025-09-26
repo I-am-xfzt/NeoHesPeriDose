@@ -1,0 +1,50 @@
+[
+    {
+        "label": "JavaScript基础",
+        "dictType": "js_repository_tag",
+        "description": "primary",
+        "value": "JavaScript基础"
+    },
+    {
+        "label": "变量与数据类型",
+        "dictType": "js_repository_tag",
+        "description": "primary",
+        "value": "变量与数据类型"
+    },
+    {
+        "label": "运算符",
+        "dictType": "js_repository_tag",
+        "description": "primary",
+        "value": "运算符"
+    },
+    {
+        "label": "继承",
+        "dictType": "js_repository_tag",
+        "description": "primary",
+        "value": "继承"
+    },
+    {
+        "label": "函数",
+        "dictType": "js_repository_tag",
+        "description": "primary",
+        "value": "函数"
+    },
+    {
+        "label": "数组与对象",
+        "dictType": "js_repository_tag",
+        "description": "primary",
+        "value": "数组与对象"
+    },
+    {
+        "label": "ES6+新特性",
+        "dictType": "js_repository_tag",
+        "description": "primary",
+        "value": "ES6+新特性"
+    },
+    {
+        "label": "其他",
+        "dictType": "js_repository_tag",
+        "description": "primary",
+        "value": "其他"
+    }
+]

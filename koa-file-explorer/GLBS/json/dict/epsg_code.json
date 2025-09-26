@@ -1,20 +1,16 @@
-{
-  "code": 0,
-  "msg": null,
-  "data": [
+[
     {
       "label": "许昌市",
-      "dictType": "account_status",
+      "dictType": "epsg_code",
       "description": "primary",
       "lngs": ["4490"],
       "value": "0"
     },
     {
       "label": "滨州市",
-      "dictType": "account_status",
+      "dictType": "epsg_code",
       "description": "primary",
       "lngs": [117],
       "value": "4326"
     }
   ]
-}

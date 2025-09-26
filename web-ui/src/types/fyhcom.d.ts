@@ -5,7 +5,7 @@ declare interface elComAttrAndFunType {
   formItem: FormItemsOptionsType;
   attrs?: EmptyObjectType;
   typeName?: elComNameType;
-  isInter?: string;
+  isInter?: string | SelectOptionType[];
   dict?: string;
   aboutName?: string; // 关联字段名称; 因为select组件v-model绑定id等，但有时候不仅需要id，还需要其他字段，所以需要传入关联字段名称
   methods?: {
@@ -34,7 +34,7 @@ declare interface FormItemsOptionsType {
   label?: string;
   labelPosition?: positionEnum;
   labelWidth?: string;
-  required: boolean;
+  required?: boolean;
   rules?: Function | EmptyObjectType;
 }
 
@@ -43,7 +43,7 @@ declare interface FyhComOptions {
   rules?: (model: EmptyObjectType) => EmptyObjectType;
   columns: Array<elComAttrAndFunType[]>;
   dicts?: string[];
-  countInter?: string[];
+  countInter?: (string | SelectOptionType)[];
 }
 declare interface tableColumnOp {
   /** 列标签 */

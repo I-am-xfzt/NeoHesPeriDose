@@ -1,0 +1,50 @@
+[
+    {
+        "label": "账号状态",
+        "value": "account_status",
+        "dictType": "dict_list",
+        "description": "primary"
+    },
+    {
+        "label": "坐标类型",
+        "value": "coordinate_type",
+        "dictType": "dict_list",
+        "description": "primary"
+    },
+    {
+        "label": "epsg坐标",
+        "value": "epsg_code",
+        "dictType": "dict_list",
+        "description": "primary"
+    },
+    {
+        "label": "Js题目标签",
+        "value": "js_repository_tag",
+        "dictType": "dict_list",
+        "description": "primary"
+    },
+    {
+        "label": "Ts题库标签",
+        "value": "dict_list",
+        "dictType": "dict_list",
+        "description": "primary"
+    },
+    {
+        "label": "React题目标签",
+        "value": "react_repository_tag",
+        "dictType": "dict_list",
+        "description": "primary"
+    },
+    {
+        "label": "Scss题目标签",
+        "value": "scss_repository_tag",
+        "dictType": "dict_list",
+        "description": "primary"
+    },
+    {
+        "label": "Vue题目标签",
+        "value": "vue_repository_tag",
+        "dictType": "dict_list",
+        "description": "primary"
+    }
+]

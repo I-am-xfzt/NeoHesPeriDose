@@ -25,5 +25,5 @@ export interface TrackPoint {
      */
     address?: string;
 }
-const http = new BaseHttpClient("/json");
-export const pageList = () => http.get<HttpResType<TrackPoint[]>>("/track.json");
+const http = new BaseHttpClient("/");
+export const pageList = () => http.get<HttpResType<TrackPoint[]>>("track");

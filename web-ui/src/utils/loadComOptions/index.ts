@@ -80,8 +80,8 @@ export class loadComOptions implements abCreateComOptions.ILoadComOptions {
    * @param { Array<elComAttrAndFunType>[] } data
    * @return { Array<string> }
    */
-  public countInter(data: Array<elComAttrAndFunType>[]): Array<string> {
-    return data.map(v => v.filter(m => m.isInter).map(s => s.isInter)).flat(1) as Array<string>;
+  public countInter(data: Array<elComAttrAndFunType>[]): Array<string | SelectOptionType[]> {
+    return data.map(v => v.filter(m => m.isInter).map(s => s.isInter)).flat(1) as Array<string | SelectOptionType[]>;
   }
 
   /**
@@ -157,14 +157,15 @@ export class allElFormItemsOptions implements abCreateComOptions.IAllElFormItems
       eventName = "handleChange",
       disabled = false,
       isInter = "",
-      dict = "",
+      clearable = true,
+      dict = ""
     } = p;
     return {
       formItem: getFormItemsOptions(itemOp),
       attrs: {
         placeholder: placeholder || "请选择" + itemOp.label,
         prop: itemOp.prop,
-        clearable: true,
+        clearable,
         multiple,
         disabled
       },
@@ -186,7 +187,7 @@ export class allElFormItemsOptions implements abCreateComOptions.IAllElFormItems
    * @returns {elComAttrAndFunType} Input组件配置
    */
   public getInput(p: abCreateComOptions.InputConfig, itemOp: FormItemsOptionsType): elComAttrAndFunType {
-    const { placeholder, span = 4, disabled = false } = p;
+    const { placeholder, span = 4, disabled = false, type = "text", rows } = p;
     return {
       formItem: getFormItemsOptions(itemOp),
       typeName: "input",
@@ -195,7 +196,9 @@ export class allElFormItemsOptions implements abCreateComOptions.IAllElFormItems
         label: itemOp.label,
         placeholder: placeholder || "请输入" + itemOp.label,
         disabled,
-        clearable: true
+        type,
+        clearable: true,
+        rows
       },
       methods: {
         event: "",

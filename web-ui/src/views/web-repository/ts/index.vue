@@ -1,31 +1,47 @@
 <template>
-  <div class="interview-questions">
-    <!-- 页面头部 -->
-    <QuestionHeader title="TypeScript 知识库" subtitle="TypeScript 是一种静态类型的超集，它添加了可选的类型注解，帮助开发者在编译时捕获错误。"/>
-    <!-- 搜索和筛选 -->
-    <QuestionSearch @search="filteredQuestions" :categories="categories" />
-    <!-- 题目列表 -->
-    <div class="questions-list">
-      <QuestionCard 
-        v-for="(question, index) in questions" 
-        :key="index"
-        :question="question"
-      />
-      
+  <div class="interview-questions page-container">
+    <div class="interview-questions-content">
+      <!-- 页面头部 -->
+      <QuestionHeader />
+      <!-- 搜索和筛选 -->
+      <QuestionSearch @search="filteredQuestions" @addQuestion="addQuestion" :categories="[insert, ...ts_repository_tag]" />
+      <!-- 题目列表 -->
+      <QuestionCard v-for="(question, index) in questions" :key="index" :question="question" />
       <!-- 空状态 -->
       <div v-if="questions.length === 0" class="empty-state">
-        <p>暂无匹配的题目</p>
+        <p>没有找到匹配的题目</p>
       </div>
     </div>
+    <theDialog v-if="visible" v-model:visible="visible" title="添加Ts题目" @confirm="confirmHandleQuestion" @cancel="resetForm">
+      <fyh-form ref="formRef" v-model="state.questionForm" :module-path="modulePath"></fyh-form>
+    </theDialog>
+    <the-pagination v-show="questions.length > 0" @size-change="sizeChangeHandle" @current-change="currentChangeHandle" v-bind="state.pagination" />
   </div>
 </template>
 
-<script setup lang='ts' name="ts-repository">
-import QuestionHeader from "../components/QuestionHeader.vue";
-import QuestionSearch from "../components/QuestionSearch.vue";
-import { useHandleQuestion } from "../hooks";
+<script setup lang="ts" name="ts-respository">
 import QuestionCard from "../components/QuestionCard/index.vue";
-const { filteredQuestions, questions, getQuestionsList, categories } = useHandleQuestion("ts");
+import QuestionHeader from "../components/QuestionHeader.vue";
+import QuestionSearch from "../components/QuestionSearch/index.vue";
+import { useHandleQuestion } from "../hooks";
+import theDialog from "@/components/Dialog/index.vue";
+import { useDict } from "@/hooks/dict";
+const {
+  filteredQuestions,
+  questions,
+  addQuestion,
+  visible,
+  FyhForm,
+  state,
+  formRef,
+  modulePath,
+  confirmHandleQuestion,
+  resetForm,
+  sizeChangeHandle,
+  currentChangeHandle,
+  insert
+} = useHandleQuestion("ts");
+const { ts_repository_tag } = useDict("ts_repository_tag");
 </script>
 
 <style>

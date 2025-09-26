@@ -60,14 +60,19 @@ export class BaseHttpClient {
   // 处理请求
   private async handleRequest(config: IRequestConfig): Promise<any> {
     // 序列化GET参数
+    console.log(config);
+    
     if (config.serializeParams !== false && config.method?.toLowerCase() === "get") {
+      for (const key in config.params) {
+         if(!config.params[key]) config.params[key] = ''
+      }
       config.paramsSerializer = params => {
         return Object.keys(params)
           .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
           .join("&");
       };
     }
-
+    
     // 添加鉴权token
     const token = this.getToken();
     if (token && !config.headers?.Authorization) {
@@ -82,6 +87,11 @@ export class BaseHttpClient {
 
   // 处理响应
   private handleResponse(response: AxiosResponse): any {
+    const errorMessage = response?.data?.message || response?.data?.msg;
+    if (this.errorCodeMap[response?.data?.code]) {
+      useMessage().error(`请求失败: ${errorMessage}`);
+      throw new Error(`请求失败: ${errorMessage}`)
+    }
     return response.data;
   }
 

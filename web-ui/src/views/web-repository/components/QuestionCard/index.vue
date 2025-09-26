@@ -1,7 +1,7 @@
 <template>
   <main class="main-content">
     <div class="question">
-      <div class="question-card rounded-8 mt10">
+      <div class="question-card rounded-8">
         <div class="question-header flx-between s-col-center">
           <h3 class="question-title">{{ question.title }}</h3>
           <span class="question-category">{{ question.category }}</span>
@@ -19,6 +19,7 @@
               {{ isExpanded ? "收起" : "查看答案" }}
             </button>
             <button v-if="question.code" @click="showCodeModal" class="code-btn rounded-4 hand">查看代码示例</button>
+            <button style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);" @click="$emit('updateQuestion', 'update', question)" class="code-btn rounded-4 hand">修改答案</button>
           </div>
           <div class="question-meta flx-align-center gap-12">
             <span class="difficulty" :class="question.difficulty">
@@ -38,22 +39,14 @@
         <button class="close-btn rounded-4 hand l-t-center" @click="closeCodeModal">×</button>
       </div>
       <div class="modal-body scroll-y">
-        <pre cols="scroll-x"><code class="language-javascript">{{ question.code }}</code></pre>
+        <pre class="scroll-x"><code class="language-javascript">{{ question.code }}</code></pre>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts" name="QuestionCard">
-// 题目类型定义
-export interface InterviewQuestion {
-  title: string;
-  category: string;
-  content: string;
-  answer: string;
-  code?: string;
-  difficulty: "初级" | "中级" | "高级";
-}
+import { InterviewQuestion } from "../../hooks";
 
 // 接收题目数据作为props
 const props = defineProps<{

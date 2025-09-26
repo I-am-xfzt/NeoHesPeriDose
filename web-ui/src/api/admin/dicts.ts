@@ -1,13 +1,9 @@
 import { BaseHttpClient } from "@/utils/request";
-const http = new BaseHttpClient("/json");
+const http = new BaseHttpClient("/dict");
 export interface dictData {
-  id: string;
-  dictId: string;
   label: string;
   dictType: string;
   description: themeType;
-  sortOrder: number;
-  createTime: string;
   value: string;
 }
-export const getDicts = (dict: string) => http.get<HttpResType<dictData>>(`/dict/${dict}.json`);
+export const getDicts = (dict: string) => http.get<HttpResType<dictData[]>>(`/${dict}`);

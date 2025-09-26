@@ -84,7 +84,7 @@ declare type EmptyObjectType<T = any> = {
 // 申明 select option
 declare type SelectOptionType = {
   value: string | number;
-  label: string | number;
+  label: string;
   [k: string]: any;
 };
 type StringOrEmpty<T = null> = string | T;
@@ -193,7 +193,7 @@ declare interface listResponse<T> {
   size: number;
   current: number;
   pages: number;
-  records: T[];
+  [key: string]: T[];
 }
 
 declare type themeType = "info" | "success" | "warning" | "danger" | "primary" | "default";

@@ -54,15 +54,13 @@ $breakpoint-mobile: 768px;
 }
 
 .main-content {
-  padding: 10px 0;
+  padding: 5px 0;
 }
 
 .question {
   /* 题目卡片容器 */
   .question-card {
     @include card-base-style;
-    border-radius: 8px;
-    margin-bottom: 10px;
 
     &:hover {
       transform: translateY(-1px);
@@ -148,7 +146,6 @@ $breakpoint-mobile: 768px;
   padding: 2px 8px;
   border-radius: 10px;
   font-weight: 500;
-  white-space: nowrap;
 
   &.初级 {
     @include difficulty-badge(#2e7d32, #81c784);
@@ -172,9 +169,6 @@ $breakpoint-mobile: 768px;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
   z-index: $z-index-modal;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .code-modal {
@@ -184,15 +178,11 @@ $breakpoint-mobile: 768px;
   max-height: 80vh;
   overflow: hidden;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-  border-radius: 8px;
 
   .modal-header {
     @include card-section-base;
     padding: 16px 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 
     h3 {
       margin: 0;
@@ -207,11 +197,6 @@ $breakpoint-mobile: 768px;
       font-size: 1.5rem;
       width: 30px;
       height: 30px;
-      border-radius: 4px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       transition: background-color 0.2s ease;
 
       &:hover {
@@ -222,21 +207,17 @@ $breakpoint-mobile: 768px;
 
   .modal-body {
     max-height: calc(80vh - 60px);
-    overflow-y: auto;
 
     pre {
       margin: 0;
       padding: 20px;
       background-color: rgba(15, 23, 42, 0.6);
-      overflow-x: auto;
 
       code {
         font-family: $code-font;
         font-size: 14px;
         line-height: 1.6;
         color: $text-primary;
-        white-space: pre-wrap;
-        word-wrap: break-word;
       }
     }
   }
@@ -255,64 +236,7 @@ $breakpoint-mobile: 768px;
     margin-bottom: 12px;
     font-size: 1.1rem;
     color: $success-color;
-  }
-
-  /* 修复列表样式 */
-  ul,
-  ol {
-    margin: 10px 0;
-    padding-left: 25px;
-  }
-
-  li {
-    margin: 5px 0;
-  }
-
-  /* 修复段落间距 */
-  p {
-    margin: 10px 0;
-  }
-
-  /* 链接样式 */
-  a {
-    color: $primary-color;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  /* 代码样式 */
-  code {
-    font-family: $code-font;
-    background-color: rgba(15, 23, 42, 0.6);
-    padding: 2px 5px;
-    border-radius: 3px;
-    font-size: 0.9em;
-  }
-
-  /* 代码块样式 */
-  pre {
-    background-color: rgba(15, 23, 42, 0.6);
-    padding: 15px;
-    border-radius: 5px;
-    overflow-x: auto;
-    margin: 15px 0;
-  }
-
-  pre code {
-    background: none;
-    padding: 0;
-  }
-
-  /* 响应式设计 */
-  @media (max-width: $breakpoint-mobile) {
-    .question-header,
-    .answer-section {
-      padding: 15px !important;
-    }
-  }    font-weight: 600;
+    font-weight: 600;
   }
 
   ul {

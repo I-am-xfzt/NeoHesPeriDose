@@ -28,12 +28,16 @@ export namespace abCreateComOptions {
     export interface SelectConfig extends commonItem{
         multiple?: boolean;
         aboutName?: string;
-        isInter?: string;
+        isInter?: string | SelectOptionType[];
         dict?: string;
+        clearable?: boolean;
     }
 
     /** Input组件配置接口 */
-    export interface InputConfig extends commonItem {}
+    export interface InputConfig extends commonItem {
+        type?: string;
+        rows?: number;
+    }
 
     /** DatePicker组件配置接口 */
     export interface DatePickerConfig extends commonItem{
@@ -47,7 +51,7 @@ export namespace abCreateComOptions {
 
         countDict(data: elComAttrAndFunType[][], ruleSymbols?: string): string[];
 
-        countInter(data: elComAttrAndFunType[][]): string[];
+        countInter(data: elComAttrAndFunType[][]): Array<string | SelectOptionType[]>;
 
         createSingleRules(other: FormItemRule[], ...p: ruleDataInter['rule']): FormItemRule[];
 

@@ -1,0 +1,50 @@
+[
+    {
+        "label": "基础类型",
+        "dictType": "ts_repository_tag",
+        "description": "primary",
+        "value": "基础类型"
+    },
+    {
+        "label": "接口和类型",
+        "dictType": "ts_repository_tag",
+        "description": "primary",
+        "value": "接口和类型"
+    },
+    {
+        "label": "泛型",
+        "dictType": "ts_repository_tag",
+        "description": "primary",
+        "value": "泛型"
+    },
+    {
+        "label": "类型操作",
+        "dictType": "ts_repository_tag",
+        "description": "primary",
+        "value": "类型操作"
+    },
+    {
+        "label": "高级特性",
+        "dictType": "ts_repository_tag",
+        "description": "primary",
+        "value": "高级特性"
+    },
+    {
+        "label": "工具类型",
+        "dictType": "ts_repository_tag",
+        "description": "primary",
+        "value": "工具类型"
+    },
+    {
+        "label": "最佳实践",
+        "dictType": "ts_repository_tag",
+        "description": "primary",
+        "value": "最佳实践"
+    },
+    {
+        "label": "其他",
+        "dictType": "js_repository_tag",
+        "description": "primary",
+        "value": "其他"
+    }
+]

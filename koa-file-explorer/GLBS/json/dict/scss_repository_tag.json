@@ -1,0 +1,50 @@
+[
+    {
+        "label": "SCSS基础",
+        "dictType": "scss_repository_tag",
+        "description": "primary",
+        "value": "SCSS基础"
+    },
+    {
+        "label": "变量",
+        "dictType": "scss_repository_tag",
+        "description": "primary",
+        "value": "变量"
+    },
+    {
+        "label": "嵌套",
+        "dictType": "scss_repository_tag",
+        "description": "primary",
+        "value": "嵌套"
+    },
+    {
+        "label": "混合指令",
+        "dictType": "scss_repository_tag",
+        "description": "primary",
+        "value": "混合指令"
+    },
+    {
+        "label": "函数指令",
+        "dictType": "scss_repository_tag",
+        "description": "primary",
+        "value": "函数指令"
+    },
+    {
+        "label": "ScssScript",
+        "dictType": "scss_repository_tag",
+        "description": "primary",
+        "value": "ScssScript"
+    },
+    {
+        "label": "控制指令",
+        "dictType": "scss_repository_tag",
+        "description": "primary",
+        "value": "控制指令"
+    },
+    {
+        "label": "其他",
+        "dictType": "js_repository_tag",
+        "description": "primary",
+        "value": "其他"
+    }
+]

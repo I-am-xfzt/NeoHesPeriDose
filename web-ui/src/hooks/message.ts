@@ -1,7 +1,7 @@
 import { ElMessage, ElMessageBox } from 'element-plus';
 
 const defaultOptions = {
-    duration: 3000, // 显示时间为3秒
+    duration: 2000, // 显示时间为3秒
     showClose: true, // 显示关闭按钮
     offset: 20, // 消息距离顶部的偏移量
 };

@@ -53,5 +53,13 @@
     "answer": "**Options API**和**Composition API**是Vue中两种不同的组件编写方式。\n\n**Options API**\n- **特点**：通过选项（如data、methods、computed等）组织组件逻辑\n- **优势**：\n  - 简单直观，容易上手\n  - 结构清晰，对于小型组件很友好\n  - 学习曲线平缓\n- **劣势**：\n  - 逻辑关注点分散，大型组件难以维护\n  - 相同逻辑无法跨组件复用（mixins有命名冲突等问题）\n  - TypeScript支持有限\n\n**Composition API**\n- **特点**：通过函数组合的方式组织组件逻辑\n- **优势**：\n  - 逻辑关注点聚合，大型组件更容易维护\n  - 更好的逻辑复用（通过组合函数）\n  - 更强大的TypeScript支持\n  - 树摇友好，未使用的代码可以被排除\n  - 更灵活的代码组织方式\n- **劣势**：\n  - 学习曲线较陡峭\n  - 对于简单组件可能显得冗余\n\n**主要区别**\n1. **代码组织方式**：Options API按选项分类，Composition API按逻辑关注点分类\n2. **逻辑复用**：Composition API提供了更优雅的逻辑复用方式\n3. **类型支持**：Composition API对TypeScript的支持更完善\n4. **性能优化**：Composition API更有利于树摇和代码优化\n\n**适用场景**\n- **Options API**：小型组件、快速开发、团队对Vue 2更熟悉\n- **Composition API**：大型组件、复杂逻辑、需要更好的TypeScript支持、需要逻辑复用\n\nVue 3同时支持两种API风格，开发者可以根据项目需求和团队熟悉度选择合适的方式。",
     "code": "// Options API 示例\nexport default {\n  data() {\n    return {\n      count: 0\n    }\n  },\n  computed: {\n    doubleCount() {\n      return this.count * 2\n    }\n  },\n  methods: {\n    increment() {\n      this.count++\n    }\n  },\n  mounted() {\n    console.log('Component mounted')\n  }\n}\n\n// Composition API 示例\nimport { ref, computed, onMounted } from 'vue'\n\nexport default {\n  setup() {\n    const count = ref(0)\n    const doubleCount = computed(() => count.value * 2)\n    \n    const increment = () => {\n      count.value++\n    }\n    \n    onMounted(() => {\n      console.log('Component mounted')\n    })\n    \n    return {\n      count,\n      doubleCount,\n      increment\n    }\n  }\n}",
     "difficulty": "中级"
+  },
+  {
+    "category": "Vue3新特性",
+    "title": "Vue3 如何给props定义准确的类型并且设置属性默认值？",
+    "content": "请阐述Vue3 给props定义准确的类型并且设置属性默认值的方法",
+    "answer": "使用 defineProps 和 withDefaults",
+    "code": "<script setup lang=\"ts\">\ninterface User {\n  id: number\n  name: string\n  email: string\n}\n\ninterface Props {\n  // 基本类型\n  title: string\n  count: number\n  isActive: boolean\n  tags: string[]\n  \n  // 复杂对象类型\n  user: User\n  \n  // 可选属性\n  optionalProp?: string\n  \n  // 联合类型\n  status: 'pending' | 'success' | 'error'\n  \n  // 函数类型\n  onSubmit: (data: any) => void\n}\n\n// 定义 props 并设置默认值\nconst props = withDefaults(defineProps<Props>(), {\n  title: '默认标题',\n  count: 0,\n  isActive: false,\n  tags: () => ['default'],\n  optionalProp: '默认值',\n  status: 'pending',\n  user: () => ({\n    id: 1,\n    name: '默认用户',\n    email: 'default@example.com'\n  })\n})\n</script>",
+    "difficulty": "中级"
   }
 ]

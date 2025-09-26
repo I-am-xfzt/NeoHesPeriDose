@@ -1,0 +1,44 @@
+[
+    {
+        "label": "React基础",
+        "dictType": "react_repository_tag",
+        "description": "primary",
+        "value": "React基础"
+    },
+    {
+        "label": "React Hooks",
+        "dictType": "react_repository_tag",
+        "description": "primary",
+        "value": "React Hooks"
+    },
+    {
+        "label": "组件",
+        "dictType": "react_repository_tag",
+        "description": "primary",
+        "value": "组件"
+    },
+    {
+        "label": "状态管理",
+        "dictType": "react_repository_tag",
+        "description": "primary",
+        "value": "状态管理"
+    },
+    {
+        "label": "路由",
+        "dictType": "react_repository_tag",
+        "description": "primary",
+        "value": "路由"
+    },
+    {
+        "label": "性能优化",
+        "dictType": "react_repository_tag",
+        "description": "primary",
+        "value": "性能优化"
+    },
+    {
+        "label": "其他",
+        "dictType": "react_repository_tag",
+        "description": "primary",
+        "value": "其他"
+    }
+]

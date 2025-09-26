@@ -1,28 +1,14 @@
-{
-    "code": 0,
-    "msg": null,
-    "data": [
-        {
-            "id": "1957717461894041602",
-            "dictId": "1957717238543159297",
-            "label": "启用",
-            "dictType": "account_status",
-            "description": "success",
-            "sortOrder": 0,
-            "updateBy": " ",
-            "createTime": "2025-08-19 16:13:10",
-            "value": "0"
-        },
-        {
-            "id": "1957717543926239234",
-            "dictId": "1957717238543159297",
-            "label": "禁用",
-            "dictType": "account_status",
-            "description": "info",
-            "sortOrder": 0,
-            "updateBy": " ",
-            "createTime": "2025-08-19 16:13:30",
-            "value": "1"
-        }
-    ]
-}
+[
+    {
+        "label": "启用",
+        "dictType": "account_status",
+        "description": "success",
+        "value": "0"
+    },
+    {
+        "label": "禁用",
+        "dictType": "account_status",
+        "description": "info",
+        "value": "1"
+    }
+]

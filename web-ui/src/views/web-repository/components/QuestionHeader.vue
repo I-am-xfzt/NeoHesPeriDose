@@ -1,6 +1,6 @@
 <template>
   <!-- 页面头部 -->
-  <header class="header">
+  <header class="header rounded-8">
     <div class="container">
       <h1>{{ title }}</h1>
       <p class="subtitle">{{ subtitle }}</p>
@@ -28,8 +28,6 @@ const props = defineProps({
   color: white;
   padding: 40px 0 30px;
   text-align: center;
-  border-radius: 8px;
-  margin-top: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   h1 {
     font-size: 2rem;

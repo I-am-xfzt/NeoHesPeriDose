@@ -1,0 +1,38 @@
+[
+    {
+        "label": "Vue基础",
+        "dictType": "vue_repository_tag",
+        "description": "primary",
+        "value": "Vue基础"
+    },
+    {
+        "label": "Vue3新特性",
+        "dictType": "vue_repository_tag",
+        "description": "primary",
+        "value": "Vue3新特性"
+    },
+    {
+        "label": "组件通信",
+        "dictType": "vue_repository_tag",
+        "description": "primary",
+        "value": "组件通信"
+    },
+    {
+        "label": "Vuex",
+        "dictType": "vue_repository_tag",
+        "description": "primary",
+        "value": "Vuex"
+    },
+    {
+        "label": "VueRouter",
+        "dictType": "vue_repository_tag",
+        "description": "primary",
+        "value": "VueRouter"
+    },
+    {
+        "label": "性能优化",
+        "dictType": "vue_repository_tag",
+        "description": "primary",
+        "value": "性能优化"
+    }
+]

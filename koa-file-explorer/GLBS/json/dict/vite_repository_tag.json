@@ -1,0 +1,38 @@
+[
+    {
+        "label": "Vite基础",
+        "dictType": "vue_repository_tag",
+        "description": "primary",
+        "value": "Vite基础"
+    },
+    {
+        "label": "插件系统",
+        "dictType": "vue_repository_tag",
+        "description": "primary",
+        "value": "插件系统"
+    },
+    {
+        "label": "组件通信",
+        "dictType": "vue_repository_tag",
+        "description": "primary",
+        "value": "组件通信"
+    },
+    {
+        "label": "环境变量",
+        "dictType": "vue_repository_tag",
+        "description": "primary",
+        "value": "环境变量"
+    },
+    {
+        "label": "静态资源",
+        "dictType": "vue_repository_tag",
+        "description": "primary",
+        "value": "静态资源"
+    },
+    {
+        "label": "性能优化",
+        "dictType": "vue_repository_tag",
+        "description": "primary",
+        "value": "性能优化"
+    }
+]

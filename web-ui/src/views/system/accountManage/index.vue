@@ -7,14 +7,14 @@ const modelPath = `views/system/accountManage`;
 import { Refresh, Search, EditPen, Delete } from "@element-plus/icons-vue";
 const state = reactive<BasicTableProps>({
   queryForm: {
-    status: undefined,
-    username: "",
-    phonenumber: ""
+    // status: undefined,
+    // username: "",
+    // phonenumber: ""
   },
   pageList
 });
 const { getDataList, resetData, tableStyle, currentChangeHandle, sizeChangeHandle } = useTable(state);
-const { cellFunStyle, headerCellStyle, rowStyle } = toRefs( tableStyle(8));
+const { cellFunStyle, headerCellStyle, rowStyle } = toRefs(tableStyle(8));
 const openDialog = (id: number) => {};
 const handleDelete = (id: number) => {
   state.dataList = state.dataList!.filter(item => item.id !== id);
