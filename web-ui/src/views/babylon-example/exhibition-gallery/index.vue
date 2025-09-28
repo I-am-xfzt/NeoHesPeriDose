@@ -5,13 +5,8 @@
 </template>
 
 <script setup lang="ts">
-import {
-  Engine,
-  Scene,
-  StandardMaterial,
-  SceneLoader,
-} from "@babylonjs/core";
-import { useMessageBox } from "@/hooks/message"
+import { Engine, Scene, StandardMaterial, SceneLoader } from "@babylonjs/core";
+import { useMessageBox } from "@/hooks/message";
 nextTick().then(() => {
   let canvas = document.getElementById("renderCanvas") as HTMLCanvasElement;
   let sceneChecked: boolean;
@@ -33,7 +28,7 @@ nextTick().then(() => {
       function (newScene) {
         scene = newScene;
         scene.executeWhenReady(function () {
-          canvas.style.opacity = '1';
+          canvas.style.opacity = "1";
           if (scene.activeCamera) {
             scene.activeCamera.attachControl(canvas);
 
@@ -50,6 +45,9 @@ nextTick().then(() => {
 
           if (then) {
             then();
+            useMessageBox().confirm("请按住W、A、S、D。进行移动", {
+              showClose: false
+            });
           }
         });
       },
@@ -63,14 +61,14 @@ nextTick().then(() => {
       }
     );
 
-    canvas.style.opacity = '0';
+    canvas.style.opacity = "0";
   };
 
   // Render loop
   let renderFunction = function () {
     // Fps
-    let frameCount = 0
-    const renderFrequency = 4 // 每 4 帧渲染一次
+    let frameCount = 0;
+    const renderFrequency = 4; // 每 4 帧渲染一次
     // Render scene
     if (scene) {
       if (!sceneChecked) {
@@ -81,7 +79,7 @@ nextTick().then(() => {
         }
       }
       if (frameCount % renderFrequency === 0) scene.render();
-      frameCount++
+      frameCount++;
     }
   };
 
@@ -103,9 +101,6 @@ nextTick().then(() => {
     scene.getMeshByName("Sol loin")!.useVertexColors = false;
     scene.gravity.scaleInPlace(0.5);
   });
-  useMessageBox().confirm('请按住W、A、S、D。进行移动', {
-    showClose: false
-  })
 });
 </script>
 
